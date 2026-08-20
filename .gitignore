@@ -221,3 +221,6 @@ compile_commands.json
 
 # VS Code
 .vscode
+
+# OpenCode
+AGENTS.md
