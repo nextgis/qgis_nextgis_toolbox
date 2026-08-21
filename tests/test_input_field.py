@@ -28,11 +28,11 @@ from nextgis_toolbox.shared.ui.input_field import (
     FieldsForm,
     InputField,
     IntegerSpinBoxAdapter,
-    TextEditAdapter,
+    TextEditorAdapter,
 )
 
 
-class CustomTextEditAdapter(EditorAdapter[str]):
+class CustomTextEditorAdapter(EditorAdapter[str]):
     """Adapter that exposes its editor without using the base private field."""
 
     def __init__(self) -> None:
@@ -46,7 +46,7 @@ class CustomTextEditAdapter(EditorAdapter[str]):
     def editor(self) -> QLineEdit:
         return self._text_edit
 
-    def get_value(self) -> str:
+    def value(self) -> str:
         return self._text_edit.text()
 
     def set_value(self, value: Optional[str]) -> None:
@@ -60,7 +60,7 @@ class CustomTextEditAdapter(EditorAdapter[str]):
 def _create_text_form():
     input_field = InputField(
         title="Text",
-        editor_type=EditorType.TEXT_EDIT,
+        editor_type=EditorType.TEXT_EDITOR,
         value="saved value",
     )
     form = FieldsForm()
@@ -68,10 +68,10 @@ def _create_text_form():
     return form, editor
 
 
-def test_text_edit_adapter_treats_falsy_values_as_empty(qgis_app) -> None:
+def test_text_editor_adapter_treats_falsy_values_as_empty(qgis_app) -> None:
     del qgis_app
 
-    adapter = TextEditAdapter()
+    adapter = TextEditorAdapter()
 
     try:
         assert adapter.is_empty("") is True
@@ -102,7 +102,7 @@ def test_form_creates_builtin_editor_adapters(qgis_app) -> None:
 
     form = FieldsForm()
     editor_types = [
-        (EditorType.TEXT_EDIT, TextEditAdapter),
+        (EditorType.TEXT_EDITOR, TextEditorAdapter),
         (EditorType.INTEGER_SPIN_BOX, IntegerSpinBoxAdapter),
         (EditorType.DOUBLE_SPIN_BOX, DoubleSpinBoxAdapter),
         (EditorType.COMBO_BOX, ComboBoxAdapter),
@@ -166,8 +166,8 @@ def test_form_initializes_combo_adapters_from_combo_box_items(
         multiple_choice_adapter = form._input_fields[1].adapter
         assert isinstance(single_choice_adapter, ComboBoxAdapter)
         assert isinstance(multiple_choice_adapter, CheckableComboBoxAdapter)
-        assert single_choice_adapter.get_value() == "two"
-        assert multiple_choice_adapter.get_value() == ["one", "two"]
+        assert single_choice_adapter.value() == "two"
+        assert multiple_choice_adapter.value() == ["one", "two"]
     finally:
         form.deleteLater()
 
@@ -176,7 +176,7 @@ def test_form_uses_supplied_custom_adapter(qgis_app) -> None:
     del qgis_app
 
     form = FieldsForm()
-    adapter = CustomTextEditAdapter()
+    adapter = CustomTextEditorAdapter()
 
     try:
         editor = form.add_field(
@@ -190,7 +190,7 @@ def test_form_uses_supplied_custom_adapter(qgis_app) -> None:
 
         assert form._input_fields[0].adapter is adapter
         assert editor is adapter.editor
-        assert adapter.get_value() == "saved value"
+        assert adapter.value() == "saved value"
     finally:
         form.deleteLater()
 
@@ -209,11 +209,11 @@ def test_form_rejects_invalid_editor_configuration(qgis_app) -> None:
                 )
             )
 
-        with pytest.raises(ValueError, match="requires TextEditAdapter"):
+        with pytest.raises(ValueError, match="requires TextEditorAdapter"):
             form.add_field(
                 InputField(
                     title="Text edit",
-                    editor_type=EditorType.TEXT_EDIT,
+                    editor_type=EditorType.TEXT_EDITOR,
                 ),
                 adapter=ComboBoxAdapter(),
             )
@@ -224,7 +224,7 @@ def test_form_rejects_invalid_editor_configuration(qgis_app) -> None:
             form.add_field(
                 InputField(
                     title="Text edit",
-                    editor_type=EditorType.TEXT_EDIT,
+                    editor_type=EditorType.TEXT_EDITOR,
                     combo_box_items=[("Option", "option")],
                 )
             )

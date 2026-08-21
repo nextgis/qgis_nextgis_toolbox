@@ -41,6 +41,7 @@ from nextgis_toolbox.shared.ui.input_field import (
     FieldsForm,
     InputField,
     UrlValidator,
+    UuidValidator,
 )
 from nextgis_toolbox.ui.icon import plugin_icon
 
@@ -54,7 +55,6 @@ class NextgisToolboxSettingsPage(QgsOptionsPageWidget):
         :param parent: Optional parent widget.
         """
         super().__init__(parent)
-        self._settings = NextgisToolboxSettings()
         self._initialize_ui()
 
     def apply(self) -> None:
@@ -62,18 +62,19 @@ class NextgisToolboxSettingsPage(QgsOptionsPageWidget):
         if not self._settings_form.save():
             return
 
-        self._settings.endpoint = self._endpoint_field.value
-        self._settings.authentication_token = self._api_key_field.value
+        settings = NextgisToolboxSettings()
+        settings.endpoint = self._endpoint_field.value
+        settings.authentication_token = self._api_key_field.value
 
-        old_debug_enabled = self._settings.is_debug_logs_enabled
+        old_debug_enabled = settings.is_debug_logs_enabled
         new_debug_enabled = self._widget.debug_checkbox.isChecked()
-        self._settings.is_debug_logs_enabled = new_debug_enabled
+        settings.is_debug_logs_enabled = new_debug_enabled
         if old_debug_enabled != new_debug_enabled:
             debug_state = "enabled" if new_debug_enabled else "disabled"
             update_logging_level()
             logger.warning(f"Debug messages were {debug_state}")
 
-        self._settings.is_experimental_qgis_integration_enabled = (
+        settings.is_experimental_qgis_integration_enabled = (
             self._widget.experimental_qgis_integration_checkbox.isChecked()
         )
 
@@ -134,10 +135,11 @@ class NextgisToolboxSettingsPage(QgsOptionsPageWidget):
 
     def _create_settings_form(self) -> None:
         """Create input fields initialized from persisted settings."""
+        settings = NextgisToolboxSettings()
         self._endpoint_field = InputField(
             title=self.tr("Endpoint"),
-            editor_type=EditorType.TEXT_EDIT,
-            value=self._settings.endpoint,
+            editor_type=EditorType.TEXT_EDITOR,
+            value=settings.endpoint,
             default_value=DEFAULT_API_ENDPOINT,
             placeholder=DEFAULT_API_ENDPOINT,
             tooltip=self.tr("Set the base endpoint for NextGIS Toolbox API."),
@@ -147,10 +149,11 @@ class NextgisToolboxSettingsPage(QgsOptionsPageWidget):
         )
         self._api_key_field = InputField(
             title=self.tr("Toolbox API Key"),
-            editor_type=EditorType.TEXT_EDIT,
-            value=self._settings.authentication_token,
+            editor_type=EditorType.TEXT_EDITOR,
+            value=settings.authentication_token,
             default_value="",
             tooltip=self.tr("Set the API key used to access NextGIS Toolbox."),
+            invalid_message=self.tr("Enter a valid API key UUID"),
         )
         self._settings_form = FieldsForm(
             parent=self._widget.nextgis_toolbox_token_group_box,
@@ -160,7 +163,10 @@ class NextgisToolboxSettingsPage(QgsOptionsPageWidget):
             self._endpoint_field,
             validator=UrlValidator(),
         )
-        self._settings_form.add_field(self._api_key_field)
+        self._settings_form.add_field(
+            self._api_key_field,
+            validator=UuidValidator(),
+        )
         self._widget.authentication_layout.insertWidget(
             0,
             self._settings_form,
@@ -168,11 +174,10 @@ class NextgisToolboxSettingsPage(QgsOptionsPageWidget):
 
     def _load_other_settings(self) -> None:
         """Load settings that are not represented by input fields."""
-        self._widget.debug_checkbox.setChecked(
-            self._settings.is_debug_logs_enabled
-        )
+        settings = NextgisToolboxSettings()
+        self._widget.debug_checkbox.setChecked(settings.is_debug_logs_enabled)
         self._widget.experimental_qgis_integration_checkbox.setChecked(
-            self._settings.is_experimental_qgis_integration_enabled
+            settings.is_experimental_qgis_integration_enabled
         )
 
 
