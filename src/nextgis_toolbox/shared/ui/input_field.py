@@ -15,20 +15,18 @@
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
 import html
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from enum import Enum
 from typing import (
     Any,
-    Dict,
     Generic,
     List,
-    Mapping,
     Optional,
     Sequence,
     Tuple,
     TypeVar,
 )
 from urllib.parse import urlparse
-from uuid import uuid4
 
 from qgis.gui import (
     QgsCheckableComboBox,
@@ -119,6 +117,17 @@ except ImportError:
 ERROR_COLOR = "#e93d58"
 
 T = TypeVar("T")
+
+
+class EditorType(str, Enum):
+    """Built-in editor adapters supported by :class:`FieldsForm`."""
+
+    TEXT_EDIT = "text_edit"
+    INTEGER_SPIN_BOX = "integer_spin_box"
+    DOUBLE_SPIN_BOX = "double_spin_box"
+    COMBO_BOX = "combo_box"
+    CHECKABLE_COMBO_BOX = "checkable_combo_box"
+    CUSTOM = "custom"
 
 
 class UrlValidator(QValidator):
@@ -345,11 +354,29 @@ class EditorAdapter(QObject, Generic[T]):
     """Normalize the API of one editor created with the adapter."""
 
     value_changed = pyqtSignal()
-    editor: QWidget
+    _editor: QWidget
 
     def __init__(self) -> None:
         """Initialize the adapter."""
         super().__init__()
+        self._is_changed = False
+        self.value_changed.connect(self._mark_changed)
+
+    @property
+    def editor(self) -> QWidget:
+        """Return the editor widget.
+
+        :returns: Editor widget.
+        """
+        return self._editor
+
+    @property
+    def is_changed(self) -> bool:
+        """Return whether the user has changed the editor value.
+
+        :returns: ``True`` after the editor has emitted a value-change signal.
+        """
+        return self._is_changed
 
     def get_value(self) -> T:
         """Return the current editor value.
@@ -371,25 +398,31 @@ class EditorAdapter(QObject, Generic[T]):
         :param default_value: Field default value.
         """
         self.set_value(default_value)
+        self._is_changed = False
 
     def is_empty(self, value: Optional[T]) -> bool:
         """Return whether a value is empty.
 
         :param value: Value to inspect.
 
-        :returns: ``True`` for ``None`` or empty text.
+        :returns: ``True`` for a falsy value.
         """
-        return value is None or value == ""
+        return not bool(value)
+
+    @pyqtSlot()
+    def _mark_changed(self) -> None:
+        """Record that the editor emitted a value-change signal."""
+        self._is_changed = True
 
 
-class LineEditAdapter(EditorAdapter[str]):
-    """Adapt a QGIS line edit to the common editor contract."""
+class TextEditAdapter(EditorAdapter[str]):
+    """Adapt a QGIS text editor to the common editor contract."""
 
     def __init__(self) -> None:
         """Create the line edit and connect its user-edit signal."""
         super().__init__()
-        self.editor = QgsHighlightableLineEdit()
-        self.editor.textChanged.connect(
+        self._editor = QgsHighlightableLineEdit()
+        self._editor.textChanged.connect(
             lambda _text: self.value_changed.emit()
         )
 
@@ -398,18 +431,18 @@ class LineEditAdapter(EditorAdapter[str]):
 
         :returns: Editor text.
         """
-        return self.editor.text()
+        return self._editor.text()
 
     def set_value(self, value: Optional[str]) -> None:
         """Set text without emitting a user change.
 
         :param value: New text. ``None`` clears the editor.
         """
-        signals_were_blocked = self.editor.blockSignals(True)
+        signals_were_blocked = self._editor.blockSignals(True)
         try:
-            self.editor.setText("" if value is None else str(value))
+            self._editor.setText("" if value is None else str(value))
         finally:
-            self.editor.blockSignals(signals_were_blocked)
+            self._editor.blockSignals(signals_were_blocked)
 
 
 class IntegerSpinBoxAdapter(EditorAdapter[int]):
@@ -426,12 +459,12 @@ class IntegerSpinBoxAdapter(EditorAdapter[int]):
         :param maximum: Maximum accepted value.
         """
         super().__init__()
-        self.editor = HighlightableSpinBox()
-        self.editor.setButtonSymbols(
+        self._editor = HighlightableSpinBox()
+        self._editor.setButtonSymbols(
             QAbstractSpinBox.ButtonSymbols.UpDownArrows
         )
-        self.editor.setRange(minimum, maximum)
-        self.editor.valueChanged.connect(
+        self._editor.setRange(minimum, maximum)
+        self._editor.valueChanged.connect(
             lambda _value: self.value_changed.emit()
         )
 
@@ -440,18 +473,18 @@ class IntegerSpinBoxAdapter(EditorAdapter[int]):
 
         :returns: Current integer value.
         """
-        return int(self.editor.value())
+        return int(self._editor.value())
 
     def set_value(self, value: Optional[int]) -> None:
         """Set an integer without emitting a user change.
 
         :param value: New value. ``None`` is treated as zero.
         """
-        signals_were_blocked = self.editor.blockSignals(True)
+        signals_were_blocked = self._editor.blockSignals(True)
         try:
-            self.editor.setValue(0 if value is None else int(value))
+            self._editor.setValue(0 if value is None else int(value))
         finally:
-            self.editor.blockSignals(signals_were_blocked)
+            self._editor.blockSignals(signals_were_blocked)
 
     def is_empty(self, value: Optional[int]) -> bool:
         """Return ``False`` because a spin box always has a value.
@@ -479,13 +512,13 @@ class DoubleSpinBoxAdapter(EditorAdapter[float]):
         :param decimals: Number of decimal places.
         """
         super().__init__()
-        self.editor = HighlightableDoubleSpinBox()
-        self.editor.setButtonSymbols(
+        self._editor = HighlightableDoubleSpinBox()
+        self._editor.setButtonSymbols(
             QAbstractSpinBox.ButtonSymbols.UpDownArrows
         )
-        self.editor.setDecimals(decimals)
-        self.editor.setRange(minimum, maximum)
-        self.editor.valueChanged.connect(
+        self._editor.setDecimals(decimals)
+        self._editor.setRange(minimum, maximum)
+        self._editor.valueChanged.connect(
             lambda _value: self.value_changed.emit()
         )
 
@@ -494,18 +527,18 @@ class DoubleSpinBoxAdapter(EditorAdapter[float]):
 
         :returns: Current value.
         """
-        return float(self.editor.value())
+        return float(self._editor.value())
 
     def set_value(self, value: Optional[float]) -> None:
         """Set a number without emitting a user change.
 
         :param value: New value. ``None`` is treated as zero.
         """
-        signals_were_blocked = self.editor.blockSignals(True)
+        signals_were_blocked = self._editor.blockSignals(True)
         try:
-            self.editor.setValue(0.0 if value is None else float(value))
+            self._editor.setValue(0.0 if value is None else float(value))
         finally:
-            self.editor.blockSignals(signals_were_blocked)
+            self._editor.blockSignals(signals_were_blocked)
 
     def is_empty(self, value: Optional[float]) -> bool:
         """Return ``False`` because a spin box always has a value.
@@ -529,37 +562,39 @@ class ComboBoxAdapter(EditorAdapter[Any]):
         :param items: Sequence of ``(text, data)`` options.
         """
         super().__init__()
-        self.editor = QgsHighlightableComboBox()
+        self._editor = QgsHighlightableComboBox()
         for item_text, item_value in items or ():
-            self.editor.addItem(item_text, item_value)
-        self.editor.setCurrentIndex(-1)
-        self.editor.activated.connect(lambda _index: self.value_changed.emit())
+            self._editor.addItem(item_text, item_value)
+        self._editor.setCurrentIndex(-1)
+        self._editor.activated.connect(
+            lambda _index: self.value_changed.emit()
+        )
 
     def get_value(self) -> Any:
         """Return selected item data or ``None``.
 
         :returns: Selected item data, or ``None`` without a selection.
         """
-        if self.editor.currentIndex() < 0:
+        if self._editor.currentIndex() < 0:
             return None
-        return self.editor.currentData(Qt.ItemDataRole.UserRole)
+        return self._editor.currentData(Qt.ItemDataRole.UserRole)
 
     def set_value(self, value: Any) -> None:
         """Select item data without emitting a user change.
 
         :param value: Item data. ``None`` clears the selection.
         """
-        signals_were_blocked = self.editor.blockSignals(True)
+        signals_were_blocked = self._editor.blockSignals(True)
         try:
             item_index = -1
             if value is not None:
-                item_index = self.editor.findData(
+                item_index = self._editor.findData(
                     value,
                     Qt.ItemDataRole.UserRole,
                 )
-            self.editor.setCurrentIndex(item_index)
+            self._editor.setCurrentIndex(item_index)
         finally:
-            self.editor.blockSignals(signals_were_blocked)
+            self._editor.blockSignals(signals_were_blocked)
 
 
 class CheckableComboBoxAdapter(EditorAdapter[List[Any]]):
@@ -574,15 +609,15 @@ class CheckableComboBoxAdapter(EditorAdapter[List[Any]]):
         :param items: Sequence of ``(text, data)`` options.
         """
         super().__init__()
-        self.editor = HighlightableCheckableComboBox()
+        self._editor = HighlightableCheckableComboBox()
         for item_text, item_value in items or ():
-            self.editor.addItemWithCheckState(
+            self._editor.addItemWithCheckState(
                 item_text,
                 Qt.CheckState.Unchecked,
                 item_value,
             )
-        self.editor.setCurrentIndex(-1)
-        self.editor.checkedItemsChanged.connect(
+        self._editor.setCurrentIndex(-1)
+        self._editor.checkedItemsChanged.connect(
             lambda _items: self.value_changed.emit()
         )
 
@@ -592,9 +627,9 @@ class CheckableComboBoxAdapter(EditorAdapter[List[Any]]):
         :returns: Checked values in editor order.
         """
         return [
-            self.editor.itemData(item_index, Qt.ItemDataRole.UserRole)
-            for item_index in range(self.editor.count())
-            if self.editor.itemCheckState(item_index) == Qt.CheckState.Checked
+            self._editor.itemData(item_index, Qt.ItemDataRole.UserRole)
+            for item_index in range(self._editor.count())
+            if self._editor.itemCheckState(item_index) == Qt.CheckState.Checked
         ]
 
     def set_value(self, value: Optional[List[Any]]) -> None:
@@ -603,29 +638,29 @@ class CheckableComboBoxAdapter(EditorAdapter[List[Any]]):
         :param value: Values to check. ``None`` clears the selection.
         """
         selected_values = [] if value is None else list(value)
-        signals_were_blocked = self.editor.blockSignals(True)
+        signals_were_blocked = self._editor.blockSignals(True)
         try:
-            for item_index in range(self.editor.count()):
-                self.editor.setItemCheckState(
+            for item_index in range(self._editor.count()):
+                self._editor.setItemCheckState(
                     item_index,
                     Qt.CheckState.Unchecked,
                 )
-            self.editor.setCurrentIndex(-1)
+            self._editor.setCurrentIndex(-1)
             for selected_value in selected_values:
-                item_index = self.editor.findData(
+                item_index = self._editor.findData(
                     selected_value,
                     Qt.ItemDataRole.UserRole,
                 )
                 if item_index < 0:
                     continue
-                self.editor.setItemCheckState(
+                self._editor.setItemCheckState(
                     item_index,
                     Qt.CheckState.Checked,
                 )
-                self.editor.setCurrentIndex(item_index)
+                self._editor.setCurrentIndex(item_index)
         finally:
-            self.editor.blockSignals(signals_were_blocked)
-        self.editor._update_display_text_palette()
+            self._editor.blockSignals(signals_were_blocked)
+        self._editor._update_display_text_palette()
 
     def is_empty(self, value: Optional[List[Any]]) -> bool:
         """Return whether no values are selected.
@@ -642,10 +677,10 @@ class InputField(Generic[T]):
     """Describe an input field and its last saved value.
 
     :param title: Text displayed next to or above the editor.
-    :param adapter: Editor adapter dedicated to this field.
+    :param editor_type: Type of editor used to edit the value.
     :param value: Last saved value.
+    :param combo_box_items: Options available in a combo box editor.
     :param default_value: Value used by reset operations.
-    :param validator: Optional Qt validator.
     :param placeholder: Optional editor placeholder.
     :param tooltip: Editor tooltip.
     :param is_required: Whether an empty active value is invalid.
@@ -657,10 +692,10 @@ class InputField(Generic[T]):
     """
 
     title: str
-    adapter: EditorAdapter[T]
+    editor_type: EditorType
     value: Optional[T] = None
+    combo_box_items: Optional[Sequence[Tuple[str, Any]]] = None
     default_value: Optional[T] = None
-    validator: Optional[QValidator] = None
     placeholder: str = ""
     tooltip: str = ""
     is_required: bool = False
@@ -669,7 +704,6 @@ class InputField(Generic[T]):
     is_used: bool = True
     required_message: str = "This field is required"
     invalid_message: str = "Invalid value"
-    field_id: str = field(default_factory=lambda: uuid4().hex, init=False)
 
 
 @dataclass(frozen=True)
@@ -678,12 +712,10 @@ class FormState:
 
     :param dirty: Whether working values differ from saved values.
     :param valid: Last known validation state.
-    :param user_modified: Whether a user has changed the form.
     """
 
     dirty: bool
     valid: Optional[bool]
-    user_modified: bool
 
 
 class InputFieldWidget(QWidget):
@@ -694,6 +726,8 @@ class InputFieldWidget(QWidget):
     :class:`FieldsForm`.
 
     :param input_field: Field declaration represented by the widget.
+    :param adapter: Runtime adapter for the editor.
+    :param validator: Optional Qt validator.
     :param orientation: Layout orientation of the field.
     :param parent: Parent form widget.
     """
@@ -701,24 +735,29 @@ class InputFieldWidget(QWidget):
     def __init__(
         self,
         input_field: InputField[Any],
+        adapter: EditorAdapter[Any],
+        validator: Optional[QValidator],
         orientation: Qt.Orientation,
         parent: QWidget,
     ) -> None:
         """Create one field presentation.
 
         :param input_field: Field declaration represented by the widget.
+        :param adapter: Runtime adapter for the editor.
+        :param validator: Optional Qt validator.
         :param orientation: Layout orientation of the field.
         :param parent: Parent form widget.
         """
         super().__init__(parent)
         self.definition = input_field
-        self.editor = input_field.adapter.editor
+        self.adapter = adapter
+        self.validator = validator
+        self.editor = adapter.editor
         self.editor.setParent(self)
         self.title_label = QLabel(self)
         self.optional_checkbox = QCheckBox(self)
         self.reset_button = QToolButton(self)
         self.error_label = QLabel(self)
-        self.touched = False
         self.validation_result: Optional[bool] = None
         self._palette_before_error: Optional[QPalette] = None
         self._control_height = 0
@@ -733,14 +772,6 @@ class InputFieldWidget(QWidget):
         self._configure_reset_button()
         self._configure_error_label()
         self._build_layout(orientation)
-
-    @property
-    def field_id(self) -> str:
-        """Return the generated field identifier.
-
-        :returns: Field identifier.
-        """
-        return self.definition.field_id
 
     def _configure_editor(self) -> None:
         """Apply common and declarative editor properties."""
@@ -771,7 +802,7 @@ class InputFieldWidget(QWidget):
         """Apply the declared validator to a compatible editor."""
         set_validator = getattr(self.editor, "setValidator", None)
         if callable(set_validator):
-            set_validator(self.definition.validator)
+            set_validator(self.validator)
 
     def _configure_title(self, orientation: Qt.Orientation) -> None:
         """Configure the title label."""
@@ -964,7 +995,6 @@ class InputFieldWidget(QWidget):
 
     def clear_validation(self) -> None:
         """Clear the stored and displayed validation result."""
-        self.touched = False
         self.validation_result = None
         self.show_error("")
 
@@ -972,43 +1002,138 @@ class InputFieldWidget(QWidget):
 class FieldsForm(QWidget):
     """Render and manage a collection of declarative input fields."""
 
-    field_changed = pyqtSignal(str, object)
-    state_changed = pyqtSignal(object)
-
     def __init__(
         self,
-        fields: Sequence[InputField[Any]],
         parent: Optional[QWidget] = None,
         orientation: Qt.Orientation = Qt.Orientation.Horizontal,
     ) -> None:
-        """Create the form and attach the adapters' editors.
+        """Create an empty fields form.
 
-        :param fields: Complete field collection.
         :param parent: Optional Qt parent.
         :param orientation: Common field layout orientation.
         """
         super().__init__(parent)
         self._orientation = orientation
         self._input_fields: List[InputFieldWidget] = []
-        self._user_modified = False
-        form_layout = QVBoxLayout(self)
-        form_layout.setContentsMargins(0, 0, 0, 0)
-        form_layout.setSpacing(9)
-
-        for field_definition in fields:
-            input_field = InputFieldWidget(
-                field_definition,
-                orientation,
-                self,
-            )
-            field_definition.adapter.set_value(field_definition.value)
-            input_field.set_optional_checked(field_definition.is_used)
-            self._connect_input_field(input_field)
-            self._input_fields.append(input_field)
-            form_layout.addWidget(input_field)
-
-        self._align_titles()
+        self._form_layout = QVBoxLayout(self)
+        self._form_layout.setContentsMargins(0, 0, 0, 0)
+        self._form_layout.setSpacing(9)
         self._state = self._calculate_state()
+
+    def add_field(
+        self,
+        input_field: InputField[Any],
+        *,
+        adapter: Optional[EditorAdapter[Any]] = None,
+        validator: Optional[QValidator] = None,
+    ) -> QWidget:
+        """Append an input field and return its editor.
+
+        :param input_field: Declarative field description.
+        :param adapter: Optional configured adapter; required for custom editors.
+        :param validator: Optional Qt validator.
+
+        :returns: Created editor widget.
+
+        :raises ValueError: If editor configuration is invalid.
+        """
+        editor_adapter = self._create_adapter(input_field, adapter)
+
+        input_field_widget = InputFieldWidget(
+            input_field,
+            editor_adapter,
+            validator,
+            self._orientation,
+            self,
+        )
+        editor_adapter.set_value(input_field.value)
+        input_field_widget.set_optional_checked(input_field.is_used)
+        self._connect_input_field(input_field_widget)
+        self._input_fields.append(input_field_widget)
+        self._form_layout.addWidget(input_field_widget)
+        self._align_titles()
+        self._refresh_state()
+        return input_field_widget.editor
+
+    def _create_adapter(
+        self,
+        input_field: InputField[Any],
+        adapter: Optional[EditorAdapter[Any]],
+    ) -> EditorAdapter[Any]:
+        """Create or validate the adapter for an input field.
+
+        :param input_field: Field declaration that selects the editor type.
+        :param adapter: Optional configured adapter; required for custom editors.
+
+        :returns: Adapter that owns the editor widget.
+
+        :raises ValueError: If editor configuration is invalid.
+        """
+        self._validate_combo_box_items(input_field)
+
+        if adapter is not None:
+            if input_field.combo_box_items is not None:
+                raise ValueError(
+                    "Combo box items cannot be combined with a supplied adapter"
+                )
+            self._validate_adapter_type(input_field.editor_type, adapter)
+            return adapter
+
+        if input_field.editor_type == EditorType.TEXT_EDIT:
+            return TextEditAdapter()
+        if input_field.editor_type == EditorType.INTEGER_SPIN_BOX:
+            return IntegerSpinBoxAdapter()
+        if input_field.editor_type == EditorType.DOUBLE_SPIN_BOX:
+            return DoubleSpinBoxAdapter()
+        if input_field.editor_type == EditorType.COMBO_BOX:
+            return ComboBoxAdapter(input_field.combo_box_items)
+        if input_field.editor_type == EditorType.CHECKABLE_COMBO_BOX:
+            return CheckableComboBoxAdapter(input_field.combo_box_items)
+        if input_field.editor_type == EditorType.CUSTOM:
+            raise ValueError("Custom editor type requires an adapter")
+
+        raise ValueError(f"Unsupported editor type: {input_field.editor_type}")
+
+    def _validate_combo_box_items(self, input_field: InputField[Any]) -> None:
+        """Reject combo box items configured for a different editor."""
+        if input_field.combo_box_items is None:
+            return
+
+        if input_field.editor_type in (
+            EditorType.COMBO_BOX,
+            EditorType.CHECKABLE_COMBO_BOX,
+        ):
+            return
+
+        raise ValueError(
+            f"Editor type {input_field.editor_type} does not support combo box items"
+        )
+
+    def _validate_adapter_type(
+        self,
+        editor_type: EditorType,
+        adapter: EditorAdapter[Any],
+    ) -> None:
+        """Ensure a supplied adapter is compatible with its editor type."""
+        if editor_type == EditorType.CUSTOM:
+            return
+
+        adapter_types = {
+            EditorType.TEXT_EDIT: TextEditAdapter,
+            EditorType.INTEGER_SPIN_BOX: IntegerSpinBoxAdapter,
+            EditorType.DOUBLE_SPIN_BOX: DoubleSpinBoxAdapter,
+            EditorType.COMBO_BOX: ComboBoxAdapter,
+            EditorType.CHECKABLE_COMBO_BOX: CheckableComboBoxAdapter,
+        }
+        expected_type = adapter_types.get(editor_type)
+        if expected_type is None:
+            raise ValueError(f"Unsupported editor type: {editor_type}")
+        if isinstance(adapter, expected_type):
+            return
+
+        raise ValueError(
+            f"Editor type {editor_type} requires {expected_type.__name__}"
+        )
 
     @property
     def fields(self) -> List[InputField[Any]]:
@@ -1050,81 +1175,6 @@ class FieldsForm(QWidget):
         """
         return self._state.valid
 
-    @property
-    def has_user_changes(self) -> bool:
-        """Return whether the user has changed the form.
-
-        :returns: User-change flag.
-        """
-        return self._state.user_modified
-
-    def current_values(self) -> Dict[str, Any]:
-        """Return current values keyed by generated field identifier.
-
-        :returns: Current working values.
-        """
-        return {
-            input_field.field_id: (input_field.definition.adapter.get_value())
-            for input_field in self._input_fields
-        }
-
-    def current_value(self, field_id: str) -> Any:
-        """Return one current editor value.
-
-        :param field_id: Generated field identifier.
-
-        :returns: Current working value.
-
-        :raises KeyError: If the identifier is unknown.
-        """
-        input_field = self._get_input_field(field_id)
-        return input_field.definition.adapter.get_value()
-
-    def editor(self, field_id: str) -> QWidget:
-        """Return one runtime editor.
-
-        :param field_id: Generated field identifier.
-
-        :returns: Editor widget.
-
-        :raises KeyError: If the identifier is unknown.
-        """
-        return self._get_input_field(field_id).editor
-
-    def set_value(self, field_id: str, value: Any) -> None:
-        """Programmatically set one working value.
-
-        :param field_id: Generated field identifier.
-        :param value: New working value.
-
-        :raises KeyError: If the identifier is unknown.
-        """
-        input_field = self._get_input_field(field_id)
-        input_field.definition.adapter.set_value(value)
-        input_field.clear_validation()
-        self._refresh_state()
-
-    def set_values(self, values: Mapping[str, Any]) -> None:
-        """Programmatically set several working values.
-
-        :param values: Values keyed by generated field identifier.
-
-        :raises KeyError: If any identifier is unknown.
-        """
-        known_ids = {
-            input_field.field_id for input_field in self._input_fields
-        }
-        unknown_ids = [key for key in values if key not in known_ids]
-        if unknown_ids:
-            joined_ids = ", ".join(sorted(unknown_ids))
-            raise KeyError(f"Unknown field identifiers: {joined_ids}")
-
-        for field_id, value in values.items():
-            input_field = self._get_input_field(field_id)
-            input_field.definition.adapter.set_value(value)
-            input_field.clear_validation()
-        self._refresh_state()
-
     def validate(self) -> bool:
         """Validate all fields and show all errors.
 
@@ -1153,12 +1203,11 @@ class FieldsForm(QWidget):
 
         for input_field in self._input_fields:
             field_definition = input_field.definition
-            field_definition.value = field_definition.adapter.get_value()
+            field_definition.value = input_field.adapter.get_value()
             if field_definition.is_optional_allowed:
                 field_definition.is_used = (
                     input_field.optional_checkbox.isChecked()
                 )
-        self._user_modified = False
         self._refresh_state()
         return True
 
@@ -1166,10 +1215,9 @@ class FieldsForm(QWidget):
         """Restore working values from saved field values."""
         for input_field in self._input_fields:
             field_definition = input_field.definition
-            field_definition.adapter.set_value(field_definition.value)
+            input_field.adapter.set_value(field_definition.value)
             input_field.set_optional_checked(field_definition.is_used)
             input_field.clear_validation()
-        self._user_modified = False
         self._refresh_state()
 
     def reset_defaults(self) -> None:
@@ -1177,24 +1225,16 @@ class FieldsForm(QWidget):
         for input_field in self._input_fields:
             field_definition = input_field.definition
             if field_definition.default_value is not None:
-                field_definition.adapter.reset(field_definition.default_value)
+                input_field.adapter.reset(field_definition.default_value)
             input_field.clear_validation()
         self._refresh_state()
 
-    def reset_field(self, field_id: str) -> None:
-        """Reset one working value to its default.
-
-        :param field_id: Generated field identifier.
-
-        :raises KeyError: If the identifier is unknown.
-        """
-        input_field = self._get_input_field(field_id)
+    def _reset_field(self, input_field: InputFieldWidget) -> None:
+        """Reset one working value to its default."""
         if input_field.definition.default_value is None:
             return
 
-        input_field.definition.adapter.reset(
-            input_field.definition.default_value
-        )
+        input_field.adapter.reset(input_field.definition.default_value)
         input_field.clear_validation()
         self._refresh_state()
 
@@ -1203,7 +1243,7 @@ class FieldsForm(QWidget):
         input_field: InputFieldWidget,
     ) -> None:
         """Connect the controls of one field presentation."""
-        input_field.definition.adapter.value_changed.connect(
+        input_field.adapter.value_changed.connect(
             lambda input_field=input_field: self._on_value_changed(input_field)
         )
         input_field.optional_checkbox.clicked.connect(
@@ -1212,22 +1252,16 @@ class FieldsForm(QWidget):
             )
         )
         input_field.reset_button.clicked.connect(
-            lambda _checked, input_field=input_field: self.reset_field(
-                input_field.field_id
+            lambda _checked, input_field=input_field: self._reset_field(
+                input_field
             )
         )
 
     def _on_value_changed(self, input_field: InputFieldWidget) -> None:
         """Handle a user change from one field presentation."""
-        input_field.touched = True
-        self._user_modified = True
         input_field.update_enabled()
         self._validate_input_field(input_field)
         self._refresh_state()
-        self.field_changed.emit(
-            input_field.field_id,
-            input_field.definition.adapter.get_value(),
-        )
 
     def _validate_input_field(
         self,
@@ -1235,7 +1269,7 @@ class FieldsForm(QWidget):
     ) -> bool:
         """Validate and display the result for one field."""
         field_definition = input_field.definition
-        editor_adapter = field_definition.adapter
+        editor_adapter = input_field.adapter
         current_value = editor_adapter.get_value()
         error_message = ""
         if input_field.is_used() and field_definition.is_enabled:
@@ -1244,11 +1278,11 @@ class FieldsForm(QWidget):
             ):
                 error_message = field_definition.required_message
             elif (
-                field_definition.validator is not None
+                input_field.validator is not None
                 and not editor_adapter.is_empty(current_value)
             ):
                 value_text = str(current_value)
-                validator_state, _, _ = field_definition.validator.validate(
+                validator_state, _, _ = input_field.validator.validate(
                     value_text,
                     len(value_text),
                 )
@@ -1262,8 +1296,7 @@ class FieldsForm(QWidget):
     def _calculate_state(self) -> FormState:
         """Calculate aggregate form state."""
         dirty = any(
-            input_field.definition.adapter.get_value()
-            != input_field.definition.value
+            input_field.adapter.is_changed
             or (
                 input_field.definition.is_optional_allowed
                 and input_field.is_used() != input_field.definition.is_used
@@ -1282,29 +1315,11 @@ class FieldsForm(QWidget):
             form_validity = True
         elif not validation_results:
             form_validity = True
-        return FormState(dirty, form_validity, self._user_modified)
+        return FormState(dirty, form_validity)
 
     def _refresh_state(self) -> None:
-        """Emit aggregate form state only after an actual change."""
-        current_state = self._calculate_state()
-        if current_state == self._state:
-            return
-        self._state = current_state
-        self.state_changed.emit(current_state)
-
-    def _get_input_field(self, field_id: str) -> InputFieldWidget:
-        """Return one field presentation by its identifier."""
-        input_field = next(
-            (
-                candidate_field
-                for candidate_field in self._input_fields
-                if candidate_field.field_id == field_id
-            ),
-            None,
-        )
-        if input_field is None:
-            raise KeyError(f"Unknown field identifier: {field_id}")
-        return input_field
+        """Refresh the aggregate form state."""
+        self._state = self._calculate_state()
 
     def _align_titles(self) -> None:
         """Align title widths in horizontal forms."""

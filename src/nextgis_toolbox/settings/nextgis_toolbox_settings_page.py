@@ -37,9 +37,9 @@ from nextgis_toolbox.settings.nextgis_toolbox_settings import (
     NextgisToolboxSettings,
 )
 from nextgis_toolbox.shared.ui.input_field import (
+    EditorType,
     FieldsForm,
     InputField,
-    LineEditAdapter,
     UrlValidator,
 )
 from nextgis_toolbox.ui.icon import plugin_icon
@@ -136,10 +136,9 @@ class NextgisToolboxSettingsPage(QgsOptionsPageWidget):
         """Create input fields initialized from persisted settings."""
         self._endpoint_field = InputField(
             title=self.tr("Endpoint"),
-            adapter=LineEditAdapter(),
+            editor_type=EditorType.TEXT_EDIT,
             value=self._settings.endpoint,
             default_value=DEFAULT_API_ENDPOINT,
-            validator=UrlValidator(),
             placeholder=DEFAULT_API_ENDPOINT,
             tooltip=self.tr("Set the base endpoint for NextGIS Toolbox API."),
             is_required=True,
@@ -148,16 +147,20 @@ class NextgisToolboxSettingsPage(QgsOptionsPageWidget):
         )
         self._api_key_field = InputField(
             title=self.tr("Toolbox API Key"),
-            adapter=LineEditAdapter(),
+            editor_type=EditorType.TEXT_EDIT,
             value=self._settings.authentication_token,
             default_value="",
             tooltip=self.tr("Set the API key used to access NextGIS Toolbox."),
         )
         self._settings_form = FieldsForm(
-            fields=[self._endpoint_field, self._api_key_field],
             parent=self._widget.nextgis_toolbox_token_group_box,
             orientation=Qt.Orientation.Horizontal,
         )
+        self._settings_form.add_field(
+            self._endpoint_field,
+            validator=UrlValidator(),
+        )
+        self._settings_form.add_field(self._api_key_field)
         self._widget.authentication_layout.insertWidget(
             0,
             self._settings_form,
