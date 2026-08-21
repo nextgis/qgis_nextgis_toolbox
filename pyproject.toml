@@ -23,7 +23,7 @@ compile = false
 dev = ["ruff", "pre-commit"]
 
 [tool.pyright]
-include = ["src"]
+include = ["src", "tests"]
 pythonVersion = "3.7"
 
 reportOptionalCall = false
