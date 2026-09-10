@@ -95,6 +95,8 @@ class ChoiceInputAdapter(InputParameterAdapter):
         parameters: Dict[Optional[str], Any],
         context: QgsProcessingContext,
     ) -> Any:
+        if parameters[parameter.name] is None:
+            return None
         choices = parameter.choices or []
         qgis_parameters = cast(Dict[Optional[str], Any], parameters)
         if self._multiple:

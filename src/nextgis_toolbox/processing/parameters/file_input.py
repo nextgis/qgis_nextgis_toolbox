@@ -129,8 +129,15 @@ class FileInputAdapter(InputParameterAdapter):
         algorithm: QgsProcessingAlgorithm,
         parameters: Dict[Optional[str], Any],
         context: QgsProcessingContext,
-    ) -> str:
-        return algorithm.parameterAsFile(parameters, parameter.name, context)
+    ) -> Optional[str]:
+        result_parameter = algorithm.parameterAsFile(
+            parameters, parameter.name, context
+        )
+        if len(result_parameter):
+            result = result_parameter
+        else:
+            result = None
+        return result
 
 
 class SemanticFileInputAdapter(InputParameterAdapter):

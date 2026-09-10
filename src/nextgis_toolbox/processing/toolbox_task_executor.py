@@ -635,7 +635,7 @@ class ToolboxTaskExecutor:
             detail=str(value),
         )
 
-    def _empty_file_value(self, parameter: ToolInputParameter) -> str:
+    def _empty_file_value(self, parameter: ToolInputParameter) -> None:
         """Return the empty representation for an optional file input."""
         if parameter.required:
             raise ToolboxFileUploadError(
@@ -645,7 +645,7 @@ class ToolboxTaskExecutor:
                 detail=parameter.name,
             )
 
-        return ""
+        return None
 
     def _validate_local_file(
         self,

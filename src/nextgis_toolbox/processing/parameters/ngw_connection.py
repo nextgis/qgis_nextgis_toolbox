@@ -136,32 +136,48 @@ class SplitNgwConnectionInputAdapter(InputParameterAdapter):
             fields.password_name: value.get("password", ""),
         }
 
+    def string_to_none(self, value: str) -> Optional[str]:
+        if len(value):
+            result = value
+        else:
+            result = None
+        return result
+
     def resolve_runtime_value(
         self,
         parameter: ToolInputParameter,
         algorithm: QgsProcessingAlgorithm,
         parameters: Dict[str, Any],
         context: QgsProcessingContext,
-    ) -> Dict[str, str]:
+    ) -> Optional[Dict[str, str]]:
         fields = NgwConnectionFields.from_parameter_name(parameter.name)
         qgis_parameters = cast(Dict[Optional[str], Any], parameters)
-        return {
-            "url": algorithm.parameterAsString(
+        url = self.string_to_none(
+            algorithm.parameterAsString(
                 qgis_parameters,
                 fields.url_name,
                 context,
-            ),
-            "login": algorithm.parameterAsString(
-                qgis_parameters,
-                fields.login_name,
-                context,
-            ),
-            "password": algorithm.parameterAsString(
-                qgis_parameters,
-                fields.password_name,
-                context,
-            ),
-        }
+            )
+        )
+        if url is None:
+            result = None
+        else:
+            login = self.string_to_none(
+                algorithm.parameterAsString(
+                    qgis_parameters,
+                    fields.login_name,
+                    context,
+                )
+            )
+            password = self.string_to_none(
+                algorithm.parameterAsString(
+                    qgis_parameters,
+                    fields.password_name,
+                    context,
+                )
+            )
+            result = {"url": url, "login": login, "password": password}
+        return result
 
 
 class NgwConnectionInputAdapterFactory:
