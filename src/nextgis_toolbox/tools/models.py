@@ -174,6 +174,7 @@ class InputParameterType(Enum):
     DATE = "date"
     BBOX = "bbox"
     FILE = "file"
+    JSON = "json"
     SINGLE_CHOICE = "single_choice"
     MULTIPLE_CHOICE = "multiple_choice"
     NGW_CONNECTION = "ngw_connection"
@@ -197,6 +198,7 @@ class OutputParameterType(Enum):
     DATE = "date"
     BBOX = "bbox"
     FILE = "file"
+    JSON = "json"
 
     def __str__(self) -> str:
         return self.value

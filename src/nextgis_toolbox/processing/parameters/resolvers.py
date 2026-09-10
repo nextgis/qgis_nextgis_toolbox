@@ -28,11 +28,11 @@ from nextgis_toolbox.tools.models import (
 )
 
 ParameterValueResolver = Callable[
-    [ToolInputParameter, Dict[Optional[str], Any], QgsProcessingContext],
+    [ToolInputParameter, Dict[str, Any], QgsProcessingContext],
     Any,
 ]
 OutputDestinationResolver = Callable[
-    [ToolOutputParameter, Dict[Optional[str], Any], QgsProcessingContext],
+    [ToolOutputParameter, Dict[str, Any], QgsProcessingContext],
     Optional[Path],
 ]
 
@@ -51,7 +51,7 @@ class AlgorithmParameterResolver:
     def __call__(
         self,
         parameter: ToolInputParameter,
-        parameters: Dict[Optional[str], Any],
+        parameters: Dict[str, Any],
         context: QgsProcessingContext,
     ) -> Any:
         return self._parameter_registry.resolve_input_value(
@@ -71,7 +71,7 @@ class AlgorithmOutputDestinationResolver:
     def __call__(
         self,
         parameter: ToolOutputParameter,
-        parameters: Dict[Optional[str], Any],
+        parameters: Dict[str, Any],
         context: QgsProcessingContext,
     ) -> Optional[Path]:
         output_path = self._algorithm.parameterAsFileOutput(

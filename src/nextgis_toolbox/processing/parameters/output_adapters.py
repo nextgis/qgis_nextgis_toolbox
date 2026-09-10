@@ -151,6 +151,7 @@ class OutputParameterAdapterFactory:
             OutputParameterType.BOOLEAN,
             OutputParameterType.DATE,
             OutputParameterType.BBOX,
+            OutputParameterType.JSON,
         ):
             registry.register(parameter_type, self._generic_adapter)
 

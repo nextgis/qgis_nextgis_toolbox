@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, see <https://www.gnu.org/licenses/>.
-
+import json
 from dataclasses import dataclass
 from typing import (
     TYPE_CHECKING,
@@ -305,8 +305,12 @@ class ScalarRuntimeValueResolver:
         parameters: Dict[Optional[str], Any],
         name: str,
         context: QgsProcessingContext,
-    ) -> str:
-        return algorithm.parameterAsString(parameters, name, context)
+    ) -> Optional[str]:
+        result_parametr = algorithm.parameterAsString(
+            parameters, name, context
+        )
+        result = result_parametr if len(result_parametr) else None
+        return result
 
     def resolve_boolean(
         self,
@@ -323,7 +327,7 @@ class ScalarRuntimeValueResolver:
         parameters: Dict[Optional[str], Any],
         name: str,
         context: QgsProcessingContext,
-    ) -> int:
+    ) -> Optional[int]:
         return algorithm.parameterAsInt(parameters, name, context)
 
     def resolve_float(
@@ -332,7 +336,7 @@ class ScalarRuntimeValueResolver:
         parameters: Dict[Optional[str], Any],
         name: str,
         context: QgsProcessingContext,
-    ) -> float:
+    ) -> Optional[float]:
         return algorithm.parameterAsDouble(parameters, name, context)
 
     def resolve_bbox(
@@ -341,12 +345,29 @@ class ScalarRuntimeValueResolver:
         parameters: Dict[Optional[str], Any],
         name: str,
         context: QgsProcessingContext,
-    ) -> str:
+    ) -> Optional[dict]:
         extent = algorithm.parameterAsExtent(parameters, name, context)
-        return (
-            f"{extent.xMinimum()},{extent.yMinimum()},"
-            f"{extent.xMaximum()},{extent.yMaximum()}"
-        )
+        if extent.isNull():
+            return None
+
+        result = {
+            "east": extent.xMaximum(),
+            "west": extent.xMinimum(),
+            "north": extent.yMaximum(),
+            "south": extent.yMinimum(),
+        }
+        return result
+
+    def resolve_json(
+        self,
+        algorithm: QgsProcessingAlgorithm,
+        parameters: Dict[Optional[str], Any],
+        name: str,
+        context: QgsProcessingContext,
+    ) -> Any:
+        parameter = parameters[name]
+        result = json.loads(parameter) if len(parameter) else None
+        return result
 
     def resolve_date(
         self,
@@ -354,11 +375,12 @@ class ScalarRuntimeValueResolver:
         parameters: Dict[Optional[str], Any],
         name: str,
         context: QgsProcessingContext,
-    ) -> str:
+    ) -> Optional[str]:
         datetime = algorithm.parameterAsDateTime(parameters, name, context)
-        if not datetime.isValid():
-            return ""
-        return datetime.toString("yyyy-MM-dd")
+        result = (
+            datetime.toString("yyyy-MM-dd") if datetime.isValid() else None
+        )
+        return result
 
 
 class ScalarPresetValueConverter:
@@ -379,6 +401,21 @@ class ScalarPresetValueConverter:
         if isinstance(value, str):
             return value.lower() in {"1", "true", "yes", "on"}
         return value
+
+    def coerce_string_extent(self, value: Any) -> str:
+        if not isinstance(value, dict):
+            raise ValueError(f"Preset bbox not dict: {value} {type(value)}")
+
+        x_min = value["west"]
+        y_min = value["south"]
+        x_max = value["east"]
+        y_max = value["north"]
+        result = f"{x_min},{y_min},{x_max},{y_max}"
+        return result
+
+    def coerce_string_json(self, value: Any) -> str:
+        result = json.dumps(value)
+        return result
 
 
 class ScalarInputAdapterFactory:
@@ -435,7 +472,7 @@ class ScalarInputAdapterFactory:
                 InputParameterType.BBOX,
                 QgsProcessingParameterExtent,
                 self._runtime_resolver.resolve_bbox,
-                self._preset_converter.pass_through,
+                self._preset_converter.coerce_string_extent,
             ),
             ScalarAdapterDefinition(
                 InputParameterType.DATE,
@@ -443,12 +480,18 @@ class ScalarInputAdapterFactory:
                 self._runtime_resolver.resolve_date,
                 self._preset_converter.pass_through,
             ),
+            ScalarAdapterDefinition(
+                InputParameterType.JSON,
+                QgsProcessingParameterString,
+                self._runtime_resolver.resolve_json,
+                self._preset_converter.coerce_string_json,
+            ),
         )
 
     def _create_adapter(
         self,
         definition: ScalarAdapterDefinition,
-    ) -> ScalarInputAdapter:
+    ) -> InputParameterAdapter:
         adapter = ScalarInputAdapter(
             definition.parameter_class,
             definition.resolver,

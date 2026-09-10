@@ -15,7 +15,7 @@
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Dict, Optional, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from qgis.core import (
     QgsProcessingAlgorithm,
@@ -140,28 +140,40 @@ class SplitNgwConnectionInputAdapter(InputParameterAdapter):
         self,
         parameter: ToolInputParameter,
         algorithm: QgsProcessingAlgorithm,
-        parameters: Dict[str, Any],
+        parameters: Dict[Optional[str], Any],
         context: QgsProcessingContext,
-    ) -> Dict[str, str]:
+    ) -> Optional[Dict[str, Optional[str]]]:
         fields = NgwConnectionFields.from_parameter_name(parameter.name)
-        qgis_parameters = cast(Dict[Optional[str], Any], parameters)
-        return {
-            "url": algorithm.parameterAsString(
-                qgis_parameters,
+
+        url = (
+            algorithm.parameterAsString(
+                parameters,
                 fields.url_name,
                 context,
-            ),
-            "login": algorithm.parameterAsString(
-                qgis_parameters,
+            )
+            or None
+        )
+        if url is None:
+            return None
+
+        login = (
+            algorithm.parameterAsString(
+                parameters,
                 fields.login_name,
                 context,
-            ),
-            "password": algorithm.parameterAsString(
-                qgis_parameters,
+            )
+            or None
+        )
+        password = (
+            algorithm.parameterAsString(
+                parameters,
                 fields.password_name,
                 context,
-            ),
-        }
+            )
+            or None
+        )
+        result = {"url": url, "login": login, "password": password}
+        return result
 
 
 class NgwConnectionInputAdapterFactory:

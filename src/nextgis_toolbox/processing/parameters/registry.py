@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from qgis.core import QgsProcessingAlgorithm, QgsProcessingContext
 
@@ -161,7 +161,7 @@ class ProcessingParameterRegistry:
         parameter: ToolInputParameter,
         value: Any,
         preset_context: PresetPreparationContext,
-    ) -> Dict[Optional[str], Any]:
+    ) -> Dict[str, Any]:
         return self._input_registry.adapter_for(
             parameter
         ).prepare_preset_values(
@@ -174,12 +174,17 @@ class ProcessingParameterRegistry:
         self,
         parameter: ToolInputParameter,
         algorithm: QgsProcessingAlgorithm,
-        parameters: Dict[Optional[str], Any],
+        parameters: Dict[str, Any],
         context: QgsProcessingContext,
     ) -> Any:
         return self._input_registry.adapter_for(
             parameter
-        ).resolve_runtime_value(parameter, algorithm, parameters, context)
+        ).resolve_runtime_value(
+            parameter,
+            algorithm,
+            cast(Dict[Optional[str], Any], parameters),
+            context,
+        )
 
     def create_output_representation(
         self,

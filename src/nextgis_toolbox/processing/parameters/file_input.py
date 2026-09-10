@@ -129,8 +129,12 @@ class FileInputAdapter(InputParameterAdapter):
         algorithm: QgsProcessingAlgorithm,
         parameters: Dict[Optional[str], Any],
         context: QgsProcessingContext,
-    ) -> str:
-        return algorithm.parameterAsFile(parameters, parameter.name, context)
+    ) -> Optional[str]:
+        result_parameter = algorithm.parameterAsFile(
+            parameters, parameter.name, context
+        )
+        result = result_parameter if len(result_parameter) else None
+        return result
 
 
 class SemanticFileInputAdapter(InputParameterAdapter):
@@ -225,7 +229,7 @@ class SemanticFileInputAdapter(InputParameterAdapter):
         algorithm: QgsProcessingAlgorithm,
         parameters: Dict[Optional[str], Any],
         context: QgsProcessingContext,
-    ) -> str:
+    ) -> Optional[str]:
         semantic = parameter.input_semantic
         if semantic is None:
             return self._fallback.resolve_runtime_value(
@@ -267,7 +271,7 @@ class SemanticFileInputAdapter(InputParameterAdapter):
         algorithm: QgsProcessingAlgorithm,
         parameters: Dict[Optional[str], Any],
         context: QgsProcessingContext,
-    ) -> str:
+    ) -> Optional[str]:
         semantic = parameter.input_semantic
         if semantic is None:
             return self._fallback.resolve_runtime_value(
@@ -325,7 +329,7 @@ class SemanticFileInputAdapter(InputParameterAdapter):
         algorithm: QgsProcessingAlgorithm,
         parameters: Dict[Optional[str], Any],
         context: QgsProcessingContext,
-    ) -> str:
+    ) -> Optional[str]:
         raster_layer = algorithm.parameterAsRasterLayer(
             parameters,
             parameter.name,
@@ -465,7 +469,7 @@ class FileInputAdapterFactory:
     ) -> None:
         registry.register(InputParameterType.FILE, self._create())
 
-    def _create(self) -> FileInputAdapter:
+    def _create(self) -> InputParameterAdapter:
         fallback = FileInputAdapter(
             file_reference_resolver=self._file_reference_resolver,
             download_path_factory=self._download_path_factory,

@@ -63,7 +63,7 @@ class InputParameterAdapter:
         parameter: ToolInputParameter,
         value: Any,
         preset_context: PresetPreparationContext,
-    ) -> Dict[Optional[str], Any]:
+    ) -> Dict[str, Any]:
         raise NotImplementedError()
 
     def resolve_runtime_value(
