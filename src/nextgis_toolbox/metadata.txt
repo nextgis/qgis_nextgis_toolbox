@@ -1,6 +1,6 @@
 [general]
 name=NextGIS Toolbox
-version=1.1.1
+version=1.1.2
 category=Web
 tags=nextgis, web, tool, analysis, processing, webservice
 icon=resources/icons/nextgis_toolbox_logo.svg
@@ -26,6 +26,8 @@ about=NextGIS Toolbox provider for QGIS. Sends tasks to NextGIS Toolbox server a
 about[ru]=NextGIS Toolbox провайдер для QGIS. Отправляет задачи в NextGIS Toolbox и обрабатывает результаты. Разработан NextGIS. Любые отзывы приветствуются на https://nextgis.com/contact. Подробнее на https://toolbox.nextgis.com/
 
 changelog=
+    1.1.2
+        - Fixed tools reloading after saving settings
     1.1.1
         - Fixed QGIS 3.32 compatibility issues
     1.1.0
