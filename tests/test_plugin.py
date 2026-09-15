@@ -145,3 +145,39 @@ def test_plugin_update_api_client_refreshes_tools_on_semantic_toggle(
         True
     )
     plugin._tools_manager.refresh.assert_called_once_with(clear_cache=False)
+
+
+def test_plugin_update_api_client_skips_unchanged_settings(
+    qgis_app,
+) -> None:
+    del qgis_app
+
+    plugin_module = _import_plugin_module()
+    authentication = plugin_module.ToolboxTokenAuthentication(
+        "fd5d5321-96fb-4d5e-b27b-0d2e13bc20c7"
+    )
+    plugin = plugin_module.NextgisToolboxPlugin.__new__(
+        plugin_module.NextgisToolboxPlugin
+    )
+    plugin._api_client = Mock(
+        endpoint="https://same.nextgis.test",
+        authentication=authentication,
+    )
+    plugin._tools_manager = Mock(is_semantic_enrichment_enabled=False)
+
+    original_settings_class = plugin_module.NextgisToolboxSettings
+
+    class FakeSettings:
+        endpoint = "https://same.nextgis.test"
+        authentication_type = plugin_module.AuthenticationType.TOKEN
+        authentication_token = "fd5d5321-96fb-4d5e-b27b-0d2e13bc20c7"
+        is_experimental_qgis_integration_enabled = False
+
+    plugin_module.NextgisToolboxSettings = FakeSettings
+
+    try:
+        plugin._update_api_client()
+    finally:
+        plugin_module.NextgisToolboxSettings = original_settings_class
+
+    plugin._tools_manager.refresh.assert_not_called()

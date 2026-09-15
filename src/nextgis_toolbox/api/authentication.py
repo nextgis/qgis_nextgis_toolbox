@@ -66,6 +66,13 @@ class ToolboxTokenAuthentication(ToolboxAuthentication):
 
         self._token: UUID = UUID(token)
 
+    def __eq__(self, other: object) -> bool:
+        """Compare token authentication instances by their token."""
+        return (
+            isinstance(other, ToolboxTokenAuthentication)
+            and self._token == other._token
+        )
+
     @property
     def token(self) -> str:
         """Return the configured API token as a string."""
