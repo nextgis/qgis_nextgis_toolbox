@@ -18,6 +18,7 @@ import json
 import re
 from hashlib import sha256
 from pathlib import Path
+from threading import RLock
 from time import perf_counter
 from typing import Any, Dict, Optional
 from urllib.parse import unquote
@@ -90,6 +91,7 @@ class ToolboxApiClient(QObject):
         self._endpoint = endpoint
         self._authentication = authentication
         self._is_custom_cache_manager = cache_manager is not None
+        self._cache_lock = RLock()
         self._cache_manager = cache_manager or self._create_cache_manager()
 
     @property
@@ -141,16 +143,18 @@ class ToolboxApiClient(QObject):
         self.authentication_changed.emit()
 
     def invalidate_cache(self) -> None:
-        try:
-            self._cache_manager.invalidate()
-        except ToolboxCacheError as error:
-            logger.warning(error.log_message)
+        with self._cache_lock:
+            try:
+                self._cache_manager.invalidate()
+            except ToolboxCacheError as error:
+                logger.warning(error.log_message)
 
     def invalidate_cache_entry(self, cache_key: str) -> None:
-        try:
-            self._cache_manager.invalidate_entry(cache_key)
-        except ToolboxCacheError as error:
-            logger.warning(error.log_message)
+        with self._cache_lock:
+            try:
+                self._cache_manager.invalidate_entry(cache_key)
+            except ToolboxCacheError as error:
+                logger.warning(error.log_message)
 
     def get(
         self,
@@ -870,7 +874,8 @@ class ToolboxApiClient(QObject):
         if self._is_custom_cache_manager:
             return
 
-        self._cache_manager = self._create_cache_manager()
+        with self._cache_lock:
+            self._cache_manager = self._create_cache_manager()
 
     def _cache_scope_id(self) -> str:
         authentication_headers = {}
@@ -895,28 +900,30 @@ class ToolboxApiClient(QObject):
         if cache_key is None:
             return None
 
-        try:
-            return self._cache_manager.get_bytes(
-                cache_key,
-                cache_ttl_hours=cache_ttl_hours,
-            )
-        except ToolboxCacheError as error:
-            logger.warning(error.log_message)
-            return None
+        with self._cache_lock:
+            try:
+                return self._cache_manager.get_bytes(
+                    cache_key,
+                    cache_ttl_hours=cache_ttl_hours,
+                )
+            except ToolboxCacheError as error:
+                logger.warning(error.log_message)
+                return None
 
     def _cached_json(
         self,
         cache_key: str,
         cache_ttl_hours: Optional[int] = None,
     ) -> Optional[Any]:
-        try:
-            return self._cache_manager.get(
-                cache_key,
-                cache_ttl_hours=cache_ttl_hours,
-            )
-        except ToolboxCacheError as error:
-            logger.warning(error.log_message)
-            return None
+        with self._cache_lock:
+            try:
+                return self._cache_manager.get(
+                    cache_key,
+                    cache_ttl_hours=cache_ttl_hours,
+                )
+            except ToolboxCacheError as error:
+                logger.warning(error.log_message)
+                return None
 
     def _cache_bytes(
         self,
@@ -926,10 +933,11 @@ class ToolboxApiClient(QObject):
         if cache_key is None:
             return
 
-        try:
-            self._cache_manager.put_bytes(cache_key, content)
-        except ToolboxCacheError as error:
-            logger.warning(error.log_message)
+        with self._cache_lock:
+            try:
+                self._cache_manager.put_bytes(cache_key, content)
+            except ToolboxCacheError as error:
+                logger.warning(error.log_message)
 
     def _read_upload_payload(self, file_path: Path) -> bytes:
         try:

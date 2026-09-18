@@ -14,7 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
-from typing import Any, Dict, List, Optional
+from concurrent.futures import (
+    FIRST_COMPLETED,
+    Future,
+    ThreadPoolExecutor,
+    wait,
+)
+from typing import Any, Dict, List, Optional, Tuple
 
 from qgis.core import QgsFeedback
 
@@ -33,6 +39,8 @@ from nextgis_toolbox.tools.semantics import ToolSemanticsCatalog
 
 class ToolsRepository:
     """Repository for Toolbox tool models."""
+
+    _MAX_CONCURRENT_TOOL_REQUESTS = 4
 
     def __init__(
         self,
@@ -118,22 +126,123 @@ class ToolsRepository:
         percent_progress_per_tool = (
             (95 / len(unfiltered_tools)) if unfiltered_tools else 0
         )
+        available_tools = self._available_tools(
+            unfiltered_tools,
+            is_developer_mode,
+        )
 
-        tools: List[ToolboxTool] = []
+        if self._is_canceled(feedback):
+            logger.debug("Tools fetching canceled by user")
+            return []
 
-        for index, tool_data in enumerate(unfiltered_tools, start=1):
-            if self._is_canceled(feedback):
-                logger.debug("Tools fetching canceled by user")
-                return []
+        tools_by_index = self._fetch_available_tools_data(
+            available_tools,
+            feedback,
+            percent_progress_per_tool,
+        )
+        if tools_by_index is None:
+            return []
 
-            if not self._is_tool_available(tool_data, is_developer_mode):
-                continue
+        return [tools_by_index[index] for index, _ in available_tools]
 
-            tools.append(self._fetch_all_tool_data(tool_data))
+    def _available_tools(
+        self,
+        unfiltered_tools: List[Dict[str, Any]],
+        is_developer_mode: bool,
+    ) -> List[Tuple[int, Dict[str, Any]]]:
+        return [
+            (index, tool_data)
+            for index, tool_data in enumerate(unfiltered_tools, start=1)
+            if self._is_tool_available(tool_data, is_developer_mode)
+        ]
 
-            self._set_progress(feedback, 5 + index * percent_progress_per_tool)
+    def _fetch_available_tools_data(
+        self,
+        available_tools: List[Tuple[int, Dict[str, Any]]],
+        feedback: Optional[QgsFeedback],
+        percent_progress_per_tool: float,
+    ) -> Optional[Dict[int, ToolboxTool]]:
+        tools_by_index: Dict[int, ToolboxTool] = {}
+        futures: Dict[Future, int] = {}
+        next_tool_index = 0
+        highest_progress = 5.0
 
-        return tools
+        with ThreadPoolExecutor(
+            max_workers=self._MAX_CONCURRENT_TOOL_REQUESTS,
+        ) as executor:
+            next_tool_index = self._submit_tool_fetches(
+                executor,
+                available_tools,
+                next_tool_index,
+                futures,
+            )
+
+            while futures:
+                is_canceled, highest_progress = self._collect_tool_fetches(
+                    futures,
+                    tools_by_index,
+                    feedback,
+                    percent_progress_per_tool,
+                    highest_progress,
+                )
+                if is_canceled:
+                    return None
+
+                next_tool_index = self._submit_tool_fetches(
+                    executor,
+                    available_tools,
+                    next_tool_index,
+                    futures,
+                )
+
+        return tools_by_index
+
+    def _submit_tool_fetches(
+        self,
+        executor: ThreadPoolExecutor,
+        available_tools: List[Tuple[int, Dict[str, Any]]],
+        next_tool_index: int,
+        futures: Dict[Future, int],
+    ) -> int:
+        while (
+            next_tool_index < len(available_tools)
+            and len(futures) < self._MAX_CONCURRENT_TOOL_REQUESTS
+        ):
+            index, tool_data = available_tools[next_tool_index]
+            futures[executor.submit(self._fetch_all_tool_data, tool_data)] = (
+                index
+            )
+            next_tool_index += 1
+
+        return next_tool_index
+
+    def _collect_tool_fetches(
+        self,
+        futures: Dict[Future, int],
+        tools_by_index: Dict[int, ToolboxTool],
+        feedback: Optional[QgsFeedback],
+        percent_progress_per_tool: float,
+        highest_progress: float,
+    ) -> Tuple[bool, float]:
+        completed_futures, _ = wait(
+            futures,
+            return_when=FIRST_COMPLETED,
+        )
+
+        for future in completed_futures:
+            index = futures.pop(future)
+            tools_by_index[index] = future.result()
+            highest_progress = max(
+                highest_progress,
+                5 + index * percent_progress_per_tool,
+            )
+            self._set_progress(feedback, highest_progress)
+
+        if not self._is_canceled(feedback):
+            return False, highest_progress
+
+        logger.debug("Tools fetching canceled by user")
+        return True, highest_progress
 
     def _fetch_all_tool_data(self, tool_data: Dict[str, Any]) -> ToolboxTool:
         tool_name = tool_data["name"]

@@ -15,6 +15,9 @@
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
 import json
+from threading import Lock
+from time import sleep
+from unittest.mock import Mock
 
 import nextgis_toolbox.api.cache_manager as cache_manager_module
 from nextgis_toolbox.api.client import ToolboxApiClient
@@ -224,6 +227,63 @@ def test_tools_repository_includes_dev_tools_in_developer_mode(
     assert [tool.name for tool in tools] == [
         "public-tool",
         "developer-tool",
+    ]
+
+
+def test_tools_repository_fetches_four_tools_concurrently() -> None:
+    tool_summaries = [
+        build_tool_summary(
+            tool_id,
+            f"tool-{tool_id}",
+            alias=f"Tool {tool_id}",
+        )
+        for tool_id in range(1, 6)
+    ]
+    repository = ToolsRepository(
+        Mock(),
+        is_semantic_enrichment_enabled=False,
+    )
+    active_requests = 0
+    maximum_active_requests = 0
+    request_lock = Lock()
+
+    def fetch_tool_details(tool_name: str) -> dict:
+        nonlocal active_requests, maximum_active_requests
+
+        with request_lock:
+            active_requests += 1
+            maximum_active_requests = max(
+                maximum_active_requests,
+                active_requests,
+            )
+
+        try:
+            sleep(0.05)
+        finally:
+            with request_lock:
+                active_requests -= 1
+
+        tool_summary = next(
+            tool for tool in tool_summaries if tool["name"] == tool_name
+        )
+        return build_tool_detail(tool_summary)
+
+    repository._fetch_tool_details = Mock(side_effect=fetch_tool_details)
+    repository._fetch_tool_presets = Mock(return_value=[])
+
+    tools = repository._fetch_all_tools_data(
+        tool_summaries,
+        feedback=None,
+        is_developer_mode=False,
+    )
+
+    assert maximum_active_requests == 4
+    assert [tool.name for tool in tools] == [
+        "tool-1",
+        "tool-2",
+        "tool-3",
+        "tool-4",
+        "tool-5",
     ]
 
 
