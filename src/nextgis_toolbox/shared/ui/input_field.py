@@ -975,7 +975,9 @@ class InputFieldWidget(QWidget):
         controls_enabled = self.definition.is_enabled and self.is_active()
         self.editor.setEnabled(controls_enabled)
         self.reset_button.setEnabled(
-            controls_enabled and self.definition.default_value is not None
+            controls_enabled
+            and self.definition.default_value is not None
+            and self.adapter.value() != self.definition.default_value
         )
 
     def show_error(self, message: str) -> None:
@@ -1251,6 +1253,7 @@ class FieldsForm(QWidget):
             field_definition = input_field.definition
             if field_definition.default_value is not None:
                 input_field.adapter.reset(field_definition.default_value)
+            input_field.update_enabled()
             input_field.clear_validation()
         self._refresh_state()
 
@@ -1260,6 +1263,7 @@ class FieldsForm(QWidget):
             return
 
         input_field.adapter.reset(input_field.definition.default_value)
+        input_field.update_enabled()
         input_field.clear_validation()
         self._refresh_state()
 

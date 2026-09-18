@@ -97,6 +97,34 @@ def test_form_remains_dirty_after_value_is_restored(qgis_app) -> None:
         form.deleteLater()
 
 
+def test_reset_button_is_disabled_for_default_value(qgis_app) -> None:
+    del qgis_app
+
+    form = FieldsForm()
+
+    try:
+        editor = form.add_field(
+            InputField(
+                title="Text",
+                editor_type=EditorType.TEXT_EDITOR,
+                value="default value",
+                default_value="default value",
+            )
+        )
+        reset_button = form._input_fields[0].reset_button
+
+        assert reset_button.isEnabled() is False
+
+        editor.setText("custom value")
+        assert reset_button.isEnabled() is True
+
+        reset_button.click()
+        assert editor.text() == "default value"
+        assert reset_button.isEnabled() is False
+    finally:
+        form.deleteLater()
+
+
 def test_form_creates_builtin_editor_adapters(qgis_app) -> None:
     del qgis_app
 

@@ -83,11 +83,19 @@ def test_settings_page_shows_api_key_documentation_link(qgis_app) -> None:
             settings_page._widget.toolbox_token_documentation_label
         )
         authentication_layout = settings_page._widget.authentication_layout
+        endpoint_reset_button = settings_page._settings_form._input_fields[
+            0
+        ].reset_button
+        api_key_reset_button = settings_page._settings_form._input_fields[
+            1
+        ].reset_button
 
         assert authentication_layout.itemAt(0).widget() is (
             settings_page._settings_form
         )
         assert authentication_layout.itemAt(1).widget() is documentation_label
+        assert endpoint_reset_button.isEnabled() is False
+        assert api_key_reset_button.isVisible() is False
         assert documentation_label.openExternalLinks() is True
         assert (
             "https://docs.nextgis.com/docs_ngqgis/source/toolbox.html#api-key"

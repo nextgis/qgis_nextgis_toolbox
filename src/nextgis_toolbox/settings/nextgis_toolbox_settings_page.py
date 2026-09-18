@@ -151,7 +151,6 @@ class NextgisToolboxSettingsPage(QgsOptionsPageWidget):
             title=self.tr("Toolbox API Key"),
             editor_type=EditorType.TEXT_EDITOR,
             value=settings.authentication_token,
-            default_value="",
             tooltip=self.tr("Set the API key used to access NextGIS Toolbox."),
             invalid_message=self.tr("Enter a valid API key UUID"),
         )
