@@ -86,7 +86,7 @@ class ToolsRepository:
 
         unfiltered_tools: List[Dict[str, Any]] = []
         with PluginRuntimeProfiler.download("fetching tools summaries"):
-            unfiltered_tools = self._api.fetch_tools()
+            unfiltered_tools = self._api.fetch_tools(feedback=feedback)
 
         self._set_progress(feedback, 5)
 
@@ -175,6 +175,7 @@ class ToolsRepository:
                 available_tools,
                 next_tool_index,
                 futures,
+                feedback,
             )
 
             while futures:
@@ -193,6 +194,7 @@ class ToolsRepository:
                     available_tools,
                     next_tool_index,
                     futures,
+                    feedback,
                 )
 
         return tools_by_index
@@ -203,15 +205,16 @@ class ToolsRepository:
         available_tools: List[Tuple[int, Dict[str, Any]]],
         next_tool_index: int,
         futures: Dict[Future, int],
+        feedback: Optional[QgsFeedback],
     ) -> int:
         while (
             next_tool_index < len(available_tools)
             and len(futures) < self._MAX_CONCURRENT_TOOL_REQUESTS
         ):
             index, tool_data = available_tools[next_tool_index]
-            futures[executor.submit(self._fetch_all_tool_data, tool_data)] = (
-                index
-            )
+            futures[
+                executor.submit(self._fetch_all_tool_data, tool_data, feedback)
+            ] = index
             next_tool_index += 1
 
         return next_tool_index
@@ -244,10 +247,14 @@ class ToolsRepository:
         logger.debug("Tools fetching canceled by user")
         return True, highest_progress
 
-    def _fetch_all_tool_data(self, tool_data: Dict[str, Any]) -> ToolboxTool:
+    def _fetch_all_tool_data(
+        self,
+        tool_data: Dict[str, Any],
+        feedback: Optional[QgsFeedback] = None,
+    ) -> ToolboxTool:
         tool_name = tool_data["name"]
-        tool_details = self._fetch_tool_details(tool_name)
-        tool_presets = self._fetch_tool_presets(tool_name)
+        tool_details = self._fetch_tool_details(tool_name, feedback=feedback)
+        tool_presets = self._fetch_tool_presets(tool_name, feedback=feedback)
         merged_tool_data = self._merge_tool_data(
             tool_data,
             tool_details,
@@ -259,13 +266,21 @@ class ToolsRepository:
             )
         return ToolboxTool.from_json(merged_tool_data)
 
-    def _fetch_tool_details(self, tool_name: str) -> Dict[str, Any]:
+    def _fetch_tool_details(
+        self,
+        tool_name: str,
+        feedback: Optional[QgsFeedback] = None,
+    ) -> Dict[str, Any]:
         logger.debug(f"Fetching tool details: {tool_name}")
-        return self._api.fetch_tool(tool_name)
+        return self._api.fetch_tool(tool_name, feedback=feedback)
 
-    def _fetch_tool_presets(self, tool_name: str) -> List[Dict[str, Any]]:
+    def _fetch_tool_presets(
+        self,
+        tool_name: str,
+        feedback: Optional[QgsFeedback] = None,
+    ) -> List[Dict[str, Any]]:
         logger.debug(f"Fetching tool presets: {tool_name}")
-        return self._api.fetch_tool_presets(tool_name)
+        return self._api.fetch_tool_presets(tool_name, feedback=feedback)
 
     def _merge_tool_data(
         self,
@@ -318,7 +333,10 @@ class TagsRepository:
         """
         self._api = api
 
-    def fetch_tags(self) -> List[ToolboxTag]:
+    def fetch_tags(
+        self,
+        feedback: Optional[QgsFeedback] = None,
+    ) -> List[ToolboxTag]:
         """Fetch tag models from the API.
 
         :returns: List of Toolbox tag models.
@@ -328,7 +346,7 @@ class TagsRepository:
         with PluginRuntimeProfiler.download("fetching tags"):
             tags = [
                 ToolboxTag.from_json(tag_data)
-                for tag_data in self._api.fetch_tags()
+                for tag_data in self._api.fetch_tags(feedback=feedback)
             ]
 
         logger.debug(f"Fetched {len(tags)} tags")

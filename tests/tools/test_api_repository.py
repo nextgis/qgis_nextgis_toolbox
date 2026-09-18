@@ -128,6 +128,35 @@ def test_tools_api_fetches_lists_and_detail(api_server) -> None:
     assert api.fetch_tool_presets("public-tool") == [build_tool_preset()]
 
 
+def test_tools_api_passes_feedback_to_catalog_requests(qgis_app) -> None:
+    del qgis_app
+
+    client = Mock()
+    client.get.side_effect = [
+        {"data": []},
+        {"data": []},
+        {},
+        {"items": []},
+    ]
+    api = ToolsApi(client)
+    feedback = Mock()
+
+    api.fetch_tools(feedback)
+    api.fetch_tags(feedback)
+    api.fetch_tool("tool", feedback)
+    api.fetch_tool_presets("tool", feedback)
+
+    assert client.get.call_args_list == [
+        (("tools/",), {"feedback": feedback}),
+        (("tags/",), {"feedback": feedback}),
+        (("tools/tool",), {"feedback": feedback, "cache_key": "tools/tool"}),
+        (
+            ("tools/tool/presets",),
+            {"feedback": feedback, "cache_key": "tools/tool/presets"},
+        ),
+    ]
+
+
 def test_tools_api_sets_tool_favorite(api_server) -> None:
     api_server.add_json_response(
         "POST",
@@ -247,7 +276,8 @@ def test_tools_repository_fetches_four_tools_concurrently() -> None:
     maximum_active_requests = 0
     request_lock = Lock()
 
-    def fetch_tool_details(tool_name: str) -> dict:
+    def fetch_tool_details(tool_name: str, feedback=None) -> dict:
+        del feedback
         nonlocal active_requests, maximum_active_requests
 
         with request_lock:

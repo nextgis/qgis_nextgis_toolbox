@@ -18,12 +18,17 @@ from typing import cast
 from unittest.mock import Mock
 
 import pytest
+from qgis.core import QgsTask
+from qgis.PyQt.QtCore import QObject
 
+import nextgis_toolbox.tools.tools_manager as tools_manager_module
 from nextgis_toolbox.core.exceptions import (
+    ToolboxError,
     ToolboxSortingError,
     ToolboxTagNotFoundError,
     ToolboxToolNotFoundError,
 )
+from nextgis_toolbox.tools.load_tools_task import LoadToolsTask
 from nextgis_toolbox.tools.models import (
     SortBy,
     ToolboxTag,
@@ -210,3 +215,87 @@ def test_tools_manager_updates_favorite_state(qgis_app) -> None:
         "alpha",
         True,
     )
+
+
+def test_tools_manager_cancels_previous_catalog_load_before_refreshing(
+    qgis_app,
+    monkeypatch,
+) -> None:
+    del qgis_app
+
+    class FakeSignal:
+        def connect(self, _slot) -> None:
+            return None
+
+    class FakeLoadToolsTask:
+        def __init__(self, **_kwargs) -> None:
+            self.progressChanged = FakeSignal()
+            self.cancel_calls = 0
+
+        def cancel(self) -> None:
+            self.cancel_calls += 1
+
+    class FakePlugin(QObject):
+        class Mode:
+            GUI = object()
+
+        def __init__(self) -> None:
+            super().__init__()
+            self.mode = self.Mode.GUI
+            self.qgis_tasks_manager = Mock()
+
+    plugin = FakePlugin()
+    manager = ToolsManager(Mock(), parent=plugin)  # type: ignore[arg-type]
+    monkeypatch.setattr(
+        tools_manager_module,
+        "LoadToolsTask",
+        FakeLoadToolsTask,
+    )
+
+    manager.refresh()
+    previous_task = manager._catalog_load_task
+    manager.refresh(clear_cache=True)
+
+    assert isinstance(previous_task, FakeLoadToolsTask)
+    assert previous_task.cancel_calls == 1
+    assert plugin.qgis_tasks_manager.addTask.call_count == 2
+
+
+def test_tools_manager_reports_active_catalog_load_error(qgis_app) -> None:
+    del qgis_app
+
+    class FakePlugin(QObject):
+        def __init__(self) -> None:
+            super().__init__()
+            self.notifier = Mock()
+
+    class FailedTask:
+        def __init__(self, error: ToolboxError) -> None:
+            self.error = error
+            self.tags = []
+            self.tools = []
+
+        def cancel(self) -> None:
+            return None
+
+        def isCanceled(self) -> bool:  # noqa: N802
+            return False
+
+    plugin = FakePlugin()
+    manager = ToolsManager(Mock(), parent=plugin)  # type: ignore[arg-type]
+    error = ToolboxError("Catalog request failed")
+    task = FailedTask(error)
+    manager._catalog_load_task = task  # type: ignore[assignment]
+
+    manager._on_catalog_load_finished(task, False)  # type: ignore[arg-type]
+
+    assert manager.error is error
+    plugin.notifier.display_exception.assert_called_once_with(error)
+
+
+def test_catalog_load_task_is_canceled_without_prompt(qgis_app) -> None:
+    del qgis_app
+
+    task = LoadToolsTask(Mock(), Mock(), Mock())
+
+    assert task.flags() & QgsTask.Flag.CancelWithoutPrompt

@@ -14,11 +14,10 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, cast
 
 from qgis.core import QgsFeedback, QgsTask
 
-from nextgis_toolbox.core.compat import create_scaled_feedback
 from nextgis_toolbox.core.exceptions import ToolboxError
 from nextgis_toolbox.core.logging import logger
 from nextgis_toolbox.core.utils import PluginRuntimeProfiler
@@ -43,7 +42,12 @@ class LoadToolsTask(QgsTask):
     ) -> None:
         super().__init__(
             "Load NextGIS Toolbox catalog",
-            QgsTask.Flag.CanCancel,
+            cast(
+                QgsTask.Flag,
+                QgsTask.Flag.CanCancel
+                | QgsTask.Flag.CancelWithoutPrompt
+                | QgsTask.Flag.Hidden,
+            ),
         )
         self._tags_repository = tags_repository
         self._tools_repository = tools_repository
@@ -51,11 +55,11 @@ class LoadToolsTask(QgsTask):
         self._error: Optional[ToolboxError] = None
         self._tags: List[ToolboxTag] = []
         self._tools: List[ToolboxTool] = []
-        self._feedback: Optional[QgsFeedback] = None
+        self._feedback = QgsFeedback(self)
+        self._feedback.progressChanged.connect(self.setProgress)
 
     def cancel(self) -> None:
-        if self._feedback is not None:
-            self._feedback.cancel()
+        self._feedback.cancel()
         super().cancel()
 
     @property
@@ -72,18 +76,13 @@ class LoadToolsTask(QgsTask):
 
     @PluginRuntimeProfiler.wrap("load NextGIS Toolbox catalog")
     def run(self) -> bool:
-        self._feedback = QgsFeedback(self)
-        self._feedback.progressChanged.connect(self.setProgress)
-
         try:
-            self._tags = self._tags_repository.fetch_tags()
+            self._tags = self._tags_repository.fetch_tags(self._feedback)
+            if self.isCanceled():
+                return False
+
             self.setProgress(self._TAGS_PROGRESS_WEIGHT)
-            tools_feedback = create_scaled_feedback(
-                self._feedback,
-                self._TAGS_PROGRESS_WEIGHT,
-                100,
-            )
-            self._tools = self._tools_repository.fetch_tools(tools_feedback)
+            self._tools = self._tools_repository.fetch_tools(self._feedback)
             self.setProgress(100)
 
         except ToolboxError as error:
@@ -112,11 +111,6 @@ class LoadToolsTask(QgsTask):
                 exc_info=error,
             )
             return False
-
-        finally:
-            if self._feedback is not None:
-                self._feedback.deleteLater()
-                self._feedback = None
 
         return not self.isCanceled()
 

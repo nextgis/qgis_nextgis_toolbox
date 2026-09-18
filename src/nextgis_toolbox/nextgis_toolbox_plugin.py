@@ -202,6 +202,13 @@ class NextgisToolboxPlugin(NextgisToolboxInterface):
 
         if self._tools_manager is not None:
             self._tools_manager.unload()
+
+        if self._qgis_task_manager is not None:
+            self._qgis_task_manager.cancelAll()
+            for task in self._qgis_task_manager.activeTasks():
+                task.waitForFinished(0)
+
+        if self._tools_manager is not None:
             self._tools_manager.deleteLater()
             del self._tools_manager
 

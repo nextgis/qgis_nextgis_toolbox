@@ -386,10 +386,6 @@ class ToolsManager(ToolsInterface):
         self._set_state(ToolsManagerState.LOADED)
 
     def _start_catalog_load(self, *, clear_cache: bool = False) -> None:
-        if self._catalog_load_task is not None:
-            logger.info("Tools catalog load is already in progress")
-            return
-
         if clear_cache:
             self._tools_api.invalidate_cache()
 
@@ -429,16 +425,25 @@ class ToolsManager(ToolsInterface):
         elif load_task.error is not None:
             self._reset()
             self._set_state(ToolsManagerState.ERROR, load_task.error)
+            self._notify_load_error(load_task.error)
             return
 
         elif not result:
             self._reset()
             error = ToolboxError("Failed to load tools catalog.")
             self._set_state(ToolsManagerState.ERROR, error)
+            self._notify_load_error(error)
             return
 
         self._apply_catalog(load_task.tags, load_task.tools)
         self._set_state(ToolsManagerState.LOADED)
+
+    def _notify_load_error(self, error: ToolboxError) -> None:
+        plugin = cast("NextgisToolboxInterface", self.parent())
+        if plugin is None:
+            return
+
+        plugin.notifier.display_exception(error)
 
     def _normalize_to_list(
         self, value: Any

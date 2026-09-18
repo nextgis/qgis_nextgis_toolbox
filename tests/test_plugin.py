@@ -181,3 +181,28 @@ def test_plugin_update_api_client_skips_unchanged_settings(
         plugin_module.NextgisToolboxSettings = original_settings_class
 
     plugin._tools_manager.refresh.assert_not_called()
+
+
+def test_plugin_unload_waits_for_local_catalog_tasks(qgis_app) -> None:
+    del qgis_app
+
+    plugin_module = _import_plugin_module()
+    plugin = plugin_module.NextgisToolboxPlugin.__new__(
+        plugin_module.NextgisToolboxPlugin
+    )
+    plugin._processing_provider = None
+    tools_manager = Mock()
+    plugin._tools_manager = tools_manager
+    plugin._tasks_manager = None
+    plugin._api_client = None
+    active_task = Mock()
+    task_manager = Mock()
+    task_manager.activeTasks.return_value = [active_task]
+    plugin._qgis_task_manager = task_manager
+
+    plugin._unload_processing()
+
+    tools_manager.unload.assert_called_once_with()
+    task_manager.cancelAll.assert_called_once_with()
+    active_task.waitForFinished.assert_called_once_with(0)
+    task_manager.deleteLater.assert_called_once_with()

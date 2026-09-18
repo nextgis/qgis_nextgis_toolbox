@@ -14,7 +14,9 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
+
+from qgis.core import QgsFeedback
 
 from nextgis_toolbox.api.client import ToolboxApiClient
 
@@ -34,20 +36,26 @@ class ToolsApi:
         """Low-level API client."""
         return self._client
 
-    def fetch_tools(self) -> List[Dict[str, Any]]:
+    def fetch_tools(
+        self,
+        feedback: Optional[QgsFeedback] = None,
+    ) -> List[Dict[str, Any]]:
         """Fetch raw tool summary payloads.
 
         :returns: List of raw tool dictionaries.
         """
-        response_data = self._client.get("tools/")
+        response_data = self._client.get("tools/", feedback=feedback)
         return response_data["data"]
 
-    def fetch_tags(self) -> List[Dict[str, Any]]:
+    def fetch_tags(
+        self,
+        feedback: Optional[QgsFeedback] = None,
+    ) -> List[Dict[str, Any]]:
         """Fetch raw tags payloads.
 
         :returns: List of raw tag dictionaries.
         """
-        response_data = self._client.get("tags/")
+        response_data = self._client.get("tags/", feedback=feedback)
         return response_data["data"]
 
     def invalidate_cache(self) -> None:
@@ -57,6 +65,7 @@ class ToolsApi:
     def fetch_tool(
         self,
         tool_name: str,
+        feedback: Optional[QgsFeedback] = None,
     ) -> Dict[str, Any]:
         """Fetch raw tool details.
 
@@ -65,9 +74,13 @@ class ToolsApi:
         :returns: Raw tool dictionary.
         """
         path = f"tools/{tool_name}"
-        return self._client.get(path, cache_key=path)
+        return self._client.get(path, feedback=feedback, cache_key=path)
 
-    def fetch_tool_presets(self, tool_name: str) -> List[Dict[str, Any]]:
+    def fetch_tool_presets(
+        self,
+        tool_name: str,
+        feedback: Optional[QgsFeedback] = None,
+    ) -> List[Dict[str, Any]]:
         """Fetch raw tool presets.
 
         :param tool_name: Toolbox tool identifier.
@@ -75,7 +88,11 @@ class ToolsApi:
         :returns: List of raw tool preset dictionaries.
         """
         path = f"tools/{tool_name}/presets"
-        response_data = self._client.get(path, cache_key=path)
+        response_data = self._client.get(
+            path,
+            feedback=feedback,
+            cache_key=path,
+        )
         return response_data["items"]
 
     def set_tool_favorite(
