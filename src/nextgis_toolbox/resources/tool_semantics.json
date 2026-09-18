@@ -49,7 +49,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "c85ba7086160b56d3482ea632fad9f97be32435f"
   },
   "ai2geo": {
     "inputs": {
@@ -75,7 +76,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "912170616bc6165c647fde70bf0652d2d9268e14"
   },
   "ascii2geotiff": {
     "inputs": {
@@ -105,7 +107,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "82fe9a6324ec949d273465ad69b317dd70cd6cb4"
   },
   "autocad_file_schema": {
     "outputs": {
@@ -118,9 +121,12 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "3610ae65f28dc1cd89b91a2a156b8415d7169e0c"
   },
-  "autocad_version": {},
+  "autocad_version": {
+    "commit_hash": "52d08f767f630a3b3f5564d70d4049076dbe46cb"
+  },
   "cadastre2img": {
     "inputs": {
       "code": {
@@ -160,7 +166,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "458be0c36cf44892d39b496ab20414203e58534e"
   },
   "centerline": {
     "inputs": {
@@ -189,7 +196,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "334396c0f2f762c07e54d9e8a12f64b6d2d93b80"
   },
   "centroid2attr": {
     "inputs": {
@@ -212,7 +220,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "c1cd99203f7547710bfc2017dfc3da2ec649d2b0"
   },
   "check_geometries": {
     "inputs": {
@@ -246,7 +255,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "04f5fd82b8b2066c083fae98cab047866538bbc8"
   },
   "clip_polys_poly": {
     "inputs": {
@@ -284,7 +294,8 @@
           }
         ]
       }
-    }
+    },
+    "commit_hash": "d2d0548055a25821c65942ef36497e0ba8a459a4"
   },
   "convert": {
     "inputs": {
@@ -303,7 +314,8 @@
           "layer_type": "vector"
         }
       }
-    }
+    },
+    "commit_hash": "824f46acab9ad6b411075348e792b62cd1e1a07b"
   },
   "coord_recalc": {
     "inputs": {
@@ -343,7 +355,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "c35a01ebc3870ed34ad4c0740b78d4b0721778c2"
   },
   "coords2poly": {
     "inputs": {
@@ -367,7 +380,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "a8dd31719cb247291f658859751472a9db450046"
   },
   "count_tiles": {
     "inputs": {
@@ -396,7 +410,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "62a4d4707f74d74694e3557e93770eace2b3b30d"
   },
   "crossing_borders": {
     "inputs": {
@@ -435,7 +450,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "4df2a3d1de112c954d8ebd845da302bc96832484"
   },
   "deminpoints": {
     "inputs": {
@@ -472,7 +488,8 @@
           }
         ]
       }
-    }
+    },
+    "commit_hash": "d7666d2c793f3fbdc9ebca7ce17696d2109d91cf"
   },
   "dezhurcad": {
     "inputs": {
@@ -529,7 +546,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "e4d9767b8b1dbe45023e4d31f560d149e5660c29"
   },
   "doc2pdf": {
     "inputs": {
@@ -563,7 +581,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "2ed5990db031c0be991c579d8d5cb68beddd1e38"
   },
   "download_and_prepare_l8_s2": {
     "inputs": {
@@ -589,7 +608,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "efc8242e779f38cf7888b93abdf85ec336b9d33e"
   },
   "download_glad": {
     "inputs": {
@@ -631,7 +651,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "2fb855bc3a2059e0aba474e980191f4bbb000861"
   },
   "egrn_kvartals_cover": {
     "inputs": {
@@ -656,7 +677,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "4eaee79af855b211fe9b82544f4f688ccbb11c56"
   },
   "egrn_splitter": {
     "inputs": {
@@ -680,7 +702,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "21b0117928a909b280242061d9155634fab8abb9"
   },
   "embedsvg": {
     "inputs": {
@@ -698,7 +721,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "a543d36b30c552dcda34160cdcd1f687c9775d35"
   },
   "empty_geoms": {
     "inputs": {
@@ -727,7 +751,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "5c70f080836051d01da181d858c063bb71f597dc"
   },
   "eraser": {
     "inputs": {
@@ -754,7 +779,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "dca9dcecdbd32a4712d08c77dd352d660f572a07"
   },
   "erosion_analysis": {
     "inputs": {
@@ -778,7 +804,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "77c72961ce76fa16cb226b46f75231fe90d17cbc"
   },
   "exif2resource": {
     "inputs": {
@@ -822,7 +849,8 @@
           }
         ]
       }
-    }
+    },
+    "commit_hash": "92429fb1c73ba38710ad808f8c0b7871a42beb5c"
   },
   "explication2poly": {
     "inputs": {
@@ -847,7 +875,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "8dbddaf3453ab4cc285dda9f3cdda698d06bfe30"
   },
   "field_value_changer": {
     "inputs": {
@@ -876,7 +905,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "2eddcb5b9f988dcf40ac0908181f55215aae1327"
   },
   "fix_geometries": {
     "inputs": {
@@ -894,7 +924,8 @@
           "layer_type": "vector"
         }
       }
-    }
+    },
+    "commit_hash": "eb61503b50cfc2299952707d8c06317c58e938a5"
   },
   "flatten": {
     "inputs": {
@@ -914,7 +945,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "1035699a0531f39c447bd12d6617d9f97f929955"
   },
   "flood_analysis": {
     "inputs": {
@@ -938,7 +970,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "d163310c946b2333ece11ea31aafcad166a0341f"
   },
   "forestplots_field": {
     "inputs": {
@@ -986,7 +1019,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "2e4e4b33b268ff8c85adc520be56657c7d4681c2"
   },
   "gbif_download": {
     "inputs": {
@@ -1011,7 +1045,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "dbd26543b6b58b09040bb17f5aaa2f2be88266fb"
   },
   "generalization": {
     "inputs": {
@@ -1034,7 +1069,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "281b7c9280f1ddecabf609bcaf8c67b14c64e923"
   },
   "geocodetable": {
     "inputs": {
@@ -1070,7 +1106,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "67d9376240aed045c127d1f36f7b7fbb6ce99b3c"
   },
   "geodata2pmtiles": {
     "inputs": {
@@ -1108,7 +1145,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "25e992ff46626692078f8327a6624e5766b49994"
   },
   "geometry_changer": {
     "inputs": {
@@ -1147,9 +1185,12 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "8773f3a254a4f79d3ed9fe5f25ef286c7457421d"
   },
-  "geospatial_input_explainer": {},
+  "geospatial_input_explainer": {
+    "commit_hash": "8a4ac6b1a2d34d6de003f688212a1c6d3a446030"
+  },
   "gpkg2etab": {
     "inputs": {
       "src": {
@@ -1174,7 +1215,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "99c498420dbe25d3a6751479e918b64b5e19526c"
   },
   "gpx2exif": {
     "inputs": {
@@ -1210,7 +1252,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "75904367e1735c242865038f9cdf31d8e948c30a"
   },
   "gpxanimation": {
     "inputs": {
@@ -1235,7 +1278,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "a9e44a2caf9d9d6d4f121f2edb766a3ec3bcb11f"
   },
   "gpxclipbbox": {
     "inputs": {
@@ -1261,7 +1305,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "d6a661f99b3541c1e52341cdce8a24468f3740ed"
   },
   "gpxdailysplit": {
     "inputs": {
@@ -1295,7 +1340,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "ac4856927970dd31af6ea7c8fe0cc6000f4ba921"
   },
   "gpxmerge": {
     "inputs": {
@@ -1321,7 +1367,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "c6a036075d4046b97a00a70deac688474878d5ec"
   },
   "gpxtracksplit": {
     "inputs": {
@@ -1347,7 +1394,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "107001f7a6ea3e6aac4fa454f64c5ce505272673"
   },
   "grid": {
     "inputs": {
@@ -1387,7 +1435,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "a922507b886f54a2beb19bafcd519734b1ffcbff"
   },
   "grunt": {
     "inputs": {
@@ -1412,9 +1461,12 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "a8938bcc2951e4fe21bd560582a7b4f9aa48698a"
   },
-  "hello": {},
+  "hello": {
+    "commit_hash": "2e701a0f4fabf19c1caaae1227ddf686919960f3"
+  },
   "image_classification": {
     "inputs": {
       "src_file_raster": {
@@ -1470,7 +1522,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "da7a6e2a1743f351b2c943b65390c35f095d533b"
   },
   "image_clustering": {
     "inputs": {
@@ -1493,7 +1546,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "153bf431b09ad6d93ec34362bfa6227704bca01a"
   },
   "imagesearch": {
     "inputs": {
@@ -1521,7 +1575,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "a76bc063ac6a7805e54594b96468b1916830cd15"
   },
   "import_dwg": {
     "inputs": {
@@ -1546,7 +1601,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "0436e6f28b057e276e36eb6e53df0648f57227a4"
   },
   "import_dwg_libdxfrw": {
     "inputs": {
@@ -1571,7 +1627,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "fa93f22ad9dc71390664acf305d8f5a021e2cfee"
   },
   "import_egrn": {
     "inputs": {
@@ -1624,7 +1681,8 @@
       "report": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "6a000999ff9be57de24a958dd1906fc0e46abf7a"
   },
   "import_glr": {
     "inputs": {
@@ -1648,7 +1706,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "260f3bc65a9f4465b60708a57e9c4590a6657f14"
   },
   "improvedem": {
     "inputs": {
@@ -1671,7 +1730,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "f5c8eb1555f507a74b6f9526b62a23b6b0e46f08"
   },
   "inaturalist_download": {
     "outputs": {
@@ -1694,7 +1754,8 @@
       "result_manifest": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "75ac3ddc973f802c4a9ada58a821153ce947a640"
   },
   "infomap": {
     "inputs": {
@@ -1717,7 +1778,8 @@
       "result": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "c5b00ec1e023db233f4047ddce7846719033b107"
   },
   "intersect_layers": {
     "inputs": {
@@ -1767,7 +1829,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "b628bda197880e4b6684c4e4f2dce7bbb808ab02"
   },
   "join_by_field": {
     "inputs": {
@@ -1818,7 +1881,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "c3e97a39978e42040eb3fd0725f96d8bfbbc3cf2"
   },
   "kml2geodata": {
     "inputs": {
@@ -1843,7 +1907,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "57d2a206969278bc84a2d0121a421cb1151c4eef"
   },
   "kmldae2footprints": {
     "inputs": {
@@ -1872,7 +1937,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "478b17d02b81f9cf4fd98cf0a45998f54a544246"
   },
   "kptbatch_validator": {
     "inputs": {
@@ -1885,7 +1951,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "d2ba1326e745f57bff51b1a52eecbca50712b3e8"
   },
   "landsat_search": {
     "outputs": {
@@ -1901,7 +1968,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "3b2ebe837202d04db8ee0173bbe7a2d39566cf2f"
   },
   "landsat_to_radiance": {
     "inputs": {
@@ -1934,7 +2002,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "dace38257bb6d40e6549b8da78ee104a67dbfcf8"
   },
   "landsat_to_reflectance": {
     "inputs": {
@@ -1967,7 +2036,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "8f9efad4ff73a37997dab196f28bbb2dba94029c"
   },
   "landslide_analysis": {
     "inputs": {
@@ -1997,7 +2067,8 @@
       "result_manifest": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "0057133c51f70f82ca29bc8694d711d9f0ce0aa0"
   },
   "layers2ngw": {
     "inputs": {
@@ -2045,7 +2116,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "24bbf4b617c9953659d583e48c8c900efd7badfb"
   },
   "lesis2sqlite": {
     "inputs": {
@@ -2091,7 +2163,8 @@
       "report": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "33226f094f005e30e2fa1357a1fe7133cb73ddbe"
   },
   "lines2poly": {
     "inputs": {
@@ -2127,7 +2200,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "3338437687cd9aa35645bea25332c39ce83e3060"
   },
   "lines2polygons": {
     "inputs": {
@@ -2210,7 +2284,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "e347a2a9e9140abdc0ca274d92dbc8d7b1ae7a9f"
   },
   "lines_merge": {
     "inputs": {
@@ -2251,7 +2326,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "fe6a0175c308f10ac404092a1f5d51bd31359ffd"
   },
   "mapinfo2qgis": {
     "inputs": {
@@ -2283,7 +2359,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "8a5c3dfb9b246c7d5b52dbaf7c1f53e3c00c7dea"
   },
   "mappy": {
     "outputs": {
@@ -2296,7 +2373,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "bbd350ce1bf2ed2bf934ad22c857d26dea218ee8"
   },
   "maxdist": {
     "inputs": {
@@ -2330,7 +2408,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "573d294f41800822649ac88304aa862ef01d3540"
   },
   "mt2report": {
     "inputs": {
@@ -2379,7 +2458,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "3d9d6f74d4b0d9cc992a9afc41ffdfb79f33b272"
   },
   "ndi": {
     "inputs": {
@@ -2409,7 +2489,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "2cc7821e67d50958cc3b137298bde7d06a4e8810"
   },
   "ngw_attribute2description": {
     "inputs": {
@@ -2445,7 +2526,8 @@
       "result": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "009efdd5e1ab4d35438d0205ec4ee4397a9983f2"
   },
   "ngw_contribution_activity": {
     "inputs": {
@@ -2476,7 +2558,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "88b82833a7a6f0fcc01abab73a664efec4893924"
   },
   "ngw_copy_layer": {
     "inputs": {
@@ -2513,7 +2596,8 @@
       "message": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "19798ac6c69dc8ccd68db6c19411aa68b294b09d"
   },
   "ngw_feature_history": {
     "inputs": {
@@ -2549,7 +2633,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "758143b73ba13360e3c8f01c1a5bbd62331de973"
   },
   "ngw_intersect": {
     "inputs": {
@@ -2588,7 +2673,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "09c6f5208d7ffa7445dd0dce812f1cd91d3ad995"
   },
   "ngw_layer_historical_state": {
     "inputs": {
@@ -2621,7 +2707,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "aa7236dd70757a472f0735b8ae8cef16e9ccc6f0"
   },
   "ngw_layer_schema": {
     "inputs": {
@@ -2662,7 +2749,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "7c4d060f2d7d09af22d709b2f82c66bdb7ce166a"
   },
   "ngw_merge_layers": {
     "inputs": {
@@ -2699,7 +2787,8 @@
       "message": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "bbfd477284ecb119a2068f57efde2ff9c97a3c68"
   },
   "ngw_to_gpkg": {
     "inputs": {
@@ -2732,7 +2821,8 @@
       "report": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "6f1fd86552173045dc12d59d1ff1f00945f4bb12"
   },
   "ngw_webmap2image": {
     "inputs": {
@@ -2750,7 +2840,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "f05ed7240e830bbcc1a3780d6ebc8149bbf8a45d"
   },
   "nominatim_geocode": {
     "inputs": {
@@ -2768,7 +2859,8 @@
       "result_manifest": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "a720e93c531168ef57b30648fa341436a10db561"
   },
   "ogrmerge": {
     "inputs": {
@@ -2799,7 +2891,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "83931b281e9a8f055384b348693dbfce87ab79cc"
   },
   "osm_download": {
     "outputs": {
@@ -2822,7 +2915,8 @@
       "result_manifest": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "d82c645a2be2b9f76792e8e463ab5e0a8a1d3d4c"
   },
   "osmclip_bbox": {
     "inputs": {
@@ -2840,7 +2934,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "e9f4de272f9e10bec84f0824aeefd811b75466ed"
   },
   "panotag": {
     "inputs": {
@@ -2867,7 +2962,8 @@
           ]
         }
       }
-    }
+    },
+    "commit_hash": "6d330f3fd7a3f3bf6b180b9b9096a8e51ebc9f05"
   },
   "planetary_search": {
     "outputs": {
@@ -2883,7 +2979,8 @@
       "result_manifest": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "8fcaeeb233b4081a4d01a83f677bc6918efe7a53"
   },
   "plk_catalog": {
     "inputs": {
@@ -2908,7 +3005,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "de5038ee6d2d28c559bc263fcb8de7302c78e459"
   },
   "plk_lesnich": {
     "inputs": {
@@ -2936,7 +3034,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "64bc7804c3a08821a78904396c6a9637fc325af6"
   },
   "pointcloud2tileset": {
     "inputs": {
@@ -2965,7 +3064,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "e622221131a0efecca18469dc738803319040729"
   },
   "points_on_tracks_stats": {
     "inputs": {
@@ -3054,7 +3154,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "5f668358ca1099c3b75e07b3483954bd850c7baf"
   },
   "poly2explication": {
     "inputs": {
@@ -3105,7 +3206,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "4af191855cea56080ba392a6718792d5d0ca7b69"
   },
   "polysimplifier": {
     "inputs": {
@@ -3143,7 +3245,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "c0ce495cb06b8505917480a57fb6cdddb3e2c805"
   },
   "postal": {
     "inputs": {
@@ -3179,7 +3282,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "40db5358383e1e571ae75dbd7a5edb076e50d87c"
   },
   "predict_overpass": {
     "inputs": {
@@ -3204,7 +3308,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "92ccb7fd82efda84ff2b19b401f742bd8fa58de8"
   },
   "prepare_raster": {
     "inputs": {
@@ -3233,7 +3338,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "553f3b2786d30a3c115c4664be26da4c3013028b"
   },
   "pzz_report": {
     "inputs": {
@@ -3254,7 +3360,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "68f881febb15e3062e523fba858754a5fac943f4"
   },
   "qgis2pdf": {
     "inputs": {
@@ -3275,7 +3382,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "e1e545861eb6d061b076325d4f45e32d8d737ce1"
   },
   "qgis_check_geometries": {
     "inputs": {
@@ -3312,7 +3420,8 @@
       "output_msg": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "7cb36835b449f3834bfb11009b46060ae2c0053c"
   },
   "qgis_fix_geometries": {
     "inputs": {
@@ -3333,7 +3442,8 @@
       "output_msg": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "7545239d842d3aabbcc52338bbd996e0b97be95c"
   },
   "qgis_multiparttosingleparts": {
     "inputs": {
@@ -3356,7 +3466,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "df7f1dfb5bc2d55f4c5f9164e6bc8913d571bc35"
   },
   "qgis_rastertiles": {
     "inputs": {
@@ -3388,7 +3499,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "32e5274361897409caea1f05dcb216509b9429fc"
   },
   "qgis_vectortiles": {
     "inputs": {
@@ -3409,7 +3521,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "72eee73425c9e3acdeaea63617b140792e15ed25"
   },
   "quadro": {
     "inputs": {
@@ -3442,7 +3555,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "456f59861730083aed05174f1282d0274591c8bb"
   },
   "r_mapcalc": {
     "inputs": {
@@ -3514,7 +3628,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "860c22e6acba74fce3a6e0095140eb27b6b20c2c"
   },
   "raster2tiles": {
     "inputs": {
@@ -3536,7 +3651,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "6e4e5ce4d0269dc6334c9fdcadf83238ee352d71"
   },
   "raster_calculator": {
     "inputs": {
@@ -3558,7 +3674,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "4e35e202b5fb787684d03f00cecad1232d80d69d"
   },
   "removecontents": {
     "inputs": {
@@ -3581,7 +3698,8 @@
       "output": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "d1a8dbd2bd8c9e6fd40819fbcc8c66284be63e8f"
   },
   "rosreestr2coord": {
     "inputs": {
@@ -3619,7 +3737,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "d11da259efb2fcba3bc3b49d9b8bede0e0df86a6"
   },
   "rosreestr_from_coord": {
     "inputs": {
@@ -3654,7 +3773,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "15ad0a5e7d789750507140523eb412ff24f31e8f"
   },
   "rsc2csv": {
     "inputs": {
@@ -3678,7 +3798,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "61ec3c2312d0c4add642a81b03a82f6b3a6d2697"
   },
   "s2_search": {
     "outputs": {
@@ -3694,7 +3815,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "a879a1c0904a862eb12b148903c71f980d20140c"
   },
   "solar_hours": {
     "outputs": {
@@ -3719,7 +3841,8 @@
       "hours": {
         "kind": "number"
       }
-    }
+    },
+    "commit_hash": "27387294d20e4c9dd3b863e8b65d6fc1e854ddef"
   },
   "spatial_join": {
     "inputs": {
@@ -3771,7 +3894,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "ff631dbde5ff0abe786cd65539bcb91bbd3a1f92"
   },
   "spectral_indices": {
     "inputs": {
@@ -3804,7 +3928,8 @@
       "result_manifest": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "0a04ed107522e1a3fa74b906973f714d61395a24"
   },
   "split180": {
     "inputs": {
@@ -3833,7 +3958,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "4cd56fe9bd15fe3fe20ac13b76d33d3886e09845"
   },
   "split_to_equal": {
     "inputs": {
@@ -3862,7 +3988,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "e4075c86d1af0f4d5ba0b740ba02f82c90067132"
   },
   "split_to_rect": {
     "inputs": {
@@ -3900,7 +4027,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "b4bf65012b1626ad237caba5a75e3625a521daa8"
   },
   "splitcomplex": {
     "inputs": {
@@ -3929,7 +4057,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "79de342881f2d3f985f823aaa4959cf8d328d7a1"
   },
   "spreadsheet2layer": {
     "inputs": {
@@ -3972,7 +4101,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "286f1240cab9a360a0a160ebc54f1ec6a1c332b8"
   },
   "table2geo": {
     "inputs": {
@@ -4003,7 +4133,8 @@
           ]
         }
       }
-    }
+    },
+    "commit_hash": "9e11d9b980750453b6d39bcb8f921b7ed57ba52d"
   },
   "temporal_split": {
     "inputs": {
@@ -4071,7 +4202,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "704062feeabcb3f84b1ec00845d3ddf04f34d114"
   },
   "terrain_analysis": {
     "inputs": {
@@ -4095,7 +4227,8 @@
       "result_manifest": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "b56131a84c7f2a3bf2c477f3426a3811af94c635"
   },
   "tropomi2geotiff": {
     "inputs": {
@@ -4120,7 +4253,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "4be70c6b26ef7de9b6d9be6af532588412f74c18"
   },
   "update_vector_layer": {
     "inputs": {
@@ -4164,7 +4298,8 @@
       "result_url": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "c141cd391316bc04163026d7d512605a0252466a"
   },
   "vector2datalens": {
     "inputs": {
@@ -4199,7 +4334,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "7eee09d831feff800f179bfc283e536be9384afc"
   },
   "vectorclip": {
     "inputs": {
@@ -4232,7 +4368,8 @@
           "file_count": "single"
         }
       }
-    }
+    },
+    "commit_hash": "6c888e0f6728036ad41a09828cf6e3e57c6d42d1"
   },
   "water_usage": {
     "inputs": {
@@ -4265,7 +4402,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "0cb148faaafc2a338a5dbbc9893942ab3ed1c19b"
   },
   "web_gis_structure": {
     "inputs": {
@@ -4297,7 +4435,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "f08169d806773995056e0ea4a5e58b3838b25543"
   },
   "webmap2qgis": {
     "inputs": {
@@ -4338,7 +4477,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "fbdf4a9dc1a12633a0187614f48138cb61361c43"
   },
   "wildfire_analysis": {
     "inputs": {
@@ -4368,7 +4508,8 @@
       "result_manifest": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "8a7afdd6484b268d0fd49616a1b50d5e636084f5"
   },
   "xml_decl_to_vector": {
     "inputs": {
@@ -4398,7 +4539,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "25dd831e984a250c3e10ed4d3ce6940fe23b4982"
   },
   "xml_lpo_to_vector": {
     "inputs": {
@@ -4428,7 +4570,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "26595e2505cee3b9f3e1506839daba6905667125"
   },
   "xml_plv_to_vector": {
     "inputs": {
@@ -4458,7 +4601,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "d1f1bbb66ba08e2a04ef3352ee8b000ad234174d"
   },
   "xml_tol_to_vector": {
     "inputs": {
@@ -4488,7 +4632,8 @@
       "result_text": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "fa54560ad5a4cd9e1ac1a0cb6ad21304638e4866"
   },
   "zmu_data_analysis": {
     "inputs": {
@@ -4518,7 +4663,8 @@
           "file_count": "multiple"
         }
       }
-    }
+    },
+    "commit_hash": "54436592b8cdc281da882a98dc6d360b68abe38e"
   },
   "zmu_deploy": {
     "inputs": {
@@ -4599,7 +4745,8 @@
       "output_msg": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "cb380fafe4bfcfcfdd9959fceb63a2c0eabddf5e"
   },
   "zmu_update": {
     "inputs": {
@@ -4662,6 +4809,7 @@
       "output_msg": {
         "kind": "text"
       }
-    }
+    },
+    "commit_hash": "eba6d9028f2d2e47ccb25fdf6186efb9fa4cb7d9"
   }
 }
