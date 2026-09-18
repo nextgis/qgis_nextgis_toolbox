@@ -19,7 +19,7 @@ from typing import List, Optional
 
 from qgis.gui import QgsOptionsPageWidget, QgsOptionsWidgetFactory
 from qgis.PyQt import uic
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -210,7 +210,13 @@ class NextgisToolboxSettingsPageFactory(QgsOptionsWidgetFactory):
 
     def __init__(self) -> None:
         """Initialize the settings page factory."""
-        super().__init__("NextGIS Toolbox", plugin_icon())
+        super().__init__(
+            QCoreApplication.translate(
+                "NextgisToolboxSettingsPageFactory",
+                "NextGIS Toolbox",
+            ),
+            plugin_icon(),
+        )
 
     def path(self) -> List[str]:
         """Return the settings page path.

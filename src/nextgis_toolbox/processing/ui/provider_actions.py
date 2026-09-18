@@ -121,7 +121,7 @@ class _ProviderBrowserAction(_ProviderAction):
 
 class OpenProviderInBrowserAction(_ProviderBrowserAction):
     def __init__(self) -> None:
-        super().__init__("Open in Browser")
+        super().__init__(self.tr("Open in Browser"))
 
     def execute(self) -> None:
         plugin = NextgisToolboxInterface.instance()
@@ -130,7 +130,7 @@ class OpenProviderInBrowserAction(_ProviderBrowserAction):
 
 class OpenProviderTasksHistoryAction(_ProviderAction):
     def __init__(self) -> None:
-        super().__init__("Tasks history")
+        super().__init__(self.tr("Tasks history"))
 
     def getIcon(self) -> QIcon:
         return qgis_icon("mIconHistory.svg")
@@ -144,7 +144,7 @@ class OpenProviderTasksHistoryAction(_ProviderAction):
 
 class RefreshProviderToolsAction(_ProviderAction):
     def __init__(self) -> None:
-        super().__init__("Refresh tools")
+        super().__init__(self.tr("Refresh tools"))
 
     def getIcon(self) -> QIcon:
         return qgis_icon("mActionRefresh.svg")
@@ -160,7 +160,7 @@ class RefreshProviderToolsAction(_ProviderAction):
 
 class OpenProviderSettingsAction(_ProviderAction):
     def __init__(self) -> None:
-        super().__init__("Settings…")
+        super().__init__(self.tr("Settings…"))
 
     def getIcon(self) -> QIcon:
         return qgis_icon("mActionOptions.svg")
@@ -171,7 +171,7 @@ class OpenProviderSettingsAction(_ProviderAction):
 
 class OpenProviderAboutAction(_ProviderAction):
     def __init__(self) -> None:
-        super().__init__("About…")
+        super().__init__(self.tr("About…"))
 
     def getIcon(self) -> QIcon:
         return qgis_icon("mActionPropertiesWidget.svg")
@@ -182,7 +182,7 @@ class OpenProviderAboutAction(_ProviderAction):
 
 class OpenToolInBrowserAction(_ToolAlgorithmAction):
     def __init__(self) -> None:
-        super().__init__("Open Tool in Browser")
+        super().__init__(self.tr("Open Tool in Browser"))
 
     def execute(self) -> None:
         algorithm = self._algorithm()
@@ -194,7 +194,7 @@ class OpenToolInBrowserAction(_ToolAlgorithmAction):
 
 class OpenToolDocumentationAction(_ToolAlgorithmAction):
     def __init__(self) -> None:
-        super().__init__("Open Documentation")
+        super().__init__(self.tr("Open Documentation"))
 
     def execute(self) -> None:
         algorithm = self._algorithm()

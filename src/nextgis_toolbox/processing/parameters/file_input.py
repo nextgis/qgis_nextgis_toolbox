@@ -26,6 +26,7 @@ from qgis.core import (
     QgsProcessingParameterFile,
     QgsProcessingParameterRasterLayer,
 )
+from qgis.PyQt.QtCore import QCoreApplication
 
 from nextgis_toolbox.core.logging import logger
 from nextgis_toolbox.processing.parameters.common import (
@@ -140,6 +141,10 @@ class FileInputAdapter(InputParameterAdapter):
 class SemanticFileInputAdapter(InputParameterAdapter):
     def __init__(self, fallback: FileInputAdapter) -> None:
         self._fallback = fallback
+
+    @staticmethod
+    def tr(text: str) -> str:
+        return QCoreApplication.translate("FileInputAdapter", text)
 
     def create_representation(
         self,
@@ -308,18 +313,18 @@ class SemanticFileInputAdapter(InputParameterAdapter):
 
         layer_path = self._resolve_local_layer_path(vector_layer.source())
         if layer_path is None:
-            raise ValueError(
-                "Selected vector layer must use a local file-backed source "
-                f"for parameter '{parameter.name}'"
+            message = self.tr(
+                "Selected vector layer must use a local file-backed source for parameter '{parameter_name}'",
             )
+            raise ValueError(message.format(parameter_name=parameter.name))
 
         if compatible_formats:
             source_suffix = Path(layer_path).suffix.lower().lstrip(".")
             if source_suffix not in compatible_formats:
-                raise ValueError(
-                    "Selected vector layer format is incompatible with "
-                    f"parameter '{parameter.name}'"
+                message = self.tr(
+                    "Selected vector layer format is incompatible with parameter '{parameter_name}'",
                 )
+                raise ValueError(message.format(parameter_name=parameter.name))
 
         return layer_path
 
@@ -340,10 +345,10 @@ class SemanticFileInputAdapter(InputParameterAdapter):
 
         layer_path = self._resolve_local_layer_path(raster_layer.source())
         if layer_path is None:
-            raise ValueError(
-                "Selected raster layer must use a local file-backed source "
-                f"for parameter '{parameter.name}'"
+            message = self.tr(
+                "Selected raster layer must use a local file-backed source for parameter '{parameter_name}'",
             )
+            raise ValueError(message.format(parameter_name=parameter.name))
 
         semantic = parameter.input_semantic
         if semantic is None:
@@ -353,10 +358,10 @@ class SemanticFileInputAdapter(InputParameterAdapter):
         if compatible_formats:
             source_suffix = Path(layer_path).suffix.lower().lstrip(".")
             if source_suffix not in compatible_formats:
-                raise ValueError(
-                    "Selected raster layer format is incompatible with "
-                    f"parameter '{parameter.name}'"
+                message = self.tr(
+                    "Selected raster layer format is incompatible with parameter '{parameter_name}'",
                 )
+                raise ValueError(message.format(parameter_name=parameter.name))
 
         return layer_path
 

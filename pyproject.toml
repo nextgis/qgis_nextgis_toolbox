@@ -14,9 +14,9 @@ license = { file = "LICENSE" }
 ui-files = ["src/nextgis_toolbox/ui/*.ui"]
 compile = false
 
-# [tool.qgsmith.translations]
-# ts-files = ["src/nextgis_toolbox/i18n/*.ts"]
-# no-obsolete = true
+[tool.qgsmith.translations]
+ts-files = ["src/nextgis_toolbox/i18n/*.ts"]
+no-obsolete = true
 
 
 [project.optional-dependencies]

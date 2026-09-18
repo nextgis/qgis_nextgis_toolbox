@@ -242,7 +242,9 @@ class NextgisToolboxInterface(QObject, metaclass=QObjectMetaClass):
         tracker_url = self.metadata.tracker
         if self.mode == self.Mode.PROCESSING:
             self.notifier.display_message(
-                f"Please let us know about the issue: {tracker_url}",
+                self.tr(
+                    "Please let us know about the issue: {tracker_url}"
+                ).format(tracker_url=tracker_url),
                 level=Qgis.MessageLevel.Warning,
             )
             return

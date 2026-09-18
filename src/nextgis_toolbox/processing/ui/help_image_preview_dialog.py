@@ -70,7 +70,7 @@ class HelpImagePreviewDialog(QDialog):
         parent: Optional[QWidget] = None,
     ) -> None:
         super().__init__(parent)
-        self.setWindowTitle("Image preview")
+        self.setWindowTitle(self.tr("Image preview"))
         self.resize(900, 700)
 
         self._preview_widget = HelpImagePreviewWidget(image_path, self)

@@ -199,7 +199,7 @@ class PluginUiManager(QObject):
     def _create_plugin_menu(self) -> None:
         icon = plugin_icon()
         self._plugin_menu = QMenu(self._qgis_iface.mainWindow())
-        self._plugin_menu.setTitle("NextGIS Toolbox")
+        self._plugin_menu.setTitle(self.tr("NextGIS Toolbox"))
         self._plugin_menu.setIcon(icon)
 
     def _create_toolbox_menu(self) -> None:
