@@ -124,6 +124,14 @@
     </message>
 </context>
 <context>
+    <name>InputFieldWidget</name>
+    <message>
+        <location filename="../shared/ui/input_field.py" line="860"/>
+        <source>Reset to default value</source>
+        <translation>Restablecer el valor predeterminado</translation>
+    </message>
+</context>
+<context>
     <name>LoadingButton</name>
     <message>
         <location filename="../shared/ui/loading_button.py" line="73"/>
@@ -194,7 +202,7 @@
 <context>
     <name>NextgisToolboxSettingsErrorPage</name>
     <message>
-        <location filename="../settings/nextgis_toolbox_settings_page.py" line="176"/>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="192"/>
         <source>An error occurred while loading settings page</source>
         <translation>Se produjo un error al cargar la página de ajustes</translation>
     </message>
@@ -202,19 +210,49 @@
 <context>
     <name>NextgisToolboxSettingsPage</name>
     <message>
-        <location filename="../settings/nextgis_toolbox_settings_page.py" line="99"/>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="139"/>
         <source>Set the base endpoint for NextGIS Toolbox API.</source>
         <translation>Configure el endpoint base para la API de NextGIS Toolbox.</translation>
     </message>
     <message>
-        <location filename="../settings/nextgis_toolbox_settings_page.py" line="102"/>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="92"/>
         <source>Enable experimental semantic-driven QGIS integration for Toolbox parameters and outputs.</source>
         <translation>Active la integración experimental de QGIS basada en semántica para los parámetros y salidas de Toolbox.</translation>
     </message>
     <message>
-        <location filename="../settings/nextgis_toolbox_settings_page.py" line="138"/>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="126"/>
         <source>Failed to load settings UI</source>
         <translation>No se pudo cargar la interfaz de ajustes</translation>
+    </message>
+    <message>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="139"/>
+        <source>Endpoint</source>
+        <translation>Endpoint</translation>
+    </message>
+    <message>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="139"/>
+        <source>Enter the NextGIS Toolbox API endpoint</source>
+        <translation>Introduzca el endpoint de la API de NextGIS Toolbox</translation>
+    </message>
+    <message>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="139"/>
+        <source>Enter a valid HTTP or HTTPS URL</source>
+        <translation>Introduzca una URL HTTP o HTTPS válida</translation>
+    </message>
+    <message>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="150"/>
+        <source>Toolbox API Key</source>
+        <translation>Clave API de Toolbox</translation>
+    </message>
+    <message>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="150"/>
+        <source>Set the API key used to access NextGIS Toolbox.</source>
+        <translation>Establezca la clave API utilizada para acceder a NextGIS Toolbox.</translation>
+    </message>
+    <message>
+        <location filename="../settings/nextgis_toolbox_settings_page.py" line="150"/>
+        <source>Enter a valid API key UUID</source>
+        <translation>Introduzca un UUID válido para la clave API</translation>
     </message>
 </context>
 <context>
@@ -231,31 +269,21 @@
     </message>
     <message>
         <location filename="../ui/nextgis_toolbox_settings_page_base.ui" line="38"/>
-        <source>Endpoint</source>
-        <translation>Endpoint</translation>
-    </message>
-    <message>
-        <location filename="../ui/nextgis_toolbox_settings_page_base.ui" line="64"/>
-        <source>Toolbox API Key</source>
-        <translation>Clave API de Toolbox</translation>
-    </message>
-    <message>
-        <location filename="../ui/nextgis_toolbox_settings_page_base.ui" line="90"/>
         <source>&lt;a href=&quot;https://docs.nextgis.com/docs_ngqgis/source/toolbox.html#api-key&quot;&gt;How to get an API key&lt;/a&gt;</source>
         <translation>&lt;a href=&quot;https://docs.nextgis.com/docs_ngqgis/source/toolbox.html#api-key&quot;&gt;Cómo obtener una clave API&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/nextgis_toolbox_settings_page_base.ui" line="106"/>
+        <location filename="../ui/nextgis_toolbox_settings_page_base.ui" line="54"/>
         <source>Other</source>
         <translation>Otros</translation>
     </message>
     <message>
-        <location filename="../ui/nextgis_toolbox_settings_page_base.ui" line="112"/>
+        <location filename="../ui/nextgis_toolbox_settings_page_base.ui" line="60"/>
         <source>Enable debug messages</source>
         <translation>Activar mensajes de depuración</translation>
     </message>
     <message>
-        <location filename="../ui/nextgis_toolbox_settings_page_base.ui" line="119"/>
+        <location filename="../ui/nextgis_toolbox_settings_page_base.ui" line="67"/>
         <source>Enable experimental QGIS integration</source>
         <translation>Activar la integración experimental de QGIS</translation>
     </message>
@@ -380,12 +408,12 @@
 <context>
     <name>ToolboxApiClient</name>
     <message>
-        <location filename="../api/client.py" line="938"/>
+        <location filename="../api/client.py" line="946"/>
         <source>Failed to read the file for upload.</source>
         <translation>No se pudo leer el archivo para cargarlo.</translation>
     </message>
     <message>
-        <location filename="../api/client.py" line="954"/>
+        <location filename="../api/client.py" line="962"/>
         <source>Failed to prepare the request payload.</source>
         <translation>No se pudo preparar la carga útil de la solicitud.</translation>
     </message>
@@ -546,69 +574,69 @@
         <translation>Salida '{name}' guardada en {path}</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1312"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1321"/>
         <source>Task completed successfully.</source>
         <translation>La tarea se completó correctamente.</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1314"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1323"/>
         <source>Downloaded {count} output file(s).</source>
         <translation>Se descargaron {count} archivo(s) de salida.</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1320"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1329"/>
         <source>Added {count} layer(s) to the project.</source>
         <translation>Se añadieron {count} capa(s) al proyecto.</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1329"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1338"/>
         <source>Some output files were not added to the project because they are not recognized as geodata:
 {paths}</source>
         <translation>Algunos archivos de salida no se añadieron al proyecto porque no se reconocen como datos geográficos:
 {paths}</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1372"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1381"/>
         <source>{name}: {path}</source>
         <translation>{name}: {path}</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1378"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1387"/>
         <source>{name}: &lt;a href=&apos;{url}&apos;&gt;{path}&lt;/a&gt;</source>
         <translation>{name}: &lt;a href='{url}'&gt;{path}&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1453"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1462"/>
         <source>Show file</source>
         <translation>Mostrar archivo</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1453"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1462"/>
         <source>Show folder</source>
         <translation>Mostrar carpeta</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1464"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1473"/>
         <source>Copy path</source>
         <translation>Copiar ruta</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1464"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1473"/>
         <source>Copy paths</source>
         <translation>Copiar rutas</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1499"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1508"/>
         <source>No error details provided.</source>
         <translation>No se proporcionaron detalles del error.</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1584"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1593"/>
         <source>Execution was canceled.</source>
         <translation>Se canceló la ejecución.</translation>
     </message>
     <message>
-        <location filename="../processing/toolbox_task_executor.py" line="1590"/>
+        <location filename="../processing/toolbox_task_executor.py" line="1599"/>
         <source>Execution was canceled. The task continues on the server side.</source>
         <translation>Se canceló la ejecución. La tarea continúa en el servidor.</translation>
     </message>
