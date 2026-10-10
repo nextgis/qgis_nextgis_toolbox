@@ -1,6 +1,6 @@
 [general]
 name=NextGIS Toolbox
-version=1.1.2
+version=1.2.0
 category=Web
 tags=nextgis, web, tool, analysis, processing, webservice
 icon=resources/icons/nextgis_toolbox_logo.svg
@@ -26,12 +26,37 @@ about=NextGIS Toolbox provider for QGIS. Sends tasks to NextGIS Toolbox server a
 about[ru]=NextGIS Toolbox провайдер для QGIS. Отправляет задачи в NextGIS Toolbox и обрабатывает результаты. Разработан NextGIS. Любые отзывы приветствуются на https://nextgis.com/contact. Подробнее на https://toolbox.nextgis.com/
 
 changelog=
-    1.1.2
-        - Fixed tools reloading after saving settings
-    1.1.1
-        - Fixed QGIS 3.32 compatibility issues
-    1.1.0
-        - Added experimental integration with QGIS
-        - Added link to documentation with instructions how to get API key
-        - Fixed QGIS 4.2 compatibility issues
-    1.0.0 - Initial release
+    [1.2.0] - 2026-10-10
+        Added
+            - Interface translations into French, German, Italian, Portuguese, Russian and Spanish
+            - Validation of the server address and API key in settings, with buttons to reset their values
+            - Support for JSON parameters and results
+        Changed
+            - Updated the About dialog with links to documentation, support and other NextGIS services
+            - Made the tool list load faster
+        Fixed
+            - Crash when disabling the plugin while the tool list is loading
+            - Handling of bounding boxes when running tools and applying presets
+            - Handling of optional single-choice parameters
+            - Handling of empty NextGIS Web connection details
+            - Handling of empty parameters when running tools
+            - File and layer filters, field selection and saving ZIP results in experimental QGIS integration
+
+    [1.1.2] - 2026-09-15
+        Fixed
+            - Tools reloading after saving settings
+
+    [1.1.1] - 2026-08-18
+        Fixed
+            - QGIS 3.32 compatibility issues
+
+    [1.1.0] - 2026-08-12
+        Added
+            - Experimental integration with QGIS
+            - Link to documentation with instructions on how to get an API key
+        Fixed
+            - QGIS 4.2 compatibility issues
+
+    [1.0.0] - 2026-06-08
+        Added
+            - Initial release
