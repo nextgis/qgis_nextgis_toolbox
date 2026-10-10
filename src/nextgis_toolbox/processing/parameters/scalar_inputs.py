@@ -166,6 +166,13 @@ class SemanticStringInputAdapter(InputParameterAdapter):
             return self._fallback.create_representation(parameter)
 
         if semantic.kind == "field":
+            field_count = semantic.constraints.get("field_count")
+            if field_count == "multiple" or (
+                isinstance(field_count, int) and field_count > 1
+            ):
+                # Preserve the tool's textual list syntax instead of limiting
+                # a multi-field parameter to the single-field QGIS editor.
+                return self._fallback.create_representation(parameter)
             source_parameter_name = self._field_source_parameter_name(
                 parameter
             )
@@ -246,13 +253,6 @@ class SemanticStringInputAdapter(InputParameterAdapter):
                 parameter,
                 algorithm,
                 parameters,
-                context,
-            )
-
-        if semantic.kind == "field":
-            return algorithm.parameterAsString(
-                parameters,
-                parameter.name,
                 context,
             )
 

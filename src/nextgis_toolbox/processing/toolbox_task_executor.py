@@ -1033,6 +1033,15 @@ class ToolboxTaskExecutor:
             return candidate_name
 
         inferred_suffix = self._preferred_result_suffix(task_result)
+        semantic = output_parameter.output_semantic
+        if (
+            inferred_suffix is None
+            and semantic is not None
+            and semantic.archive_contents
+        ):
+            artifact_extensions = semantic.constraints.get("extensions", [])
+            if artifact_extensions == ["zip"]:
+                inferred_suffix = ".zip"
         if inferred_suffix is None and self._output_alias_implies_zip(
             output_parameter
         ):

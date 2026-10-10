@@ -33,6 +33,7 @@ from nextgis_toolbox.tools.models import (
     SortBy,
     ToolboxTag,
     ToolboxTool,
+    ToolsManagerState,
 )
 from nextgis_toolbox.tools.tools_manager import ToolsManager
 
@@ -83,6 +84,7 @@ def test_tools_manager_loads_models_and_supports_lookups(qgis_app) -> None:
     )
 
     manager.load()
+    manager.refresh()
 
     assert [tag.alias for tag in manager.tags()] == ["Alpha", "Beta"]
     assert [tag.id for tag in manager.tags(sort_by=SortBy.ID)] == [
@@ -123,19 +125,13 @@ def test_tools_manager_refresh_emits_loading_signals(qgis_app) -> None:
     manager._tags_repository.fetch_tags = Mock(return_value=[tag])
     manager._tools_repository.fetch_tools = Mock(return_value=[tool])
 
-    started = []
-    finished = []
-    manager.catalog_loading_started.connect(started.append)
-    manager.catalog_loading_finished.connect(
-        lambda is_successful, error_message: finished.append(
-            (is_successful, error_message)
-        )
-    )
+    states = []
+    manager.state_changed.connect(states.append)
 
     manager.refresh()
 
-    assert started == [None]
-    assert finished == [(True, "")]
+    assert states == [ToolsManagerState.LOADING, ToolsManagerState.LOADED]
+    assert manager.error is None
     assert manager.tools() == [tool]
 
 
@@ -170,6 +166,7 @@ def test_tools_manager_raises_for_missing_tools_and_tags(qgis_app) -> None:
     manager._tools_repository.fetch_tools = Mock(return_value=[tool])
 
     manager.load()
+    manager.refresh()
 
     with pytest.raises(ToolboxToolNotFoundError):
         manager.tool(tool_id=99)
@@ -206,6 +203,7 @@ def test_tools_manager_updates_favorite_state(qgis_app) -> None:
     manager._tools_repository.fetch_tools = Mock(return_value=[tool])
 
     manager.load()
+    manager.refresh()
     manager._tools_repository.set_tool_favorite = Mock()
 
     manager.set_tool_favorite("alpha", True)
@@ -299,3 +297,24 @@ def test_catalog_load_task_is_canceled_without_prompt(qgis_app) -> None:
     task = LoadToolsTask(Mock(), Mock(), Mock())
 
     assert task.flags() & QgsTask.Flag.CancelWithoutPrompt
+
+
+@pytest.mark.parametrize(
+    "error", [ToolboxError("Catalog failed"), ValueError("Invalid payload")]
+)
+def test_synchronous_catalog_failure_preserves_error_state(error):
+    manager = ToolsManager(Mock())
+    manager._tags_repository.fetch_tags = Mock(side_effect=error)
+    states = []
+    manager.state_changed.connect(states.append)
+
+    manager.refresh()
+
+    assert states == [ToolsManagerState.LOADING, ToolsManagerState.ERROR]
+    assert manager.state == ToolsManagerState.ERROR
+    assert manager.tools() == []
+    assert manager.tags() == []
+    if isinstance(error, ToolboxError):
+        assert manager.error is error
+    else:
+        assert manager.error.__cause__ is error

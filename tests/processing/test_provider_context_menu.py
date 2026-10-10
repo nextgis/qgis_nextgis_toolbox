@@ -19,6 +19,7 @@ import sys
 from pathlib import Path
 from unittest.mock import Mock
 
+import pytest
 import qgis.utils
 from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import QPoint, pyqtSignal
@@ -42,7 +43,7 @@ def _import_context_menu_module():
         qgis.utils.plugin_paths.append(str(processing_plugin_root))
 
     return importlib.import_module(
-        "nextgis_toolbox.processing.nextgis_toolbox_provider_context_menu"
+        "nextgis_toolbox.processing.ui.panel_actions_integrator"
     )
 
 
@@ -51,10 +52,12 @@ class FakeAlgorithmTree(QWidget):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
+        self._index = Mock()
+        self.algorithmForIndex = Mock(return_value=None)
 
     def indexAt(self, point: QPoint):
         del point
-        return Mock()
+        return self._index
 
     def mapToGlobal(self, point: QPoint) -> QPoint:
         return point
@@ -108,13 +111,34 @@ def _provider_button_count(toolbox: FakeToolbox, provider_id: str) -> int:
     return count
 
 
+@pytest.fixture
+def handler_factory(qgis_iface):
+    handlers = []
+
+    def create(provider):
+        provider.icon.return_value = QIcon()
+        for action in provider.actions:
+            action.isEnabled.return_value = True
+        handler = _import_context_menu_module().PanelActionsIntegrator(
+            qgis_iface=qgis_iface, provider=provider
+        )
+        handler._button_actions = provider.actions
+        handler.load()
+        handlers.append(handler)
+        return handler
+
+    yield create
+    for handler in handlers:
+        handler.unload()
+
+
 def test_provider_context_menu_binds_and_unbinds_toolbox(
     monkeypatch,
     qgis_app,
+    handler_factory,
 ) -> None:
     del qgis_app
 
-    context_menu_module = _import_context_menu_module()
     provider = Mock()
     provider.id.return_value = "nextgis_toolbox"
     provider.name.return_value = "NextGIS Toolbox"
@@ -124,18 +148,15 @@ def test_provider_context_menu_binds_and_unbinds_toolbox(
     action.getIcon.return_value = QIcon()
     provider.actions = [action]
 
-    handler = context_menu_module.NextgisToolboxProviderContextMenu(provider)
+    handler = handler_factory(provider)
     toolbox = FakeToolbox()
 
     show_menu = Mock()
-    monkeypatch.setattr(handler, "_show_provider_menu", show_menu)
-    monkeypatch.setattr(
-        handler, "_should_show_provider_menu", Mock(return_value=True)
-    )
+    monkeypatch.setattr(handler, "_show_provider_context_menu", show_menu)
 
     handler._bind_toolbox(toolbox)
 
-    assert toolbox.add_provider_actions_calls == 1
+    assert toolbox.add_provider_actions_calls == 0
     assert _provider_button_count(toolbox, provider.id()) == 1
 
     toolbox.algorithmTree.customContextMenuRequested.emit(QPoint(10, 10))
@@ -143,10 +164,10 @@ def test_provider_context_menu_binds_and_unbinds_toolbox(
 
     handler._bind_toolbox(toolbox)
 
-    assert toolbox.add_provider_actions_calls == 2
+    assert toolbox.add_provider_actions_calls == 0
     assert _provider_button_count(toolbox, provider.id()) == 1
 
-    handler.uninstall()
+    handler.unload()
     assert _provider_button_count(toolbox, provider.id()) == 0
 
     toolbox.algorithmTree.customContextMenuRequested.emit(QPoint(20, 20))
@@ -155,10 +176,10 @@ def test_provider_context_menu_binds_and_unbinds_toolbox(
 
 def test_provider_context_menu_syncs_toolbar_action_icons(
     qgis_app,
+    handler_factory,
 ) -> None:
     del qgis_app
 
-    context_menu_module = _import_context_menu_module()
     provider = Mock()
     provider.id.return_value = "nextgis_toolbox"
     provider.name.return_value = "NextGIS Toolbox"
@@ -169,7 +190,7 @@ def test_provider_context_menu_syncs_toolbar_action_icons(
     action.getIcon.return_value = icon
     provider.actions = [action]
 
-    handler = context_menu_module.NextgisToolboxProviderContextMenu(provider)
+    handler = handler_factory(provider)
     toolbox = FakeToolbox()
 
     handler._bind_toolbox(toolbox)
@@ -182,16 +203,16 @@ def test_provider_context_menu_syncs_toolbar_action_icons(
 
 def test_provider_context_menu_moves_provider_button_after_scripts(
     qgis_app,
+    handler_factory,
 ) -> None:
     del qgis_app
 
-    context_menu_module = _import_context_menu_module()
     provider = Mock()
     provider.id.return_value = "nextgis_toolbox"
     provider.name.return_value = "NextGIS Toolbox"
     provider.actions = []
 
-    handler = context_menu_module.NextgisToolboxProviderContextMenu(provider)
+    handler = handler_factory(provider)
     toolbox = FakeToolbox()
     _add_toolbar_button(toolbox, "provideraction_model")
     _add_toolbar_button(toolbox, "provideraction_script")
@@ -213,16 +234,17 @@ def test_provider_context_menu_moves_provider_button_after_scripts(
 
 def test_provider_context_menu_hides_menu_for_favorites_section(
     qgis_app,
+    monkeypatch,
+    handler_factory,
 ) -> None:
     del qgis_app
 
-    context_menu_module = _import_context_menu_module()
     provider = Mock()
     provider.id.return_value = "nextgis_toolbox"
     provider.name.return_value = "NextGIS Toolbox"
     provider.actions = []
 
-    handler = context_menu_module.NextgisToolboxProviderContextMenu(provider)
+    handler = handler_factory(provider)
     toolbox = FakeToolbox()
     toolbox.algorithmTree.algorithmForIndex = Mock(return_value=None)
     toolbox.algorithmTree.model = Mock(return_value=FakeProviderTreeModel(""))
@@ -233,23 +255,27 @@ def test_provider_context_menu_hides_menu_for_favorites_section(
     top_level_parent.isValid.return_value = False
     top_level_index.parent.return_value = top_level_parent
 
-    assert (
-        handler._should_show_provider_menu(toolbox, top_level_index) is False
-    )
+    top_level_index.data.return_value = "Favorites"
+    toolbox.algorithmTree._index = top_level_index
+    show_menu = Mock()
+    monkeypatch.setattr(QMenu, "exec", show_menu)
+    handler._show_provider_context_menu(toolbox, QPoint(1, 2))
+    show_menu.assert_not_called()
 
 
 def test_provider_context_menu_shows_menu_for_nested_provider_node(
     qgis_app,
+    monkeypatch,
+    handler_factory,
 ) -> None:
     del qgis_app
 
-    context_menu_module = _import_context_menu_module()
     provider = Mock()
     provider.id.return_value = "nextgis_toolbox"
     provider.name.return_value = "NextGIS Toolbox"
     provider.actions = []
 
-    handler = context_menu_module.NextgisToolboxProviderContextMenu(provider)
+    handler = handler_factory(provider)
     toolbox = FakeToolbox()
     toolbox.algorithmTree.algorithmForIndex = Mock(return_value=None)
     toolbox.algorithmTree.model = Mock(
@@ -262,4 +288,9 @@ def test_provider_context_menu_shows_menu_for_nested_provider_node(
     nested_parent.isValid.return_value = True
     nested_index.parent.return_value = nested_parent
 
-    assert handler._should_show_provider_menu(toolbox, nested_index) is True
+    nested_index.data.return_value = "NextGIS Toolbox"
+    toolbox.algorithmTree._index = nested_index
+    show_menu = Mock()
+    monkeypatch.setattr(QMenu, "exec", show_menu)
+    handler._show_provider_context_menu(toolbox, QPoint(1, 2))
+    show_menu.assert_called_once()

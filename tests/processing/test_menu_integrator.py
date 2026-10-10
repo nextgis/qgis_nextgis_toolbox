@@ -47,7 +47,7 @@ def _import_menu_integrator_module():
         qgis.utils.plugin_paths.append(str(processing_plugin_root))
 
     return importlib.import_module(
-        "nextgis_toolbox.processing.nextgis_toolbox_menu_integrator"
+        "nextgis_toolbox.processing.ui.menu_bar_actions_integrator"
     )
 
 
@@ -74,7 +74,8 @@ class _MenuIntegratorParent(QObject):
 
 def _create_menu_integrator(menu_integrator_module, qgis_iface, **kwargs):
     parent = _MenuIntegratorParent(qgis_iface)
-    menu_integrator = menu_integrator_module.NextgisToolboxMenuIntegrator(
+    menu_integrator = menu_integrator_module.ToolboxMenuBarIntegrator(
+        qgis_iface=qgis_iface,
         parent=parent,
         **kwargs,
     )

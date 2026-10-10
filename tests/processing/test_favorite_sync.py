@@ -16,10 +16,9 @@
 
 from unittest.mock import Mock
 
-from nextgis_toolbox.processing.nextgis_toolbox_favorite_sync import (
-    NextgisToolboxFavoriteSync,
+from nextgis_toolbox.processing.ui.favorite_tools_sync import (
+    FavoriteToolsSync,
 )
-
 from nextgis_toolbox.settings.nextgis_toolbox_settings import (
     AuthenticationType,
 )
@@ -72,7 +71,7 @@ def test_favorite_sync_replaces_provider_favorites_on_start() -> None:
         build_tool("regular-tool", is_favorite=False),
     ]
 
-    favorite_sync = NextgisToolboxFavoriteSync(
+    favorite_sync = FavoriteToolsSync(
         api_client=api_client,
         tools_manager=tools_manager,
         provider_id="nextgis_toolbox",

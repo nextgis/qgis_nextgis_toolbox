@@ -15,6 +15,7 @@
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
 import importlib
+from dataclasses import replace
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from zipfile import ZipFile
@@ -49,6 +50,7 @@ from nextgis_toolbox.tools.models import (
     ToolInputParameter,
     ToolOutputParameter,
 )
+from nextgis_toolbox.tools.semantics import ToolOutputSemantic
 
 
 @pytest.fixture(autouse=True)
@@ -177,7 +179,7 @@ class FakeApiClient:
     def task_results_url(self, task_id: str) -> str:
         return f"{self.endpoint}/orders?selected={task_id}"
 
-    def upload_file(self, path: Path, feedback=None) -> Dict[str, Any]:
+    def upload(self, path: Path, feedback=None) -> Dict[str, Any]:
         del feedback
         self.uploaded_paths.append(Path(path))
         if not self.upload_responses:
@@ -328,6 +330,79 @@ def make_executor(
         sleeper=fake_clock.sleep,
         wait_timeout_seconds=wait_timeout_seconds,
     )
+
+
+@pytest.mark.parametrize(
+    "result_name, value, extensions, expected",
+    [
+        ("result", "storage/result.file", ["zip"], "result.zip"),
+        ("report.csv", "storage/result.file", ["zip"], "report.csv"),
+        ("result", "storage/result.csv", ["zip", "csv"], "result.csv"),
+        ("result", "storage/result.file", ["zip", "csv"], None),
+    ],
+)
+def test_archive_result_filename_uses_artifact_semantics(
+    result_name, value, extensions, expected
+):
+    output = ToolOutputParameter(
+        name="result",
+        parameter_type=OutputParameterType.FILE,
+        alias=None,
+        description=None,
+        required=True,
+        output_semantic=ToolOutputSemantic(
+            kind="other",
+            constraints={"extensions": extensions},
+            archive_contents=[ToolOutputSemantic(kind="table")],
+        ),
+    )
+    executor = make_executor(
+        tool=make_tool(outputs=[output]),
+        resolved_values={},
+        client=FakeApiClient(tasks=[]),
+    )
+    assert (
+        executor._preferred_result_filename(
+            TaskResult(name=result_name, value=value), output
+        )
+        == expected
+    )
+
+
+def test_execute_downloads_archive_using_semantic_extension(tmp_path):
+    output = replace(
+        make_output_parameter("result", "file"),
+        output_semantic=ToolOutputSemantic(
+            kind="other",
+            constraints={"extensions": ["zip"]},
+            archive_contents=[ToolOutputSemantic(kind="table")],
+        ),
+    )
+    client = FakeApiClient(
+        tasks=[
+            make_task(
+                TaskStatus.SUCCESS,
+                progress=1.0,
+                results=[
+                    TaskResult(name="result", value="storage/result.file")
+                ],
+            )
+        ]
+    )
+    executor = make_executor(
+        tool=make_tool(outputs=[output]),
+        resolved_values={},
+        client=client,
+        output_destination_resolver=lambda *args: tmp_path / "result.file",
+    )
+
+    results = executor.execute({}, object(), FakeFeedback())
+
+    assert results == {"result": str(tmp_path / "result.zip")}
+    assert (
+        client.downloaded_requests[0]["destination"] == tmp_path / "result.zip"
+    )
+    assert (tmp_path / "result.zip").is_file()
 
 
 def test_execute_successful_task_updates_feedback_and_returns_empty_dict(
@@ -1321,7 +1396,7 @@ def test_execute_skips_optional_file_upload_when_value_is_empty() -> None:
     executor.execute({}, object(), FakeFeedback())
 
     assert client.uploaded_paths == []
-    assert client.submitted_inputs == [{"source_file": ""}]
+    assert client.submitted_inputs == [{"source_file": None}]
 
 
 def test_execute_raises_for_missing_input_file(tmp_path: Path) -> None:

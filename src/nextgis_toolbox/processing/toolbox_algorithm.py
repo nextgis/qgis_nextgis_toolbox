@@ -120,7 +120,8 @@ class ToolboxAlgorithm(QgsProcessingAlgorithm):
         clone._notifier_resolver = self._notifier_resolver
 
         provider = cast("NextgisToolboxProcessingProvider", self.provider())
-        provider.algorithm_instance_created.emit(clone)
+        if provider is not None:
+            provider.algorithm_instance_created.emit(clone)
 
         return clone
 
@@ -137,7 +138,8 @@ class ToolboxAlgorithm(QgsProcessingAlgorithm):
         for input_parameter in self.tool.inputs:
             representation = (
                 self._parameter_registry.create_input_representation(
-                    input_parameter
+                    input_parameter,
+                    tool_inputs=self.tool.inputs,
                 )
             )
             self._add_parameters(representation.parameters)

@@ -264,12 +264,12 @@ def test_ui_manager_initialize_ui_retries_until_processing_menu_available(
     manager = _create_plugin_ui_manager(manager_module, qgis_iface)
     manager._plugin_menu = None
     manager._find_processing_menu = Mock(return_value=None)
-    manager._schedule_processing_menu_retry = Mock(return_value=True)
+    manager._schedule_update_ui = Mock(return_value=True)
     manager._handle_missing_processing_plugin = Mock()
 
-    manager._initialize_ui()
+    manager._delayed_updating_ui()
 
-    manager._schedule_processing_menu_retry.assert_called_once_with()
+    manager._schedule_update_ui.assert_called_once_with()
     manager._handle_missing_processing_plugin.assert_not_called()
 
 

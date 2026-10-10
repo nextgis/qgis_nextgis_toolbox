@@ -5,6 +5,8 @@ Functionality
 -------------
 NextGIS Toolbox for QGIS. Sends tasks to NextGIS Toolbox server and recieve results. More: [https://toolbox.nextgis.com/](https://toolbox.nextgis.com/)
 
+Manual desktop integration tests: [tests/manual/README.md](tests/manual/README.md).
+
 License
 -------
 This program is licensed under GNU GPL v2 or any later version

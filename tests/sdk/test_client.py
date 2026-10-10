@@ -31,6 +31,7 @@ from nextgis_toolbox.core.exceptions import (
     NextgisToolboxCacheReadError,
     ToolboxError,
     ToolboxFileWriteError,
+    ToolboxNetworkError,
 )
 
 
@@ -133,7 +134,7 @@ def test_post_sends_json_payload(api_server) -> None:
     }
 
 
-def test_post_retries_without_feedback_after_protocol_invalid_operation_error(
+def test_post_does_not_resubmit_task_after_protocol_error(
     monkeypatch,
 ) -> None:
     client = ToolboxApiClient(endpoint="https://toolbox.nextgis.test")
@@ -145,13 +146,7 @@ def test_post_retries_without_feedback_after_protocol_invalid_operation_error(
         QNetworkReply.NetworkError.ProtocolInvalidOperationError
     )
 
-    successful_response = Mock()
-    successful_response.error.return_value = QNetworkReply.NetworkError.NoError
-    successful_response.content.return_value.data.return_value = (
-        b'{"task_id": "task-1"}'
-    )
-
-    blocking_post = Mock(side_effect=[failed_response, successful_response])
+    blocking_post = Mock(return_value=failed_response)
     network_manager = Mock()
     network_manager.blockingPost = blocking_post
     monkeypatch.setattr(
@@ -160,16 +155,13 @@ def test_post_retries_without_feedback_after_protocol_invalid_operation_error(
         classmethod(lambda cls: network_manager),
     )
 
-    response = client.post(
-        "tasks/",
-        {"tool": "hello"},
-        feedback=feedback,
-    )
+    # A failed POST may already have created a remote task. Retrying without
+    # feedback is not a safe binding workaround and can submit it twice.
+    with pytest.raises(ToolboxNetworkError):
+        client.post("tasks/", {"tool": "hello"}, feedback=feedback)
 
-    assert response == {"task_id": "task-1"}
-    assert blocking_post.call_count == 2
-    assert blocking_post.call_args_list[0].kwargs == {"feedback": feedback}
-    assert blocking_post.call_args_list[1].kwargs == {}
+    assert blocking_post.call_count == 1
+    assert blocking_post.call_args.args[-1] is feedback
 
 
 def test_upload_posts_binary_payload_and_parses_json_response(
@@ -185,7 +177,7 @@ def test_upload_posts_binary_payload_and_parses_json_response(
     )
     client = ToolboxApiClient(endpoint=api_server.base_url)
 
-    response = client.upload_file(source_path)
+    response = client.upload(source_path)
 
     assert response == {
         "name": "example.txt",
@@ -293,7 +285,7 @@ def test_upload_file_wraps_read_errors(
     monkeypatch.setattr(Path, "read_bytes", raise_os_error)
 
     with pytest.raises(ToolboxError) as error:
-        client.upload_file(source_path)
+        client.upload(source_path)
 
     assert error.value.detail is None
     assert any(

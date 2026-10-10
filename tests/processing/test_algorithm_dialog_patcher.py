@@ -46,6 +46,7 @@ from nextgis_toolbox.processing.parameters import (
 from nextgis_toolbox.processing.parameters.controls import (
     ADD_RESULTS_TO_PROJECT_PARAMETER_NAME,
 )
+from nextgis_toolbox.processing.ui.dialog_patcher import AlgorithmDialogPatcher
 
 
 def _import_dialog_patcher_module():
@@ -56,7 +57,7 @@ def _import_dialog_patcher_module():
 
 def _import_help_patches_module():
     return importlib.import_module(
-        "nextgis_toolbox.processing.ui.dialog_patches.help"
+        "nextgis_toolbox.processing.ui.dialog_patches.help_browser"
     )
 
 
@@ -171,7 +172,7 @@ def _create_algorithm(
     client=None,
 ):
     algorithm_module = importlib.import_module(
-        "nextgis_toolbox.processing.nextgis_toolbox_algorithm"
+        "nextgis_toolbox.processing.toolbox_algorithm"
     )
     models_module = importlib.import_module("nextgis_toolbox.tools.models")
 
@@ -207,7 +208,7 @@ def _create_algorithm(
     tasks_manager = Mock()
     tasks_manager.api.return_value = tasks_api
 
-    algorithm = algorithm_module.NextgisToolboxAlgorithm(
+    algorithm = algorithm_module.ToolboxAlgorithm(
         tool,
         tasks_manager,
         parameter_registry=create_default_parameter_registry(),
@@ -293,6 +294,7 @@ class FakeAlgorithmDialog(QWidget):
 
     def setParameters(self, parameters):
         self._parameters = parameters
+        self._main_widget.setParameters(parameters)
 
     def updateRunButtonVisibility(self) -> None:
         return
@@ -403,8 +405,8 @@ def test_message_bar_text_patch_only_updates_text_widgets(qgis_app) -> None:
 
     assert text_browser is not None
     assert "color: black" in text_browser.styleSheet()
-    assert "QTextEdit, QTextBrowser" not in text_browser.styleSheet()
-    assert "QProgressBar { color: black; }" in progress_bar.styleSheet()
+    assert "QTextEdit, QTextBrowser" in text_browser.styleSheet()
+    assert progress_bar.styleSheet() == ""
     assert warning_item.styleSheet() == ""
     assert action_button.styleSheet() == ""
 
@@ -414,11 +416,10 @@ def test_algorithm_dialog_patcher_hides_demo_button_without_presets(
 ) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(can_run=True, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
 
@@ -435,14 +436,13 @@ def test_algorithm_dialog_patcher_adds_demo_button_and_help_icon(
 ) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     notifier_module = importlib.import_module(
         "nextgis_toolbox.notifier.message_bar_notifier"
     )
     algorithm = _create_algorithm(can_run=True, with_preset=True)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
     patcher.patch(dialog)
@@ -459,7 +459,7 @@ def test_algorithm_dialog_patcher_adds_demo_button_and_help_icon(
     assert not help_button.icon().isNull()
     assert len(demo_buttons) == 1
     assert isinstance(dialog.notifier, notifier_module.MessageBarNotifier)
-    assert algorithm.runtime_notifier is dialog.notifier
+    assert algorithm.notifier is dialog.notifier
 
     layout = dialog.buttonBox().layout()
     assert layout is not None
@@ -473,19 +473,18 @@ def test_algorithm_dialog_patcher_adds_demo_button_and_help_icon(
 def test_dialog_runtime_resolves_notifier_lazily(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     algorithm = _create_algorithm(can_run=True, with_preset=False)
     dialog = DelayedMessageBarDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
 
-    assert algorithm.runtime_notifier is None
+    assert algorithm.notifier is None
     assert getattr(dialog, "notifier", None) is None
 
     dialog.message_bar_available = True
 
-    notifier = algorithm.runtime_notifier
+    notifier = algorithm.notifier
 
     assert notifier is not None
     assert dialog.notifier is notifier
@@ -494,22 +493,20 @@ def test_dialog_runtime_resolves_notifier_lazily(qgis_app) -> None:
 def test_algorithm_clone_keeps_runtime_notifier_resolver(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     algorithm = _create_algorithm(can_run=True, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
 
     clone = algorithm.createInstance()
 
-    assert clone.runtime_notifier is dialog.notifier
+    assert clone.notifier is dialog.notifier
 
 
 def test_algorithm_dialog_patcher_applies_demo_preset(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     notifier_module = importlib.import_module(
         "nextgis_toolbox.notifier.message_bar_notifier"
@@ -521,7 +518,7 @@ def test_algorithm_dialog_patcher_applies_demo_preset(qgis_app) -> None:
         preset_inputs={"source": "/tmp/demo-input.tif"},
     )
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
     QApplication.processEvents()
@@ -555,7 +552,6 @@ def test_algorithm_dialog_patcher_applies_demo_preset(qgis_app) -> None:
 def test_demo_button_switches_to_parameters_tab(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(
         can_run=True,
@@ -567,7 +563,7 @@ def test_demo_button_switches_to_parameters_tab(qgis_app) -> None:
     )
     dialog = FakeAlgorithmDialog(algorithm)
     dialog._tab_widget.setCurrentIndex(1)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
     QApplication.processEvents()
@@ -661,7 +657,6 @@ def test_message_bar_patches_ignore_generic_widgets(qgis_app) -> None:
 def test_dialog_runtime_expands_existing_message_bar_items(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     dialog_runtime_module = importlib.import_module(
         "nextgis_toolbox.processing.ui.dialog_patches.dialog_runtime"
     )
@@ -675,7 +670,7 @@ def test_dialog_runtime_expands_existing_message_bar_items(qgis_app) -> None:
         "Existing warning message",
         level=Qgis.MessageLevel.Warning,
     )
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher(
+    patcher = AlgorithmDialogPatcher(
         patches=(
             dialog_runtime_module.DialogRuntimePatch(
                 runtime_controller=dialog_runtime_module.DialogRuntimeController(
@@ -719,7 +714,7 @@ def test_dialog_runtime_expands_notifier_created_message_items(
     )
     algorithm = _create_algorithm(can_run=True, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher(
+    patcher = AlgorithmDialogPatcher(
         patches=(
             dialog_runtime_module.DialogRuntimePatch(
                 runtime_controller=dialog_runtime_module.DialogRuntimeController(
@@ -758,22 +753,21 @@ def test_dialog_runtime_expands_notifier_created_message_items(
     assert text_browser.minimumHeight() == text_browser.maximumHeight()
 
 
-def test_dialog_runtime_notifier_does_not_force_auto_expand_by_default(
+def test_dialog_runtime_notifier_expands_messages_by_default(
     qgis_app,
 ) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     notifier_module = importlib.import_module(
         "nextgis_toolbox.notifier.message_bar_notifier"
     )
     algorithm = _create_algorithm(can_run=True, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
 
-    assert not dialog.messageBar().property(
+    assert dialog.messageBar().property(
         notifier_module.MESSAGE_BAR_AUTO_EXPAND_PATCHED_PROPERTY
     )
 
@@ -781,7 +775,6 @@ def test_dialog_runtime_notifier_does_not_force_auto_expand_by_default(
 def test_demo_button_clears_existing_progress_indicators(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(
         can_run=True,
@@ -792,7 +785,7 @@ def test_demo_button_clears_existing_progress_indicators(qgis_app) -> None:
         preset_outputs={"result": {"name": "demo.zip"}},
     )
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
     dialog._progress_bar.setValue(67)
     dialog._progress_bar.setEnabled(False)
 
@@ -829,13 +822,13 @@ def test_cancel_confirmation_patch_blocks_cancel_when_rejected(
 
     dialog_patcher_module = _import_dialog_patcher_module()
     interaction_module = importlib.import_module(
-        "nextgis_toolbox.processing.ui.dialog_patches.interaction"
+        "nextgis_toolbox.processing.ui.dialog_patches.cancel_button"
     )
     algorithm = _create_algorithm(can_run=True, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
     dialog.feedback = object()
     dialog.show()
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher(
+    patcher = AlgorithmDialogPatcher(
         patches=(dialog_patcher_module.CancelConfirmationPatch(),)
     )
 
@@ -860,20 +853,20 @@ def test_cancel_confirmation_patch_allows_cancel_when_confirmed(
 
     dialog_patcher_module = _import_dialog_patcher_module()
     interaction_module = importlib.import_module(
-        "nextgis_toolbox.processing.ui.dialog_patches.interaction"
+        "nextgis_toolbox.processing.ui.dialog_patches.cancel_button"
     )
     algorithm = _create_algorithm(can_run=True, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
     dialog.feedback = object()
     dialog.show()
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher(
+    patcher = AlgorithmDialogPatcher(
         patches=(dialog_patcher_module.CancelConfirmationPatch(),)
     )
 
     monkeypatch.setattr(
         interaction_module.QMessageBox,
         "warning",
-        lambda *_args, **_kwargs: QMessageBox.StandardButton.Ok,
+        lambda *_args, **_kwargs: QMessageBox.StandardButton.Yes,
     )
 
     patcher.patch(dialog)
@@ -974,7 +967,7 @@ def test_tool_preset_applier_downloads_and_converts_values(
         },
     )
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher(
+    patcher = AlgorithmDialogPatcher(
         patches=(
             dialog_patcher_module.DemoButtonPatch(
                 applier_module.ToolPresetApplier(
@@ -1116,7 +1109,7 @@ def test_demo_button_blocks_inputs_while_preset_is_loading(qgis_app) -> None:
             return True
 
     preset_applier = InspectingPresetApplier()
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher(
+    patcher = AlgorithmDialogPatcher(
         patches=(dialog_patcher_module.DemoButtonPatch(preset_applier),)
     )
 
@@ -1195,10 +1188,9 @@ def test_algorithm_dialog_patcher_blocks_unrunnable_tool_inputs(
 ) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     algorithm = _create_algorithm(can_run=False, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
 
@@ -1227,10 +1219,9 @@ def test_algorithm_dialog_patcher_unblocks_tool_after_repatch(
 ) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     algorithm = _create_algorithm(can_run=False, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
 
@@ -1247,10 +1238,9 @@ def test_algorithm_dialog_patcher_unblocks_tool_after_repatch(
 def test_algorithm_dialog_block_method_restores_widget_state(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     algorithm = _create_algorithm(can_run=True, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
 
@@ -1288,11 +1278,10 @@ def test_algorithm_dialog_runtime_hooks_block_controls_while_running(
 ) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(can_run=True, with_preset=True)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
     QApplication.processEvents()
@@ -1329,11 +1318,10 @@ def test_dialog_runtime_ignores_deleted_widgets_on_restore(
 ) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(can_run=True, with_preset=True)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
     QApplication.processEvents()
@@ -1359,11 +1347,10 @@ def test_dialog_runtime_ignores_deleted_widgets_on_restore(
 def test_demo_button_repatch_restores_enabled_state(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(can_run=True, with_preset=True)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
     QApplication.processEvents()
@@ -1382,11 +1369,10 @@ def test_demo_button_repatch_restores_enabled_state(qgis_app) -> None:
 def test_demo_button_repatch_preserves_external_handlers(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(can_run=True, with_preset=True)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
     external_calls = []
 
     patcher.patch(dialog)
@@ -1411,14 +1397,13 @@ def test_demo_button_repatch_preserves_external_handlers(qgis_app) -> None:
 def test_demo_button_keeps_position_after_tab_switch(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(can_run=True, with_preset=True)
     dialog = FakeAlgorithmDialog(
         algorithm,
         reorder_action_buttons_on_tab_change=True,
     )
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
     QApplication.processEvents()
@@ -1442,14 +1427,13 @@ def test_demo_button_keeps_position_after_tab_switch(qgis_app) -> None:
 def test_demo_button_keeps_position_after_execution_reset(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(can_run=True, with_preset=True)
     dialog = FakeAlgorithmDialog(
         algorithm,
         reorder_action_buttons_on_reset=True,
     )
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
     QApplication.processEvents()
@@ -1474,14 +1458,13 @@ def test_demo_button_keeps_position_after_execution_reset(qgis_app) -> None:
 def test_demo_button_handler_is_owned_by_dialog(qgis_app) -> None:
     del qgis_app
 
-    dialog_patcher_module = _import_dialog_patcher_module()
     demo_patch_module = importlib.import_module(
-        "nextgis_toolbox.processing.ui.dialog_patches.demo"
+        "nextgis_toolbox.processing.ui.dialog_patches.demo_button"
     )
     demo_button_module = _import_demo_button_module()
     algorithm = _create_algorithm(can_run=True, with_preset=True)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher()
+    patcher = AlgorithmDialogPatcher()
 
     patcher.patch(dialog)
     QApplication.processEvents()
@@ -1685,7 +1668,7 @@ def test_run_message_dismiss_patch_clears_demo_notification_on_accept(
     )
     algorithm = _create_algorithm(can_run=True, with_preset=False)
     dialog = FakeAlgorithmDialog(algorithm)
-    patcher = dialog_patcher_module.AlgorithmDialogPatcher(
+    patcher = AlgorithmDialogPatcher(
         patches=(dialog_patcher_module.DialogRuntimePatch(),)
     )
 

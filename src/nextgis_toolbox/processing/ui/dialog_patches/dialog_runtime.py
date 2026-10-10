@@ -639,6 +639,18 @@ class DialogRuntimeController:
         if callable(set_ui_blocked):
             set_ui_blocked(is_blocked)
 
+    def clear_progress(self, dialog: AlgorithmDialog) -> None:
+        """Clear stale execution progress before applying a new demo preset."""
+        clear_progress = getattr(dialog, "clearProgress", None)
+        if callable(clear_progress):
+            clear_progress()
+        message_bar = dialog.messageBar()
+        if message_bar is None:
+            return
+        for item in message_bar.items():
+            if item.findChild(QProgressBar) is not None:
+                message_bar.popWidget(item)
+
 
 class DialogRuntimePatch(AlgorithmDialogPatch):
     def __init__(

@@ -270,6 +270,8 @@ class NextgisToolboxPlugin(NextgisToolboxInterface):
         )
 
     def _qgis_profile_name(self) -> str:
+        if self.qgis_iface is None:
+            return "default"
         user_profile_manager = self.qgis_iface.userProfileManager()
         if not user_profile_manager:
             return "default"

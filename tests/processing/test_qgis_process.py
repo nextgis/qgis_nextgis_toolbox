@@ -27,20 +27,35 @@ from nextgis_toolbox.settings.nextgis_toolbox_settings import (
 )
 from tests.conftest import SOURCE_ROOT
 
-QGIS_PROCESS_COMMAND = [
-    "flatpak",
-    "run",
-    "--command=qgis_process",
-    "com.nextgis.ngqgis",
-]
+QGIS_PROCESS_COMMAND = ["qgis_process"]
 QGIS_PROCESS_ENDPOINT = None
 QGIS_PROCESS_AUTHENTICATION_TYPE = AuthenticationType.NONE
 QGIS_PROCESS_AUTHENTICATION_TOKEN = ""
 
 
 def _skip_if_qgis_process_unavailable() -> None:
-    if shutil.which("flatpak") is None:
-        pytest.skip("flatpak is required for qgis_process integration tests")
+    if shutil.which(QGIS_PROCESS_COMMAND[0]) is None:
+        pytest.skip("qgis_process is required for integration tests")
+
+
+@pytest.fixture(autouse=True)
+def isolated_process_profile(tmp_path, monkeypatch):
+    # Enabling a plugin must never change the user's QGIS profile.
+    for variable, directory in (
+        ("HOME", "home"),
+        ("XDG_CONFIG_HOME", "config"),
+        ("XDG_DATA_HOME", "data"),
+        ("QGIS_CUSTOM_CONFIG_PATH", "qgis"),
+        ("QGIS_AUTH_DB_DIR_PATH", "auth"),
+    ):
+        path = tmp_path / directory
+        path.mkdir()
+        monkeypatch.setenv(variable, str(path))
+    monkeypatch.setattr(__name__ + ".QGIS_PROCESS_ENDPOINT", None)
+    monkeypatch.setattr(
+        __name__ + ".QGIS_PROCESS_AUTHENTICATION_TYPE", AuthenticationType.NONE
+    )
+    monkeypatch.setattr(__name__ + ".QGIS_PROCESS_AUTHENTICATION_TOKEN", "")
 
 
 def _qgis_process_env() -> dict:
@@ -98,11 +113,6 @@ def _set_local_endpoint(endpoint: str) -> None:
     QGIS_PROCESS_ENDPOINT = endpoint
     QGIS_PROCESS_AUTHENTICATION_TYPE = AuthenticationType.NONE
     QGIS_PROCESS_AUTHENTICATION_TOKEN = ""
-
-    settings = NextgisToolboxSettings()
-    settings.endpoint = endpoint
-    settings.authentication_type = AuthenticationType.NONE
-    settings.authentication_token = ""
 
 
 def _register_catalog_responses(api_server) -> None:

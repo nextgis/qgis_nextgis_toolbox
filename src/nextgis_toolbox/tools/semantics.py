@@ -88,9 +88,12 @@ class ToolInputSemantic:
 
 @dataclass(frozen=True)
 class ToolOutputSemantic:
+    """Describe a result artifact and preserve its logical archive contents."""
+
     kind: str
     constraints: Dict[str, Any] = field(default_factory=dict)
     additional_data: Dict[str, Any] = field(default_factory=dict)
+    archive_contents: List["ToolOutputSemantic"] = field(default_factory=list)
 
     @classmethod
     def from_json(cls, data: Dict[str, Any]) -> "ToolOutputSemantic":
@@ -100,14 +103,22 @@ class ToolOutputSemantic:
             additional_data={
                 key: value
                 for key, value in data.items()
-                if key not in {"kind", "constraints"}
+                if key not in {"kind", "constraints", "archive_contents"}
             },
+            archive_contents=[
+                cls.from_json(member)
+                for member in data.get("archive_contents", [])
+            ],
         )
 
     def to_json(self) -> Dict[str, Any]:
         payload: Dict[str, Any] = {"kind": self.kind}
         if self.constraints:
             payload["constraints"] = self.constraints
+        if self.archive_contents:
+            payload["archive_contents"] = [
+                member.to_json() for member in self.archive_contents
+            ]
         payload.update(self.additional_data)
         return payload
 
@@ -133,8 +144,11 @@ class ToolSemanticsCatalog:
         )
 
     def enrich_tool_data(self, tool_data: Dict[str, Any]) -> Dict[str, Any]:
+        tool_name = tool_data.get("name")
+        if not isinstance(tool_name, str):
+            return dict(tool_data)
         overlays = self._load_overlays()
-        overlay = overlays.get(tool_data.get("name"))
+        overlay = overlays.get(tool_name)
         if not isinstance(overlay, dict):
             return dict(tool_data)
 

@@ -378,7 +378,7 @@ def test_semantic_vector_input_uses_feature_source_parameter(
             constraints={
                 "layer_type": "vector",
                 "geometry_types": ["polygon"],
-                "file_count": "single",
+                "dataset_count": "single",
             },
         ),
     )
@@ -409,7 +409,7 @@ def test_semantic_vector_input_resolves_compatible_source_path(
             constraints={
                 "allow_conversion": True,
                 "drivers": ["GPKG"],
-                "file_count": "single",
+                "dataset_count": "single",
                 "layer_type": "vector",
             },
         ),
@@ -517,7 +517,7 @@ def test_semantic_vector_output_uses_vector_destination_parameter(
         output_semantic=ToolOutputSemantic(
             kind="layer",
             constraints={
-                "file_count": "single",
+                "dataset_count": "single",
                 "geometry_types": ["polygon"],
                 "layer_type": "vector",
             },
@@ -547,7 +547,7 @@ def test_semantic_raster_output_uses_raster_destination_parameter(
         output_semantic=ToolOutputSemantic(
             kind="layer",
             constraints={
-                "file_count": "single",
+                "dataset_count": "single",
                 "layer_type": "raster",
             },
         ),
@@ -575,7 +575,7 @@ def test_semantic_table_output_uses_file_filter(qgis_app) -> None:
             kind="table",
             constraints={
                 "extensions": ["csv"],
-                "file_count": "single",
+                "dataset_count": "single",
             },
         ),
     )

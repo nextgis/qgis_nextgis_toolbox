@@ -239,8 +239,17 @@ def start_qgis() -> QgsApplication:
     QgsApplication.setApplicationName("NextGIS Toolbox Tests")
     QgsSettings().clear()
 
-    application = QgsApplication(list(map(os.fsencode, sys.argv)), True)
+    application = QgsApplication(
+        list(map(os.fsencode, sys.argv)), True, platformName="desktop"
+    )
     application.initQgis()
+    processing_plugin_root = (
+        Path(QgsApplication.pkgDataPath()) / "python" / "plugins"
+    )
+    if processing_plugin_root.exists():
+        for search_path in (sys.path, qgis.utils.plugin_paths):
+            if str(processing_plugin_root) not in search_path:
+                search_path.insert(0, str(processing_plugin_root))
     init_interface()
 
     APPLICATION_INFO = ApplicationInfo(
@@ -249,6 +258,18 @@ def start_qgis() -> QgsApplication:
         qgis_custom_config_path=qgis_custom_config_path,
     )
     return application
+
+
+def pytest_configure(config) -> None:
+    del config
+    # UI compatibility modules select the runtime at import time. Initialize
+    # the desktop application before test collection, not only in fixtures.
+    start_qgis()
+
+
+def pytest_unconfigure(config) -> None:
+    del config
+    stop_qgis()
 
 
 def stop_qgis() -> None:

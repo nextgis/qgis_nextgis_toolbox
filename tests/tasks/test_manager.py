@@ -14,14 +14,15 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
-from pathlib import Path
 from unittest.mock import Mock
 
+import pytest
+from qgis.core import QgsFeedback
+
 from nextgis_toolbox.tasks.models import (
-    ManagerState,
+    TaskResult,
     TaskStatus,
-    ToolboxResult,
-    ToolboxTask,
+    ToolboxTaskInformation,
 )
 from nextgis_toolbox.tasks.tasks_manager import TasksManager
 
@@ -51,58 +52,46 @@ def test_tasks_manager_submits_task_and_emits_signal(qgis_app) -> None:
     )
 
 
-def test_tasks_manager_delegates_read_operations(qgis_app) -> None:
+@pytest.mark.parametrize("with_feedback", [False, True])
+def test_tasks_manager_delegates_read_operations(
+    qgis_app, with_feedback
+) -> None:
     del qgis_app
 
     manager = TasksManager(Mock())
     repository = Mock()
-    result = ToolboxResult(
+    result = TaskResult(
         name="result",
-        result_type="file",
         value="http://example.com/result.txt",
     )
-    task = ToolboxTask(
+    task = ToolboxTaskInformation(
         tool="hello",
         status=TaskStatus.SUCCESS,
         progress=100.0,
         error=None,
         results=[result],
         operation="hello",
-        state=TaskStatus.SUCCESS,
     )
-    saved_paths = [Path("/tmp/result.txt")]
     repository.task_information.return_value = task
-    repository.get_results.return_value = [result]
-    repository.download_results.return_value = saved_paths
     manager._repository = repository
+    feedback = QgsFeedback() if with_feedback else None
 
-    assert manager.retrieve_task("task-1") is task
-    assert manager.get_results("task-1") == [result]
-    assert manager.download_results([result], Path("/tmp")) == saved_paths
+    assert manager.task_information("task-1", feedback=feedback) is task
+    assert task.results == [result]
 
-    repository.task_information.assert_called_once_with("task-1")
-    repository.get_results.assert_called_once_with("task-1")
-    repository.download_results.assert_called_once_with(
-        [result],
-        Path("/tmp"),
+    repository.task_information.assert_called_once_with(
+        "task-1", feedback=feedback
     )
 
 
-def test_tasks_manager_tracks_catalog_runtime_state(qgis_app) -> None:
+def test_tasks_manager_lifecycle_preserves_api_access(qgis_app) -> None:
     del qgis_app
 
-    manager = TasksManager(Mock())
-    observed_states = []
-    manager.state_changed.connect(observed_states.append)
-
-    manager.on_tools_catalog_loading_finished(False, "broken")
-    manager.on_tools_catalog_loading_finished(True, "")
+    api = Mock()
+    manager = TasksManager(api)
+    manager.load()
+    assert manager.api() is api
     manager.unload()
-
-    assert manager.state == ManagerState.LOADING
-    assert manager.error_message == ""
-    assert observed_states == [
-        ManagerState.ERROR,
-        ManagerState.LOADED,
-        ManagerState.LOADING,
-    ]
+    replacement = Mock()
+    manager.set_api(replacement)
+    assert manager.api() is replacement

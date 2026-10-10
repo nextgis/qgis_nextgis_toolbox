@@ -7,8 +7,7 @@
           "layer_type": "vector",
           "geometry_types": [
             "any"
-          ],
-          "file_count": "single"
+          ]
         }
       },
       "dataextract": {
@@ -21,8 +20,7 @@
           "drivers": [
             "GPKG",
             "ESRI Shapefile"
-          ],
-          "file_count": "multiple"
+          ]
         }
       }
     },
@@ -37,7 +35,7 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "resultcsv": {
@@ -46,11 +44,11 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "c85ba7086160b56d3482ea632fad9f97be32435f"
+    "commit_hash": "7fdd603f6ab317be07c9c804bcc0322b0c9891fb"
   },
   "ai2geo": {
     "inputs": {
@@ -61,7 +59,13 @@
             "pdf",
             "ai"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
+        }
+      },
+      "ref_raster_file": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "raster"
         }
       }
     },
@@ -70,14 +74,17 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "vector",
+          "geometry_types": [
+            "line",
+            "polygon"
+          ],
           "drivers": [
             "ESRI Shapefile"
-          ],
-          "file_count": "multiple"
+          ]
         }
       }
     },
-    "commit_hash": "912170616bc6165c647fde70bf0652d2d9268e14"
+    "commit_hash": "2f4d81f98173e8ddf7e758875bc80415e1a7c761"
   },
   "ascii2geotiff": {
     "inputs": {
@@ -92,7 +99,7 @@
             "USGSDEM",
             "XYZ"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -104,11 +111,11 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "82fe9a6324ec949d273465ad69b317dd70cd6cb4"
+    "commit_hash": "a4cfd73e6566ad95a7e901e90add2155461f0c84"
   },
   "autocad_file_schema": {
     "outputs": {
@@ -118,33 +125,62 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "3610ae65f28dc1cd89b91a2a156b8415d7169e0c"
+    "commit_hash": "35e834b03c53da7ed19b9274bcfbad0698bb678e"
   },
   "autocad_version": {
-    "commit_hash": "52d08f767f630a3b3f5564d70d4049076dbe46cb"
+    "inputs": {
+      "input_file": {
+        "kind": "document",
+        "constraints": {
+          "dataset_count": "single"
+        }
+      }
+    },
+    "outputs": {},
+    "commit_hash": "fd50c69b3e62912eeec3385ae39b787caf83728e"
   },
   "cadastre2img": {
     "inputs": {
-      "code": {
-        "kind": "free_text",
-        "constraints": {
-          "pattern": "^[0-9:.-]+$"
-        }
-      },
       "color": {
         "kind": "color"
       },
       "strokeColor": {
         "kind": "color"
       },
-      "qmsid": {
-        "kind": "layer",
+      "code": {
+        "kind": "free_text",
         "constraints": {
-          "layer_type": "qms_basemap"
+          "pattern": "^\\s*[0-9:.-]+\\s*$"
+        }
+      },
+      "width": {
+        "kind": "other",
+        "constraints": {
+          "max_value": 1169
+        }
+      },
+      "height": {
+        "kind": "other",
+        "constraints": {
+          "max_value": 1654
+        }
+      },
+      "opacity": {
+        "kind": "other",
+        "constraints": {
+          "min_value": 0,
+          "max_value": 1
+        }
+      },
+      "strokeOpacity": {
+        "kind": "other",
+        "constraints": {
+          "min_value": 0,
+          "max_value": 1
         }
       },
       "fitmaxzoom": {
@@ -163,11 +199,11 @@
           "extensions": [
             "png"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "458be0c36cf44892d39b496ab20414203e58534e"
+    "commit_hash": "98017feb5b26e3839e6d8f658bc32a768d268828"
   },
   "centerline": {
     "inputs": {
@@ -177,8 +213,7 @@
           "layer_type": "vector",
           "geometry_types": [
             "polygon"
-          ],
-          "file_count": "single"
+          ]
         }
       }
     },
@@ -193,19 +228,18 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "334396c0f2f762c07e54d9e8a12f64b6d2d93b80"
+    "commit_hash": "3dee199537d496f025a433a75651a138a339b6ce"
   },
   "centroid2attr": {
     "inputs": {
       "polygons": {
         "kind": "layer",
         "constraints": {
-          "layer_type": "vector",
-          "file_count": "single"
+          "layer_type": "vector"
         }
       }
     },
@@ -217,11 +251,11 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "c1cd99203f7547710bfc2017dfc3da2ec649d2b0"
+    "commit_hash": "56cf8a8bd6eb2875a42bd2c045b37f0644dafcbb"
   },
   "check_geometries": {
     "inputs": {
@@ -239,7 +273,7 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "output_geojson_file": {
@@ -252,11 +286,11 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "04f5fd82b8b2066c083fae98cab047866538bbc8"
+    "commit_hash": "6aadf67772e4e71de2aa419a72d2a6d3509b5918"
   },
   "clip_polys_poly": {
     "inputs": {
@@ -293,17 +327,35 @@
             "source_parameter": "ngw_connection"
           }
         ]
+      },
+      "area_field": {
+        "kind": "field",
+        "relations": [
+          {
+            "type": "fields",
+            "source_parameter": "features_layer_id"
+          }
+        ]
+      },
+      "area_inbound_field": {
+        "kind": "field",
+        "relations": [
+          {
+            "type": "fields",
+            "source_parameter": "features_layer_id"
+          }
+        ]
       }
     },
-    "commit_hash": "d2d0548055a25821c65942ef36497e0ba8a459a4"
+    "outputs": {},
+    "commit_hash": "75e786b2c307e0030e4f1229f608428a6026c6f0"
   },
   "convert": {
     "inputs": {
       "source": {
         "kind": "layer",
         "constraints": {
-          "layer_type": "vector",
-          "file_count": "single"
+          "layer_type": "vector"
         }
       }
     },
@@ -315,7 +367,7 @@
         }
       }
     },
-    "commit_hash": "824f46acab9ad6b411075348e792b62cd1e1a07b"
+    "commit_hash": "1a7c687664cca6eaeaf26e1b1d8e0ee623360a6a"
   },
   "coord_recalc": {
     "inputs": {
@@ -325,14 +377,16 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "source_crs": {
         "kind": "crs",
         "constraints": {
           "crs_formats": [
-            "proj"
+            "epsg",
+            "proj",
+            "wkt"
           ]
         }
       },
@@ -340,7 +394,9 @@
         "kind": "crs",
         "constraints": {
           "crs_formats": [
-            "proj"
+            "epsg",
+            "proj",
+            "wkt"
           ]
         }
       }
@@ -352,11 +408,11 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "c35a01ebc3870ed34ad4c0740b78d4b0721778c2"
+    "commit_hash": "55046001cb3fa7f518c5198faf7870f7c7ad44b5"
   },
   "coords2poly": {
     "inputs": {
@@ -364,11 +420,12 @@
         "kind": "table",
         "constraints": {
           "extensions": [
-            "xlsx",
+            "txt",
+            "csv",
             "xls",
-            "csv"
+            "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -377,11 +434,11 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "vector",
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "a8dd31719cb247291f658859751472a9db450046"
+    "commit_hash": "3fa177067f426d3a6df680b66c62f0aeeb666d45"
   },
   "count_tiles": {
     "inputs": {
@@ -391,8 +448,7 @@
           "layer_type": "vector",
           "geometry_types": [
             "polygon"
-          ],
-          "file_count": "single"
+          ]
         }
       }
     },
@@ -407,11 +463,11 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "62a4d4707f74d74694e3557e93770eace2b3b30d"
+    "commit_hash": "ec9b5a6667deeac7ba24699527d407d901dc3eb2"
   },
   "crossing_borders": {
     "inputs": {
@@ -425,7 +481,7 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       },
       "objects": {
@@ -436,7 +492,7 @@
             "ESRI Shapefile",
             "GPKG"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
@@ -447,11 +503,11 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "4df2a3d1de112c954d8ebd845da302bc96832484"
+    "commit_hash": "c2e96e8dba2ae5509a69b6d601e14069cd2e4e54"
   },
   "deminpoints": {
     "inputs": {
@@ -461,7 +517,7 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "lat_column": {
@@ -489,7 +545,8 @@
         ]
       }
     },
-    "commit_hash": "d7666d2c793f3fbdc9ebca7ce17696d2109d91cf"
+    "outputs": {},
+    "commit_hash": "95b8527f52834566a7031228e6e9589a8a669e12"
   },
   "dezhurcad": {
     "inputs": {
@@ -533,7 +590,7 @@
           "extensions": [
             "txt"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "no_process": {
@@ -543,11 +600,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "e4d9767b8b1dbe45023e4d31f560d149e5660c29"
+    "commit_hash": "a5dfb9701ff380c35f3f02c327149c1f3ff40bd5"
   },
   "doc2pdf": {
     "inputs": {
@@ -555,10 +612,8 @@
         "kind": "document",
         "constraints": {
           "extensions": [
-            "doc",
             "docx"
-          ],
-          "file_count": "single"
+          ]
         }
       },
       "input_json": {
@@ -566,8 +621,7 @@
         "constraints": {
           "extensions": [
             "json"
-          ],
-          "file_count": "single"
+          ]
         }
       }
     },
@@ -578,11 +632,11 @@
           "extensions": [
             "pdf"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "2ed5990db031c0be991c579d8d5cb68beddd1e38"
+    "commit_hash": "ce168e7871a7eca7b2f1df90eb377ca25e15585b"
   },
   "download_and_prepare_l8_s2": {
     "inputs": {
@@ -593,7 +647,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -605,21 +659,22 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "efc8242e779f38cf7888b93abdf85ec336b9d33e"
+    "commit_hash": "28e9d1596c387be873059d860863ff9c53ca160d"
   },
   "download_glad": {
     "inputs": {
       "tileslist": {
-        "kind": "table",
+        "kind": "document",
         "constraints": {
           "extensions": [
+            "txt",
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -630,7 +685,7 @@
           "extensions": [
             "bat"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "download_aws_script": {
@@ -639,7 +694,7 @@
           "extensions": [
             "bat"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "url_list": {
@@ -648,11 +703,11 @@
           "extensions": [
             "txt"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "2fb855bc3a2059e0aba474e980191f4bbb000861"
+    "commit_hash": "cff61505a2ac00765e991c0e32ae3e7e39ef42c6"
   },
   "egrn_kvartals_cover": {
     "inputs": {
@@ -663,7 +718,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -674,11 +729,11 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "4eaee79af855b211fe9b82544f4f688ccbb11c56"
+    "commit_hash": "7448ed40889adb0b6733f6ff2623f4b042538877"
   },
   "egrn_splitter": {
     "inputs": {
@@ -688,7 +743,7 @@
           "extensions": [
             "xml"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -699,18 +754,18 @@
           "extensions": [
             "xml"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "21b0117928a909b280242061d9155634fab8abb9"
+    "commit_hash": "1a225affec13853d93a45dcabf73146b0f1e5ed5"
   },
   "embedsvg": {
     "inputs": {
       "archive": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
@@ -718,11 +773,11 @@
       "result": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "a543d36b30c552dcda34160cdcd1f687c9775d35"
+    "commit_hash": "164e9542b599b3d7a1b12d26545418f2a2831992"
   },
   "empty_geoms": {
     "inputs": {
@@ -748,11 +803,11 @@
           "extensions": [
             "txt"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "5c70f080836051d01da181d858c063bb71f597dc"
+    "commit_hash": "48931eff61d1f1551a68e173b72f03400cb0c52d"
   },
   "eraser": {
     "inputs": {
@@ -760,14 +815,16 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "vector",
-          "file_count": "single"
+          "geometry_types": [
+            "polygon"
+          ],
+          "dataset_count": "single"
         }
       },
       "erase_with_data": {
         "kind": "layer",
         "constraints": {
-          "layer_type": "vector",
-          "file_count": "single"
+          "layer_type": "vector"
         }
       }
     },
@@ -776,43 +833,34 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "vector",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "dca9dcecdbd32a4712d08c77dd352d660f572a07"
+    "commit_hash": "36f2296560ce85af1e95ec8a81e686ae6048236b"
   },
   "erosion_analysis": {
     "inputs": {
       "terrain_zip": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
+        "kind": "other"
       },
       "spectral_zip": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
+        "kind": "other"
       }
     },
     "outputs": {
       "result_file": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
+        "kind": "other"
       }
     },
-    "commit_hash": "77c72961ce76fa16cb226b46f75231fe90d17cbc"
+    "commit_hash": "05675fece1f545c05b70d45ffebf4a0b37875e80"
   },
   "exif2resource": {
     "inputs": {
       "photos": {
         "kind": "image",
         "constraints": {
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         },
         "validators": [
           "geotagged_image"
@@ -850,7 +898,8 @@
         ]
       }
     },
-    "commit_hash": "92429fb1c73ba38710ad808f8c0b7871a42beb5c"
+    "outputs": {},
+    "commit_hash": "a17466844752c08b0d4d1bbb5fd59fb6b27f856d"
   },
   "explication2poly": {
     "inputs": {
@@ -860,7 +909,7 @@
           "extensions": [
             "xls"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -872,11 +921,11 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "8dbddaf3453ab4cc285dda9f3cdda698d06bfe30"
+    "commit_hash": "fa3efedac0bbccbbc82b1f7d300ce4944fae0545"
   },
   "field_value_changer": {
     "inputs": {
@@ -902,11 +951,11 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "2eddcb5b9f988dcf40ac0908181f55215aae1327"
+    "commit_hash": "f47bccd0299920eb6cbbf61882b56e652089d988"
   },
   "fix_geometries": {
     "inputs": {
@@ -925,7 +974,7 @@
         }
       }
     },
-    "commit_hash": "eb61503b50cfc2299952707d8c06317c58e938a5"
+    "commit_hash": "6d1e5ed75cc146673275831295724760c734e23e"
   },
   "flatten": {
     "inputs": {
@@ -933,7 +982,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "vector",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -942,36 +991,74 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "vector",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "1035699a0531f39c447bd12d6617d9f97f929955"
+    "commit_hash": "1e3e853225a3a135722ce324403fffa7a9d64b9a"
   },
   "flood_analysis": {
+    "outputs": {
+      "result_file": {
+        "kind": "other",
+        "constraints": {
+          "extensions": [
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "raster",
+              "drivers": [
+                "GTiff"
+              ]
+            }
+          },
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG"
+              ]
+            }
+          },
+          {
+            "kind": "table",
+            "constraints": {
+              "extensions": [
+                "csv"
+              ]
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "json"
+              ]
+            }
+          }
+        ]
+      }
+    },
     "inputs": {
       "terrain_zip": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       },
       "spectral_zip": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "outputs": {
-      "result_file": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
-      }
-    },
-    "commit_hash": "d163310c946b2333ece11ea31aafcad166a0341f"
+    "commit_hash": "dbbff4343edb0a966ad05dab8a334b10b061733d"
   },
   "forestplots_field": {
     "inputs": {
@@ -983,7 +1070,7 @@
             "polygon"
           ],
           "feature_count": 1,
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -994,7 +1081,7 @@
           "extensions": [
             "kmz"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_image": {
@@ -1003,7 +1090,7 @@
           "extensions": [
             "jpg"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_gpx": {
@@ -1016,18 +1103,18 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "2e4e4b33b268ff8c85adc520be56657c7d4681c2"
+    "commit_hash": "e4cf46011e1e767e40c2859d024c6014c87e3c1a"
   },
   "gbif_download": {
     "inputs": {
       "country": {
         "kind": "free_text",
         "constraints": {
-          "pattern": "^[A-Z]{2}$"
+          "pattern": "^\\s*[A-Za-z]{2}\\s*$"
         }
       }
     },
@@ -1042,11 +1129,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "dbd26543b6b58b09040bb17f5aaa2f2be88266fb"
+    "commit_hash": "93150e168742ac055ed3cf7f766cc88e45a1abbe"
   },
   "generalization": {
     "inputs": {
@@ -1054,7 +1141,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "vector",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1066,11 +1153,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "281b7c9280f1ddecabf609bcaf8c67b14c64e923"
+    "commit_hash": "91ca42797d12a5d16e303a901a3426e2f8547a53"
   },
   "geocodetable": {
     "inputs": {
@@ -1078,9 +1165,13 @@
         "kind": "table",
         "constraints": {
           "extensions": [
-            "csv"
+            "txt",
+            "csv",
+            "xls",
+            "xlsx",
+            "ods"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "addr_field": {
@@ -1098,16 +1189,42 @@
     },
     "outputs": {
       "result_file": {
-        "kind": "table",
+        "kind": "other",
         "constraints": {
           "extensions": [
-            "csv"
-          ],
-          "file_count": "single"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "table",
+            "constraints": {
+              "extensions": [
+                "csv"
+              ]
+            }
+          },
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG"
+              ]
+            }
+          },
+          {
+            "kind": "text",
+            "constraints": {
+              "extensions": [
+                "log"
+              ]
+            }
+          }
+        ]
       }
     },
-    "commit_hash": "67d9376240aed045c127d1f36f7b7fbb6ce99b3c"
+    "commit_hash": "9fa40d1ef08e775e61cf025df2008c56383b05ec"
   },
   "geodata2pmtiles": {
     "inputs": {
@@ -1115,7 +1232,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "any",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "minzoom": {
@@ -1142,11 +1259,11 @@
           "extensions": [
             "pmtiles"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "25e992ff46626692078f8327a6624e5766b49994"
+    "commit_hash": "3f6a252b6ff176689708ab85270a2dfb09da3581"
   },
   "geometry_changer": {
     "inputs": {
@@ -1171,7 +1288,7 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1182,14 +1299,14 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "8773f3a254a4f79d3ed9fe5f25ef286c7457421d"
+    "commit_hash": "04496a90584009914e019cb533b8a8967c83e3f2"
   },
   "geospatial_input_explainer": {
-    "commit_hash": "8a4ac6b1a2d34d6de003f688212a1c6d3a446030"
+    "commit_hash": "5446518e3f3dc17d8c8068003efbc30966d8d040"
   },
   "gpkg2etab": {
     "inputs": {
@@ -1200,7 +1317,7 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1212,11 +1329,11 @@
           "drivers": [
             "MapInfo EFAL"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "99c498420dbe25d3a6751479e918b64b5e19526c"
+    "commit_hash": "f619420998810143094825b3ed8278d02d8e4461"
   },
   "gpx2exif": {
     "inputs": {
@@ -1227,7 +1344,7 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "photos": {
@@ -1237,7 +1354,7 @@
             "jpg",
             "jpeg"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
@@ -1249,11 +1366,11 @@
             "jpg",
             "jpeg"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "75904367e1735c242865038f9cdf31d8e948c30a"
+    "commit_hash": "cb51cfc8b98065f825f8432e32b6d8b0ae1f9f83"
   },
   "gpxanimation": {
     "inputs": {
@@ -1264,7 +1381,7 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1275,11 +1392,11 @@
           "extensions": [
             "mp4"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "a9e44a2caf9d9d6d4f121f2edb766a3ec3bcb11f"
+    "commit_hash": "09043062c4e2f7517f0afa619210743bc6bf5556"
   },
   "gpxclipbbox": {
     "inputs": {
@@ -1290,7 +1407,7 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1302,11 +1419,11 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "d6a661f99b3541c1e52341cdce8a24468f3740ed"
+    "commit_hash": "4aa15915546eadc0be084a30753ff164808bec65"
   },
   "gpxdailysplit": {
     "inputs": {
@@ -1317,16 +1434,11 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "timedelta": {
-        "kind": "free_text",
-        "constraints": {
-          "min_length": 6,
-          "max_length": 6,
-          "pattern": "^[+-]\\d{2}:\\d{2}$"
-        }
+        "kind": "free_text"
       }
     },
     "outputs": {
@@ -1337,11 +1449,11 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "ac4856927970dd31af6ea7c8fe0cc6000f4ba921"
+    "commit_hash": "c586bf78759a9467c77e2210b159a3c2ce4ebb5a"
   },
   "gpxmerge": {
     "inputs": {
@@ -1352,7 +1464,7 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
@@ -1364,11 +1476,11 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "c6a036075d4046b97a00a70deac688474878d5ec"
+    "commit_hash": "b458ceff61f3648945aa0fd8d9b658a4f1b63ce0"
   },
   "gpxtracksplit": {
     "inputs": {
@@ -1379,7 +1491,7 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1391,11 +1503,11 @@
           "drivers": [
             "GPX"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "107001f7a6ea3e6aac4fa454f64c5ce505272673"
+    "commit_hash": "e22b99ce606e9360b60c6dce1b83a25baa5837ba"
   },
   "grid": {
     "inputs": {
@@ -1416,7 +1528,7 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1432,11 +1544,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "a922507b886f54a2beb19bafcd519734b1ffcbff"
+    "commit_hash": "e45bd70f166b8c1e1aeed417321df4ac71490168"
   },
   "grunt": {
     "inputs": {
@@ -1446,7 +1558,7 @@
           "extensions": [
             "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1458,14 +1570,28 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "multiple"
+          "geometry_types": [
+            "point",
+            "polygon"
+          ],
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "a8938bcc2951e4fe21bd560582a7b4f9aa48698a"
+    "commit_hash": "f64db12a1531b00b8b2862906cc6d028e0c9a4cb"
   },
   "hello": {
-    "commit_hash": "2e701a0f4fabf19c1caaae1227ddf686919960f3"
+    "inputs": {
+      "sleep": {
+        "kind": "other",
+        "constraints": {
+          "min_value": 0,
+          "unit": "s"
+        }
+      }
+    },
+    "outputs": {},
+    "commit_hash": "212fa5055699691225929dab04ffaa4ae677aaf9"
   },
   "image_classification": {
     "inputs": {
@@ -1473,7 +1599,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "src_file_vector": {
@@ -1483,7 +1609,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "class_attribute": {
@@ -1510,7 +1636,7 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "report": {
@@ -1519,11 +1645,11 @@
           "extensions": [
             "txt"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "da7a6e2a1743f351b2c943b65390c35f095d533b"
+    "commit_hash": "d9e520f5dcf58724bedc3b458653ad56877fdca3"
   },
   "image_clustering": {
     "inputs": {
@@ -1531,7 +1657,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1543,11 +1669,11 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "153bf431b09ad6d93ec34362bfa6227704bca01a"
+    "commit_hash": "25ff8864a440f66c65803e5298f8ebb1c6968abc"
   },
   "imagesearch": {
     "inputs": {
@@ -1556,12 +1682,12 @@
         "constraints": {
           "layer_type": "vector",
           "geometry_types": [
+            "point",
+            "line",
             "polygon"
           ],
-          "drivers": [
-            "GeoJSON"
-          ],
-          "file_count": "single"
+          "feature_count": 1,
+          "dataset_count": "single"
         }
       }
     },
@@ -1572,11 +1698,11 @@
           "extensions": [
             "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "a76bc063ac6a7805e54594b96468b1916830cd15"
+    "commit_hash": "45b47999b27f424fa48180a3d2ab4a974407164e"
   },
   "import_dwg": {
     "inputs": {
@@ -1586,7 +1712,7 @@
           "extensions": [
             "dwg"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1598,11 +1724,11 @@
           "drivers": [
             "DXF"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "0436e6f28b057e276e36eb6e53df0648f57227a4"
+    "commit_hash": "d55fe435442fb30bec4524ffbc8ca32443c8f4c7"
   },
   "import_dwg_libdxfrw": {
     "inputs": {
@@ -1612,7 +1738,7 @@
           "extensions": [
             "dwg"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1624,11 +1750,11 @@
           "drivers": [
             "DXF"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "fa93f22ad9dc71390664acf305d8f5a021e2cfee"
+    "commit_hash": "83857bcadfcd97b20eb67e2d7c1cc8df0816f930"
   },
   "import_egrn": {
     "inputs": {
@@ -1638,7 +1764,7 @@
           "extensions": [
             "xml"
           ],
-          "file_count": "multiple"
+          "dataset_count": "single"
         },
         "validators": [
           "egrn_extract"
@@ -1670,44 +1796,78 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "gpkg",
-            "geojson",
-            "shp",
-            "tab"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG",
+                "GeoJSON",
+                "ESRI Shapefile",
+                "MapInfo File"
+              ],
+              "dataset_count": "multiple"
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "json"
+              ]
+            }
+          },
+          {
+            "kind": "text",
+            "constraints": {
+              "extensions": [
+                "txt"
+              ]
+            }
+          }
+        ]
       },
       "report": {
         "kind": "text"
       }
     },
-    "commit_hash": "6a000999ff9be57de24a958dd1906fc0e46abf7a"
+    "commit_hash": "a2a7065b052a505ba24ca0a2bd37f631d6a81cee"
   },
   "import_glr": {
     "inputs": {
       "src": {
-        "kind": "other",
+        "kind": "document",
         "constraints": {
           "extensions": [
             "xml"
-          ],
-          "file_count": "multiple"
-        }
+          ]
+        },
+        "validators": [
+          "glr_extract"
+        ]
       }
     },
     "outputs": {
       "result_file": {
-        "kind": "other",
+        "kind": "layer",
         "constraints": {
-          "extensions": [
-            "gpkg"
+          "layer_type": "vector",
+          "geometry_types": [
+            "point",
+            "polygon"
           ],
-          "file_count": "single"
+          "drivers": [
+            "GPKG"
+          ],
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "260f3bc65a9f4465b60708a57e9c4590a6657f14"
+    "commit_hash": "7c29bbb9399c183736016ed1b79f71d7382410f2"
   },
   "improvedem": {
     "inputs": {
@@ -1715,7 +1875,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1724,16 +1884,35 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "tif",
-            "gpkg"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "raster",
+              "drivers": [
+                "GTiff"
+              ]
+            }
+          },
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG"
+              ]
+            }
+          }
+        ]
       }
     },
-    "commit_hash": "f5c8eb1555f507a74b6f9526b62a23b6b0e46f08"
+    "commit_hash": "9d54d2386def9ae12caec116e40fd4c6b46e132f"
   },
   "inaturalist_download": {
+    "inputs": {},
     "outputs": {
       "result_file": {
         "kind": "layer",
@@ -1745,7 +1924,7 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_text": {
@@ -1755,7 +1934,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "75ac3ddc973f802c4a9ada58a821153ce947a640"
+    "commit_hash": "91697a6fb721097eb1385dada51f53a24447351c"
   },
   "infomap": {
     "inputs": {
@@ -1779,7 +1958,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "c5b00ec1e023db233f4047ddce7846719033b107"
+    "commit_hash": "500bdcc56be829b6cfdec22ab122494fca38c348"
   },
   "intersect_layers": {
     "inputs": {
@@ -1790,7 +1969,7 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "poly_shape_file": {
@@ -1803,20 +1982,8 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
-      },
-      "field_name_for_csv": {
-        "kind": "field",
-        "constraints": {
-          "field_count": "single"
-        },
-        "relations": [
-          {
-            "type": "fields",
-            "source_parameter": "poly_shape_file"
-          }
-        ]
       }
     },
     "outputs": {
@@ -1825,12 +1992,11 @@
         "constraints": {
           "extensions": [
             "csv"
-          ],
-          "file_count": "multiple"
+          ]
         }
       }
     },
-    "commit_hash": "b628bda197880e4b6684c4e4f2dce7bbb808ab02"
+    "commit_hash": "79dfd8311e07a0cc8a183b426ce0f6ad6495bcaf"
   },
   "join_by_field": {
     "inputs": {
@@ -1854,8 +2020,20 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
+      },
+      "id_json": {
+        "kind": "field",
+        "constraints": {
+          "field_count": "single"
+        },
+        "relations": [
+          {
+            "type": "fields",
+            "source_parameter": "resource_id"
+          }
+        ]
       },
       "id_csv": {
         "kind": "field",
@@ -1878,11 +2056,11 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "c3e97a39978e42040eb3fd0725f96d8bfbbc3cf2"
+    "commit_hash": "c974537046243546f4d355510125dff02f007340"
   },
   "kml2geodata": {
     "inputs": {
@@ -1893,7 +2071,7 @@
             "kml",
             "kmz"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1903,23 +2081,21 @@
         "constraints": {
           "extensions": [
             "geojson"
-          ],
-          "file_count": "multiple"
+          ]
         }
       }
     },
-    "commit_hash": "57d2a206969278bc84a2d0121a421cb1151c4eef"
+    "commit_hash": "a2866d3a002c70e60395b063848d1d0cdb36a74f"
   },
   "kmldae2footprints": {
     "inputs": {
       "zip_with_kmls": {
-        "kind": "other",
+        "kind": "document",
         "constraints": {
           "extensions": [
-            "kmz",
-            "dae"
+            "kmz"
           ],
-          "file_count": "multiple"
+          "dataset_count": "single"
         }
       }
     },
@@ -1934,11 +2110,11 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "478b17d02b81f9cf4fd98cf0a45998f54a544246"
+    "commit_hash": "f8c23101696071cd8f2bdf5b2750f7e7ad1202b7"
   },
   "kptbatch_validator": {
     "inputs": {
@@ -1947,14 +2123,43 @@
         "constraints": {
           "extensions": [
             "xml"
-          ],
-          "file_count": "multiple"
+          ]
         }
       }
     },
-    "commit_hash": "d2ba1326e745f57bff51b1a52eecbca50712b3e8"
+    "outputs": {
+      "result": {
+        "kind": "other",
+        "constraints": {
+          "extensions": [
+            "zip",
+            "csv"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "table",
+            "constraints": {
+              "extensions": [
+                "csv"
+              ]
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "xml"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "commit_hash": "3a949e2645a137deee98f6424597b3a26d351298"
   },
   "landsat_search": {
+    "inputs": {},
     "outputs": {
       "result_file": {
         "kind": "other",
@@ -1962,14 +2167,14 @@
           "extensions": [
             "gpkg"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "3b2ebe837202d04db8ee0173bbe7a2d39566cf2f"
+    "commit_hash": "e3e7c20e085591b4907ff66132e5109669abfaf9"
   },
   "landsat_to_radiance": {
     "inputs": {
@@ -1977,7 +2182,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "metadata_file": {
@@ -1987,7 +2192,7 @@
             "txt",
             "mtl"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -1999,11 +2204,11 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "dace38257bb6d40e6549b8da78ee104a67dbfcf8"
+    "commit_hash": "aeb9eb0dc9650f53bbe892b8132bdf7f3eb567bf"
   },
   "landsat_to_reflectance": {
     "inputs": {
@@ -2011,7 +2216,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "metadata_file": {
@@ -2021,7 +2226,7 @@
             "txt",
             "mtl"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -2033,33 +2238,57 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "8f9efad4ff73a37997dab196f28bbb2dba94029c"
+    "commit_hash": "76a4b225c257ef028dac8f4c9e902b8f66a067e4"
   },
   "landslide_analysis": {
-    "inputs": {
-      "terrain_zip": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
-      },
-      "spectral_zip": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
-      }
-    },
     "outputs": {
       "result_file": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
-        }
+          "extensions": [
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "raster",
+              "drivers": [
+                "GTiff"
+              ]
+            }
+          },
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG"
+              ]
+            }
+          },
+          {
+            "kind": "table",
+            "constraints": {
+              "extensions": [
+                "csv"
+              ]
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "json"
+              ]
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
@@ -2068,7 +2297,21 @@
         "kind": "text"
       }
     },
-    "commit_hash": "0057133c51f70f82ca29bc8694d711d9f0ce0aa0"
+    "inputs": {
+      "terrain_zip": {
+        "kind": "other",
+        "constraints": {
+          "dataset_count": "multiple"
+        }
+      },
+      "spectral_zip": {
+        "kind": "other",
+        "constraints": {
+          "dataset_count": "multiple"
+        }
+      }
+    },
+    "commit_hash": "37ccc6a202065f03a8e58ada38bf474f5e2de02f"
   },
   "layers2ngw": {
     "inputs": {
@@ -2095,8 +2338,7 @@
             "GeoJSON",
             "GPKG",
             "KML"
-          ],
-          "file_count": "multiple"
+          ]
         }
       },
       "qmlfile": {
@@ -2108,16 +2350,16 @@
     },
     "outputs": {
       "user_log": {
-        "kind": "other",
+        "kind": "text",
         "constraints": {
           "extensions": [
             "log"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "24bbf4b617c9953659d583e48c8c900efd7badfb"
+    "commit_hash": "7559a1ec481e187e9411231cfa0db5a86254770b"
   },
   "lesis2sqlite": {
     "inputs": {
@@ -2131,13 +2373,13 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "lesis_db_zip": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
+          "dataset_count": "single"
         }
       }
     },
@@ -2148,7 +2390,7 @@
           "extensions": [
             "sqlite"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "error_log": {
@@ -2157,14 +2399,14 @@
           "extensions": [
             "txt"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "report": {
         "kind": "text"
       }
     },
-    "commit_hash": "33226f094f005e30e2fa1357a1fe7133cb73ddbe"
+    "commit_hash": "80989208c01579fffba931890525605584e65702"
   },
   "lines2poly": {
     "inputs": {
@@ -2175,7 +2417,7 @@
           "geometry_types": [
             "line"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -2187,7 +2429,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "return_lines_file": {
@@ -2197,11 +2439,11 @@
           "geometry_types": [
             "line"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "3338437687cd9aa35645bea25332c39ce83e3060"
+    "commit_hash": "5e75670069ebe62c5befe0708d5999c86f3c1638"
   },
   "lines2polygons": {
     "inputs": {
@@ -2281,11 +2523,11 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "e347a2a9e9140abdc0ca274d92dbc8d7b1ae7a9f"
+    "commit_hash": "cfa2e5daf974c591541f8a84562556fe2c40f776"
   },
   "lines_merge": {
     "inputs": {
@@ -2296,7 +2538,7 @@
           "geometry_types": [
             "line"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "group_by": {
@@ -2323,11 +2565,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "fe6a0175c308f10ac404092a1f5d51bd31359ffd"
+    "commit_hash": "3da4da5fa902c12398512ec5446a29e77db933fa"
   },
   "mapinfo2qgis": {
     "inputs": {
@@ -2337,8 +2579,7 @@
           "extensions": [
             "tab",
             "wor"
-          ],
-          "file_count": "multiple"
+          ]
         }
       }
     },
@@ -2347,20 +2588,59 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "gpkg",
-            "qgs",
-            "tif",
-            "tiff",
-            "log"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG"
+              ]
+            }
+          },
+          {
+            "kind": "qgis_project",
+            "constraints": {
+              "extensions": [
+                "qgs"
+              ]
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "qml"
+              ]
+            }
+          },
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "raster",
+              "drivers": [
+                "GTiff"
+              ]
+            }
+          },
+          {
+            "kind": "text",
+            "constraints": {
+              "extensions": [
+                "log"
+              ]
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "8a5c3dfb9b246c7d5b52dbaf7c1f53e3c00c7dea"
+    "commit_hash": "79018c3b5910ebd8798c25dfd8f880734165a23d"
   },
   "mappy": {
     "outputs": {
@@ -2370,26 +2650,26 @@
           "extensions": [
             "webp"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "bbd350ce1bf2ed2bf934ad22c857d26dea218ee8"
+    "commit_hash": "bd637f4602ae19714d32583106d055af2a558605"
   },
   "maxdist": {
     "inputs": {
       "src_file": {
         "kind": "layer",
         "constraints": {
-          "layer_type": "vector",
-          "geometry_types": [
-            "polygon"
-          ],
           "drivers": [
             "GeoJSON",
             "GPKG"
           ],
-          "file_count": "single"
+          "layer_type": "vector",
+          "geometry_types": [
+            "polygon"
+          ],
+          "dataset_count": "single"
         }
       }
     },
@@ -2397,19 +2677,19 @@
       "dst_file": {
         "kind": "layer",
         "constraints": {
-          "layer_type": "vector",
-          "geometry_types": [
-            "polygon"
-          ],
           "drivers": [
             "GeoJSON",
             "GPKG"
           ],
-          "file_count": "single"
+          "layer_type": "vector",
+          "geometry_types": [
+            "polygon"
+          ],
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "573d294f41800822649ac88304aa862ef01d3540"
+    "commit_hash": "ad4435ade2be2458e5291f5e4bf98a0aa32831a5"
   },
   "mt2report": {
     "inputs": {
@@ -2417,7 +2697,8 @@
         "kind": "ngw_resource_id",
         "constraints": {
           "ngw_resource_types": [
-            "vector_layer"
+            "vector_layer",
+            "postgis_layer"
           ],
           "geometry_types": [
             "polygon"
@@ -2434,7 +2715,8 @@
         "kind": "ngw_resource_id",
         "constraints": {
           "ngw_resource_types": [
-            "vector_layer"
+            "vector_layer",
+            "postgis_layer"
           ],
           "geometry_types": [
             "point"
@@ -2455,11 +2737,11 @@
           "extensions": [
             "xls"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "3d9d6f74d4b0d9cc992a9afc41ffdfb79f33b272"
+    "commit_hash": "bebc1614b7edad7f56cd0a5dff6ccb59dac3e682"
   },
   "ndi": {
     "inputs": {
@@ -2467,14 +2749,14 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "raster_2": {
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -2486,11 +2768,11 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "2cc7821e67d50958cc3b137298bde7d06a4e8810"
+    "commit_hash": "01ff85bcda8d3855859c7e0a8d43816e840bef71"
   },
   "ngw_attribute2description": {
     "inputs": {
@@ -2527,7 +2809,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "009efdd5e1ab4d35438d0205ec4ee4397a9983f2"
+    "commit_hash": "87fb5faef57e6649b654b2e2dac68a4c16e8d3be"
   },
   "ngw_contribution_activity": {
     "inputs": {
@@ -2555,11 +2837,11 @@
           "extensions": [
             "html"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "88b82833a7a6f0fcc01abab73a664efec4893924"
+    "commit_hash": "6786326d325f88cf51af265b04d0717918c3b44e"
   },
   "ngw_copy_layer": {
     "inputs": {
@@ -2597,7 +2879,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "19798ac6c69dc8ccd68db6c19411aa68b294b09d"
+    "commit_hash": "8ff8fd75f531604dd536e5a0469f5c15d24b3f06"
   },
   "ngw_feature_history": {
     "inputs": {
@@ -2630,14 +2912,21 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "758143b73ba13360e3c8f01c1a5bbd62331de973"
+    "commit_hash": "6d2a0659e7555f42c386b1d8cdac0ee8eaad6940"
   },
   "ngw_intersect": {
     "inputs": {
+      "wkt": {
+        "kind": "geometry",
+        "constraints": {
+          "geometry_format": "wkt",
+          "crs_required": "EPSG:3857"
+        }
+      },
       "webmap_id": {
         "kind": "ngw_resource_id",
         "constraints": {
@@ -2651,16 +2940,6 @@
             "source_parameter": "ngw_connection"
           }
         ]
-      },
-      "wkt": {
-        "kind": "geometry",
-        "constraints": {
-          "geometry_format": "wkt",
-          "geometry_types": [
-            "any"
-          ],
-          "crs_required": "EPSG:3857"
-        }
       }
     },
     "outputs": {
@@ -2670,11 +2949,11 @@
           "extensions": [
             "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "09c6f5208d7ffa7445dd0dce812f1cd91d3ad995"
+    "commit_hash": "ae932fd6cbea2669b26a3bc8634174ec2d890395"
   },
   "ngw_layer_historical_state": {
     "inputs": {
@@ -2704,11 +2983,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "aa7236dd70757a472f0735b8ae8cef16e9ccc6f0"
+    "commit_hash": "ef2d36894a24095bd0e90948589246862bd1261e"
   },
   "ngw_layer_schema": {
     "inputs": {
@@ -2732,7 +3011,7 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "multiple"
+          "dataset_count": "single"
         }
       }
     },
@@ -2743,14 +3022,14 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "7c4d060f2d7d09af22d709b2f82c66bdb7ce166a"
+    "commit_hash": "53c39a2a32ef8974ec441e14568303225fb53e31"
   },
   "ngw_merge_layers": {
     "inputs": {
@@ -2758,7 +3037,8 @@
         "kind": "ngw_resource_id",
         "constraints": {
           "ngw_resource_types": [
-            "vector_layer"
+            "vector_layer",
+            "postgis_layer"
           ]
         },
         "relations": [
@@ -2772,7 +3052,8 @@
         "kind": "ngw_resource_id",
         "constraints": {
           "ngw_resource_types": [
-            "vector_layer"
+            "vector_layer",
+            "postgis_layer"
           ]
         },
         "relations": [
@@ -2788,7 +3069,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "bbfd477284ecb119a2068f57efde2ff9c97a3c68"
+    "commit_hash": "c4849122f750feb147327b763c848e3d73d694db"
   },
   "ngw_to_gpkg": {
     "inputs": {
@@ -2814,15 +3095,14 @@
           "layer_type": "vector",
           "drivers": [
             "GPKG"
-          ],
-          "file_count": "multiple"
+          ]
         }
       },
       "report": {
         "kind": "text"
       }
     },
-    "commit_hash": "6f1fd86552173045dc12d59d1ff1f00945f4bb12"
+    "commit_hash": "51305be0ad3d23a40816565dfce3adf9aae6d3e3"
   },
   "ngw_webmap2image": {
     "inputs": {
@@ -2837,16 +3117,22 @@
           "extensions": [
             "png"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "f05ed7240e830bbcc1a3780d6ebc8149bbf8a45d"
+    "commit_hash": "a30bd92570f50f1e1ca6599c91171b0c6a7dbf71"
   },
   "nominatim_geocode": {
     "inputs": {
       "query": {
         "kind": "free_text"
+      },
+      "buffer_km": {
+        "kind": "other",
+        "constraints": {
+          "unit": "km"
+        }
       }
     },
     "outputs": {
@@ -2860,7 +3146,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "a720e93c531168ef57b30648fa341436a10db561"
+    "commit_hash": "f73f451fb7fff66ce4f32c8a89948359f4ebfc2d"
   },
   "ogrmerge": {
     "inputs": {
@@ -2875,8 +3161,7 @@
             "tab",
             "kml",
             "kmz"
-          ],
-          "file_count": "multiple"
+          ]
         }
       }
     },
@@ -2888,13 +3173,14 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "83931b281e9a8f055384b348693dbfce87ab79cc"
+    "commit_hash": "50cd738591b174505d50ac9373e31a0ffe92b947"
   },
   "osm_download": {
+    "inputs": {},
     "outputs": {
       "result_file": {
         "kind": "layer",
@@ -2906,7 +3192,7 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "multiple"
+          "dataset_count": "single"
         }
       },
       "result_text": {
@@ -2916,7 +3202,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "d82c645a2be2b9f76792e8e463ab5e0a8a1d3d4c"
+    "commit_hash": "9ce14b78d8180e23e960b253fa5440d5c0473009"
   },
   "osmclip_bbox": {
     "inputs": {
@@ -2931,47 +3217,64 @@
           "extensions": [
             "pbf"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "e9f4de272f9e10bec84f0824aeefd811b75466ed"
+    "commit_hash": "ec8a5bf4e18a5259dcbd4db9838ed6c603d68eef"
   },
   "panotag": {
     "inputs": {
       "photos": {
-        "kind": "image",
-        "constraints": {
-          "extensions": [
-            "jpg",
-            "jpeg"
-          ]
-        },
-        "validators": [
-          "spherical_panorama"
-        ]
+        "kind": "image"
       }
     },
     "outputs": {
       "photos_with_tags": {
-        "kind": "image",
+        "kind": "other",
         "constraints": {
           "extensions": [
-            "jpg",
-            "jpeg"
+            "zip"
           ]
-        }
+        },
+        "archive_contents": [
+          {
+            "kind": "image"
+          },
+          {
+            "kind": "document"
+          }
+        ]
       }
     },
-    "commit_hash": "6d330f3fd7a3f3bf6b180b9b9096a8e51ebc9f05"
+    "commit_hash": "c60c1bae7b0a31e446ded6d49866e9528df74e22"
   },
   "planetary_search": {
+    "inputs": {},
     "outputs": {
       "result_file": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
-        }
+          "extensions": [
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "other",
+            "constraints": {
+              "dataset_count": "multiple"
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "json"
+              ]
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
@@ -2980,14 +3283,14 @@
         "kind": "text"
       }
     },
-    "commit_hash": "8fcaeeb233b4081a4d01a83f677bc6918efe7a53"
+    "commit_hash": "d5ef6add3e5cb45575edd648c038b939d004718f"
   },
   "plk_catalog": {
     "inputs": {
       "yl_regnum": {
         "kind": "free_text",
         "constraints": {
-          "pattern": "^\\d+:\\d+:\\d+(?::\\d+){0,2}$"
+          "pattern": "^\\s*[+-]?\\s*\\d(?:\\s*_?\\s*\\d)*\\s*(?::\\s*[+-]?\\s*\\d(?:\\s*_?\\s*\\d)*\\s*){2,4}$"
         }
       }
     },
@@ -2996,24 +3299,41 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "gpkg",
-            "csv"
-          ],
-          "file_count": 2
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG"
+              ]
+            }
+          },
+          {
+            "kind": "table",
+            "constraints": {
+              "extensions": [
+                "csv"
+              ]
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "de5038ee6d2d28c559bc263fcb8de7302c78e459"
+    "commit_hash": "c971b16aa441f0630b94a18de7323934939f1e24"
   },
   "plk_lesnich": {
     "inputs": {
       "rn": {
         "kind": "free_text",
         "constraints": {
-          "pattern": "^\\d+:\\d+(?::\\d+)?$"
+          "pattern": "^\\s*[+-]?\\s*\\d(?:\\s*_?\\s*\\d)*\\s*(?::\\s*[+-]?\\s*\\d(?:\\s*_?\\s*\\d)*\\s*){1,2}$"
         }
       }
     },
@@ -3028,14 +3348,14 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "64bc7804c3a08821a78904396c6a9637fc325af6"
+    "commit_hash": "e63274a5b6907c27f7d32de8856db8e037e80d1e"
   },
   "pointcloud2tileset": {
     "inputs": {
@@ -3043,9 +3363,12 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "las"
+            "las",
+            "laz",
+            "ply",
+            "xyz"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "src_crs": {
@@ -3061,11 +3384,11 @@
       "tileset": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "e622221131a0efecca18469dc738803319040729"
+    "commit_hash": "e1c0d9325a8308049d41690c6942bb8c5b099ed6"
   },
   "points_on_tracks_stats": {
     "inputs": {
@@ -3074,6 +3397,9 @@
         "constraints": {
           "ngw_resource_types": [
             "vector_layer"
+          ],
+          "geometry_types": [
+            "polygon"
           ]
         },
         "relations": [
@@ -3100,6 +3426,9 @@
         "constraints": {
           "ngw_resource_types": [
             "vector_layer"
+          ],
+          "geometry_types": [
+            "point"
           ]
         },
         "relations": [
@@ -3138,10 +3467,7 @@
         ]
       },
       "trackers_list": {
-        "kind": "free_text",
-        "constraints": {
-          "pattern": "^\\d+(?:,\\d+)*$"
-        }
+        "kind": "free_text"
       }
     },
     "outputs": {
@@ -3151,11 +3477,11 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "5f668358ca1099c3b75e07b3483954bd850c7baf"
+    "commit_hash": "63421fc4ec2c0d2ace11d0c91175e858dcbfa7f6"
   },
   "poly2explication": {
     "inputs": {
@@ -3166,7 +3492,8 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single",
+          "feature_count": 1
         }
       },
       "line_dataset": {
@@ -3176,7 +3503,8 @@
           "geometry_types": [
             "line"
           ],
-          "file_count": "single"
+          "dataset_count": "single",
+          "feature_count": 1
         }
       },
       "out_crs": {
@@ -3190,7 +3518,7 @@
           "extensions": [
             "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_geojson": {
@@ -3203,11 +3531,11 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "4af191855cea56080ba392a6718792d5d0ca7b69"
+    "commit_hash": "1967596f3a37dcff7bc123516c9f7ef2cbf176ec"
   },
   "polysimplifier": {
     "inputs": {
@@ -3219,7 +3547,7 @@
             "line",
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "percentage": {
@@ -3242,11 +3570,11 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "c0ce495cb06b8505917480a57fb6cdddb3e2c805"
+    "commit_hash": "d67d8c812a235248f4a3a0bdd228dc850f2f5a31"
   },
   "postal": {
     "inputs": {
@@ -3256,7 +3584,7 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "column": {
@@ -3279,11 +3607,11 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "40db5358383e1e571ae75dbd7a5edb076e50d87c"
+    "commit_hash": "34d2189a4d8aa5647e2fde557711526ba7024e70"
   },
   "predict_overpass": {
     "inputs": {
@@ -3293,8 +3621,7 @@
           "layer_type": "vector",
           "geometry_types": [
             "polygon"
-          ],
-          "file_count": "single"
+          ]
         }
       }
     },
@@ -3305,11 +3632,11 @@
           "extensions": [
             "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "92ccb7fd82efda84ff2b19b401f742bd8fa58de8"
+    "commit_hash": "a89da22f9e2f52cbe36ce9fa3ad425967157a241"
   },
   "prepare_raster": {
     "inputs": {
@@ -3322,8 +3649,7 @@
       "vector_dataset": {
         "kind": "layer",
         "constraints": {
-          "layer_type": "vector",
-          "file_count": "single"
+          "layer_type": "vector"
         }
       }
     },
@@ -3335,18 +3661,18 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "553f3b2786d30a3c115c4664be26da4c3013028b"
+    "commit_hash": "7f706a2f5f0f6dcac525d853bf45553fe5022aa5"
   },
   "pzz_report": {
     "inputs": {
       "cn": {
         "kind": "free_text",
         "constraints": {
-          "pattern": "^[^:]+:[^:]+:[^:]+:[^:]+$"
+          "pattern": "^[^:]*:[^:]*:[^:]*:[^:]*$"
         }
       }
     },
@@ -3357,18 +3683,18 @@
           "extensions": [
             "docx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "68f881febb15e3062e523fba858754a5fac943f4"
+    "commit_hash": "342db4a61a29398c208980b00c67d4d65bfb3767"
   },
   "qgis2pdf": {
     "inputs": {
       "source": {
         "kind": "qgis_project",
         "constraints": {
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -3379,11 +3705,11 @@
           "extensions": [
             "pdf"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "e1e545861eb6d061b076325d4f45e32d8d737ce1"
+    "commit_hash": "4963bd19081332a248b11cc4b0f04116d444903e"
   },
   "qgis_check_geometries": {
     "inputs": {
@@ -3401,7 +3727,7 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "output_geojson_file": {
@@ -3414,14 +3740,14 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "output_msg": {
         "kind": "text"
       }
     },
-    "commit_hash": "7cb36835b449f3834bfb11009b46060ae2c0053c"
+    "commit_hash": "d77923de41cdd03d7b49620756f7f212cd501778"
   },
   "qgis_fix_geometries": {
     "inputs": {
@@ -3443,7 +3769,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "7545239d842d3aabbcc52338bbd996e0b97be95c"
+    "commit_hash": "9b9dbd4b15f0eb0bf8c93bed48a5ccf1ab42df26"
   },
   "qgis_multiparttosingleparts": {
     "inputs": {
@@ -3451,7 +3777,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "vector",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -3463,18 +3789,18 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "df7f1dfb5bc2d55f4c5f9164e6bc8913d571bc35"
+    "commit_hash": "d4466839d155556d7c17e7369e448ce863f94268"
   },
   "qgis_rastertiles": {
     "inputs": {
       "projectarchive": {
         "kind": "qgis_project",
         "constraints": {
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "boundsfile": {
@@ -3484,7 +3810,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -3496,18 +3822,32 @@
             "png",
             "jpg"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "32e5274361897409caea1f05dcb216509b9429fc"
+    "commit_hash": "b6bf258d7d516ea35727bf1d18e6f112cf301bf1"
   },
   "qgis_vectortiles": {
     "inputs": {
       "projectarchive": {
         "kind": "qgis_project",
         "constraints": {
-          "file_count": "single"
+          "dataset_count": "single"
+        }
+      },
+      "zoom_min": {
+        "kind": "zoom_level",
+        "constraints": {
+          "max_value": 24,
+          "unit": "zoom"
+        }
+      },
+      "zoom_max": {
+        "kind": "zoom_level",
+        "constraints": {
+          "max_value": 24,
+          "unit": "zoom"
         }
       }
     },
@@ -3518,19 +3858,29 @@
           "extensions": [
             "pbf"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "72eee73425c9e3acdeaea63617b140792e15ed25"
+    "commit_hash": "430726a51b1e51055978254200ef860b4c11102e"
   },
   "quadro": {
     "inputs": {
       "point0": {
-        "kind": "geometry"
+        "kind": "geometry",
+        "constraints": {
+          "geometry_types": [
+            "point"
+          ]
+        }
       },
       "point1": {
-        "kind": "geometry"
+        "kind": "geometry",
+        "constraints": {
+          "geometry_types": [
+            "point"
+          ]
+        }
       },
       "base_interval": {
         "kind": "other",
@@ -3552,11 +3902,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
-    "commit_hash": "456f59861730083aed05174f1282d0274591c8bb"
+    "commit_hash": "c138b2114faa29c573a890ed1b8f5aff6a50dd51"
   },
   "r_mapcalc": {
     "inputs": {
@@ -3564,56 +3914,56 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "B": {
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "C": {
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "D": {
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "E": {
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "F": {
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "G": {
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "H": {
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -3625,11 +3975,11 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "860c22e6acba74fce3a6e0095140eb27b6b20c2c"
+    "commit_hash": "28fa7db3c25ff6eb86ed2a76b32963a77593f431"
   },
   "raster2tiles": {
     "inputs": {
@@ -3637,7 +3987,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "raster",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -3648,11 +3998,11 @@
           "extensions": [
             "ngrc"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "6e4e5ce4d0269dc6334c9fdcadf83238ee352d71"
+    "commit_hash": "143392f2c76c673eb49ad60e50146bb1f1f94a16"
   },
   "raster_calculator": {
     "inputs": {
@@ -3671,11 +4021,11 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "4e35e202b5fb787684d03f00cecad1232d80d69d"
+    "commit_hash": "a70612629fd433a01609d8ebb0b3a78c9e2c61e3"
   },
   "removecontents": {
     "inputs": {
@@ -3699,7 +4049,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "d1a8dbd2bd8c9e6fd40819fbcc8c66284be63e8f"
+    "commit_hash": "fbe87cf09268ed7cd45193812cd9126ae54da5bf"
   },
   "rosreestr2coord": {
     "inputs": {
@@ -3721,7 +4071,7 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "kml": {
@@ -3734,16 +4084,16 @@
           "drivers": [
             "KML"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "d11da259efb2fcba3bc3b49d9b8bede0e0df86a6"
+    "commit_hash": "9bd297bde6f934fa2feb982c044c1231b9ad4131"
   },
   "rosreestr_from_coord": {
     "inputs": {
       "coords": {
-        "kind": "geometry"
+        "kind": "other"
       }
     },
     "outputs": {
@@ -3757,7 +4107,7 @@
           "drivers": [
             "GeoJSON"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "kml": {
@@ -3770,11 +4120,11 @@
           "drivers": [
             "KML"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "15ad0a5e7d789750507140523eb412ff24f31e8f"
+    "commit_hash": "d6bbe7c1b9ad033e4050f355a1773276156d0905"
   },
   "rsc2csv": {
     "inputs": {
@@ -3784,7 +4134,7 @@
           "extensions": [
             "rsc"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -3795,30 +4145,32 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "61ec3c2312d0c4add642a81b03a82f6b3a6d2697"
+    "commit_hash": "4176ed0187951f48a0931362a834a203848156ba"
   },
   "s2_search": {
+    "inputs": {},
     "outputs": {
       "result_file": {
-        "kind": "qgis_project",
+        "kind": "layer",
         "constraints": {
           "extensions": [
             "gpkg"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "a879a1c0904a862eb12b148903c71f980d20140c"
+    "commit_hash": "3c445e1828cbdc1da114dd4bec9886155ef593b6"
   },
   "solar_hours": {
+    "inputs": {},
     "outputs": {
       "csv_file": {
         "kind": "table",
@@ -3826,7 +4178,7 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "png_file": {
@@ -3835,39 +4187,27 @@
           "extensions": [
             "png"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "hours": {
         "kind": "number"
       }
     },
-    "commit_hash": "27387294d20e4c9dd3b863e8b65d6fc1e854ddef"
+    "commit_hash": "a40c686a9a22873efedab2bac3149de44c925718"
   },
   "spatial_join": {
     "inputs": {
       "layer1": {
         "kind": "layer",
         "constraints": {
-          "layer_type": "vector",
-          "drivers": [
-            "ESRI Shapefile",
-            "GeoJSON",
-            "GPKG"
-          ],
-          "file_count": "single"
+          "layer_type": "vector"
         }
       },
       "layer2": {
         "kind": "layer",
         "constraints": {
-          "layer_type": "vector",
-          "drivers": [
-            "ESRI Shapefile",
-            "GeoJSON",
-            "GPKG"
-          ],
-          "file_count": "single"
+          "layer_type": "vector"
         }
       },
       "attribute": {
@@ -3891,27 +4231,21 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "multiple"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "ff631dbde5ff0abe786cd65539bcb91bbd3a1f92"
+    "commit_hash": "3a8ab1d2766684174b3a1a60e7d96396d22a50c7"
   },
   "spectral_indices": {
     "inputs": {
       "sentinel_zip": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
+        "kind": "other"
       }
     },
     "outputs": {
       "result_file": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
+        "kind": "other"
       },
       "result_png": {
         "kind": "image",
@@ -3919,7 +4253,7 @@
           "extensions": [
             "png"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_text": {
@@ -3929,7 +4263,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "0a04ed107522e1a3fa74b906973f714d61395a24"
+    "commit_hash": "52c4f6b8f00cf7cd608966b57d95002cf051ac5d"
   },
   "split180": {
     "inputs": {
@@ -3939,8 +4273,7 @@
           "layer_type": "vector",
           "geometry_types": [
             "polygon"
-          ],
-          "file_count": "single"
+          ]
         }
       }
     },
@@ -3955,11 +4288,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "4cd56fe9bd15fe3fe20ac13b76d33d3886e09845"
+    "commit_hash": "68e4e22a2dc15830e89b3f155401a4911bbe69f4"
   },
   "split_to_equal": {
     "inputs": {
@@ -3969,8 +4302,7 @@
           "layer_type": "vector",
           "geometry_types": [
             "polygon"
-          ],
-          "file_count": "single"
+          ]
         }
       }
     },
@@ -3985,11 +4317,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "e4075c86d1af0f4d5ba0b740ba02f82c90067132"
+    "commit_hash": "d1201cf4888e2004bae71a1cff0e832d29c7d677"
   },
   "split_to_rect": {
     "inputs": {
@@ -4003,14 +4335,11 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "multiple"
+          "dataset_count": "single"
         }
       },
       "fieldname": {
-        "kind": "free_text",
-        "validators": [
-          "field_name"
-        ]
+        "kind": "free_text"
       }
     },
     "outputs": {
@@ -4024,11 +4353,11 @@
           "drivers": [
             "ESRI Shapefile"
           ],
-          "file_count": "multiple"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "b4bf65012b1626ad237caba5a75e3625a521daa8"
+    "commit_hash": "0bd1a54f0c146fa98891f1b28d85204a29adcc0b"
   },
   "splitcomplex": {
     "inputs": {
@@ -4038,8 +4367,7 @@
           "layer_type": "vector",
           "geometry_types": [
             "polygon"
-          ],
-          "file_count": "single"
+          ]
         }
       }
     },
@@ -4054,11 +4382,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "79de342881f2d3f985f823aaa4959cf8d328d7a1"
+    "commit_hash": "71da92f3a86ca54f6af6b5c46a775bf8c1c64612"
   },
   "spreadsheet2layer": {
     "inputs": {
@@ -4066,7 +4394,8 @@
         "kind": "ngw_resource_id",
         "constraints": {
           "ngw_resource_types": [
-            "vector_layer"
+            "vector_layer",
+            "postgis_layer"
           ]
         },
         "relations": [
@@ -4098,11 +4427,11 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "286f1240cab9a360a0a160ebc54f1ec6a1c332b8"
+    "commit_hash": "c1fa2d8c2b808b8d5d9ed369d5c3cc62bda582cf"
   },
   "table2geo": {
     "inputs": {
@@ -4113,8 +4442,7 @@
             "csv",
             "xlsx",
             "ods"
-          ],
-          "file_count": "single"
+          ]
         }
       }
     },
@@ -4123,18 +4451,42 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "shp",
-            "gpkg",
-            "geojson",
-            "tab",
-            "mif",
-            "sql",
-            "csv"
+            "zip"
           ]
-        }
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "ESRI Shapefile",
+                "GPKG",
+                "GeoJSON",
+                "MapInfo File"
+              ]
+            }
+          },
+          {
+            "kind": "table",
+            "constraints": {
+              "drivers": [
+                "CSV"
+              ]
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "sql"
+              ]
+            }
+          }
+        ]
       }
     },
-    "commit_hash": "9e11d9b980750453b6d39bcb8f921b7ed57ba52d"
+    "commit_hash": "989e262d7fdbd5999f54d44f670ca95ffe074d74"
   },
   "temporal_split": {
     "inputs": {
@@ -4142,7 +4494,8 @@
         "kind": "ngw_resource_id",
         "constraints": {
           "ngw_resource_types": [
-            "vector_layer"
+            "vector_layer",
+            "postgis_layer"
           ]
         },
         "relations": [
@@ -4177,16 +4530,10 @@
         ]
       },
       "year1_field": {
-        "kind": "free_text",
-        "validators": [
-          "field_name"
-        ]
+        "kind": "free_text"
       },
       "year2_field": {
-        "kind": "free_text",
-        "validators": [
-          "field_name"
-        ]
+        "kind": "free_text"
       }
     },
     "outputs": {
@@ -4194,32 +4541,89 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "geojson",
-            "gpkg",
-            "csv",
-            "shp"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "other",
+            "constraints": {
+              "extensions": [
+                "zip"
+              ]
+            },
+            "archive_contents": [
+              {
+                "kind": "layer",
+                "constraints": {
+                  "layer_type": "vector",
+                  "drivers": [
+                    "GeoJSON",
+                    "GPKG",
+                    "ESRI Shapefile"
+                  ]
+                }
+              },
+              {
+                "kind": "table",
+                "constraints": {
+                  "drivers": [
+                    "CSV"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       }
     },
-    "commit_hash": "704062feeabcb3f84b1ec00845d3ddf04f34d114"
+    "commit_hash": "6ef7671d59d97522d51aae12a27fb4fe47a01f51"
   },
   "terrain_analysis": {
-    "inputs": {
-      "input_zip": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
-      }
-    },
     "outputs": {
       "result_file": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
-        }
+          "extensions": [
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "raster",
+              "drivers": [
+                "GTiff"
+              ]
+            }
+          },
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG"
+              ]
+            }
+          },
+          {
+            "kind": "table",
+            "constraints": {
+              "extensions": [
+                "csv"
+              ]
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "json"
+              ]
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
@@ -4228,7 +4632,15 @@
         "kind": "text"
       }
     },
-    "commit_hash": "b56131a84c7f2a3bf2c477f3426a3811af94c635"
+    "inputs": {
+      "input_zip": {
+        "kind": "other",
+        "constraints": {
+          "dataset_count": "multiple"
+        }
+      }
+    },
+    "commit_hash": "ccbcdfe4f22cd8365327df0967910d2d7e721c18"
   },
   "tropomi2geotiff": {
     "inputs": {
@@ -4238,7 +4650,7 @@
           "extensions": [
             "nc"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -4250,11 +4662,11 @@
           "drivers": [
             "GTiff"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "4be70c6b26ef7de9b6d9be6af532588412f74c18"
+    "commit_hash": "23fde5dda75a765e5e05abc36c0083dc09509c06"
   },
   "update_vector_layer": {
     "inputs": {
@@ -4281,7 +4693,7 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -4292,14 +4704,14 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_url": {
         "kind": "text"
       }
     },
-    "commit_hash": "c141cd391316bc04163026d7d512605a0252466a"
+    "commit_hash": "423d2cc23231cd938e1123627a67096228dc2a07"
   },
   "vector2datalens": {
     "inputs": {
@@ -4310,8 +4722,7 @@
           "geometry_types": [
             "point",
             "polygon"
-          ],
-          "file_count": "single"
+          ]
         }
       }
     },
@@ -4322,7 +4733,7 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "dst_file_point": {
@@ -4331,11 +4742,11 @@
           "extensions": [
             "csv"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "7eee09d831feff800f179bfc283e536be9384afc"
+    "commit_hash": "6b9d540bcab21a8ac66293582eaea1fd37f6a43e"
   },
   "vectorclip": {
     "inputs": {
@@ -4343,7 +4754,7 @@
         "kind": "layer",
         "constraints": {
           "layer_type": "vector",
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "layer2": {
@@ -4353,7 +4764,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -4365,11 +4776,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "6c888e0f6728036ad41a09828cf6e3e57c6d42d1"
+    "commit_hash": "43f243a6dc00b11d2cb81a7933a00e1cdc641b2d"
   },
   "water_usage": {
     "inputs": {
@@ -4379,7 +4790,7 @@
           "extensions": [
             "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "uniq_number": {
@@ -4389,6 +4800,9 @@
           "min_length": 23,
           "max_length": 23
         }
+      },
+      "subject_name": {
+        "kind": "free_text"
       }
     },
     "outputs": {
@@ -4399,11 +4813,11 @@
           "drivers": [
             "GPKG"
           ],
-          "file_count": "multiple"
+          "dataset_count": "single"
         }
       }
     },
-    "commit_hash": "0cb148faaafc2a338a5dbbc9893942ab3ed1c19b"
+    "commit_hash": "1dcfe7ef1d117202e1b433adcf6d3dc32796504e"
   },
   "web_gis_structure": {
     "inputs": {
@@ -4429,14 +4843,14 @@
           "extensions": [
             "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "f08169d806773995056e0ea4a5e58b3838b25543"
+    "commit_hash": "1248103d8d51c6050b828ad2b8e95c502ff21a4d"
   },
   "webmap2qgis": {
     "inputs": {
@@ -4460,47 +4874,95 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "qgs",
-            "gpkg",
-            "gml",
-            "xsd",
-            "mif",
-            "mid",
-            "shp",
-            "dbf",
-            "prj",
-            "shx",
-            "cpg",
-            "csv",
-            "dxf"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "qgis_project",
+            "constraints": {
+              "extensions": [
+                "qgs"
+              ]
+            }
+          },
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "extensions": [
+                "gpkg",
+                "gml",
+                "mif",
+                "shp",
+                "csv",
+                "dxf"
+              ]
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "xsd",
+                "mid",
+                "dbf",
+                "prj",
+                "shx",
+                "cpg"
+              ]
+            }
+          }
+        ]
       }
     },
-    "commit_hash": "fbdf4a9dc1a12633a0187614f48138cb61361c43"
+    "commit_hash": "a62ff0217502409c5a7b95539ded52c1b7513050"
   },
   "wildfire_analysis": {
-    "inputs": {
-      "terrain_zip": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
-      },
-      "spectral_zip": {
-        "kind": "other",
-        "constraints": {
-          "file_count": "multiple"
-        }
-      }
-    },
     "outputs": {
       "result_file": {
         "kind": "other",
         "constraints": {
-          "file_count": "multiple"
-        }
+          "extensions": [
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "raster",
+              "drivers": [
+                "GTiff"
+              ]
+            }
+          },
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG"
+              ]
+            }
+          },
+          {
+            "kind": "table",
+            "constraints": {
+              "extensions": [
+                "csv"
+              ]
+            }
+          },
+          {
+            "kind": "document",
+            "constraints": {
+              "extensions": [
+                "json"
+              ]
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
@@ -4509,7 +4971,21 @@
         "kind": "text"
       }
     },
-    "commit_hash": "8a7afdd6484b268d0fd49616a1b50d5e636084f5"
+    "inputs": {
+      "terrain_zip": {
+        "kind": "other",
+        "constraints": {
+          "dataset_count": "multiple"
+        }
+      },
+      "spectral_zip": {
+        "kind": "other",
+        "constraints": {
+          "dataset_count": "multiple"
+        }
+      }
+    },
+    "commit_hash": "861373d6d8c89b72fca2dc0ad8ad1303b9eb3a40"
   },
   "xml_decl_to_vector": {
     "inputs": {
@@ -4519,7 +4995,7 @@
           "extensions": [
             "xml"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
@@ -4528,29 +5004,39 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "gpkg",
-            "geojson",
-            "shp",
-            "tab"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG",
+                "GeoJSON",
+                "ESRI Shapefile",
+                "MapInfo File"
+              ],
+              "dataset_count": "multiple"
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "25dd831e984a250c3e10ed4d3ce6940fe23b4982"
+    "commit_hash": "12048be7f72592e98ee5437ab91b122f8ccda9ea"
   },
   "xml_lpo_to_vector": {
     "inputs": {
       "source": {
-        "kind": "other",
+        "kind": "document",
         "constraints": {
           "extensions": [
             "xml"
-          ],
-          "file_count": "multiple"
+          ]
         }
       }
     },
@@ -4559,29 +5045,39 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "gpkg",
-            "geojson",
-            "shp",
-            "tab"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG",
+                "GeoJSON",
+                "ESRI Shapefile",
+                "MapInfo File"
+              ],
+              "dataset_count": "multiple"
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "26595e2505cee3b9f3e1506839daba6905667125"
+    "commit_hash": "004ad4ff604ca4f3a67da47a427b8564ee964b02"
   },
   "xml_plv_to_vector": {
     "inputs": {
       "source": {
-        "kind": "other",
+        "kind": "document",
         "constraints": {
           "extensions": [
             "xml"
-          ],
-          "file_count": "multiple"
+          ]
         }
       }
     },
@@ -4590,19 +5086,30 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "gpkg",
-            "geojson",
-            "shp",
-            "tab"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG",
+                "GeoJSON",
+                "ESRI Shapefile",
+                "MapInfo File"
+              ],
+              "dataset_count": "multiple"
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "d1f1bbb66ba08e2a04ef3352ee8b000ad234174d"
+    "commit_hash": "831c3d94e36a573ad66d11d73d714bfbcaff1779"
   },
   "xml_tol_to_vector": {
     "inputs": {
@@ -4612,7 +5119,7 @@
           "extensions": [
             "xml"
           ],
-          "file_count": "multiple"
+          "dataset_count": "multiple"
         }
       }
     },
@@ -4621,19 +5128,30 @@
         "kind": "other",
         "constraints": {
           "extensions": [
-            "gpkg",
-            "geojson",
-            "shp",
-            "tab"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "layer",
+            "constraints": {
+              "layer_type": "vector",
+              "drivers": [
+                "GPKG",
+                "GeoJSON",
+                "ESRI Shapefile",
+                "MapInfo File"
+              ],
+              "dataset_count": "multiple"
+            }
+          }
+        ]
       },
       "result_text": {
         "kind": "text"
       }
     },
-    "commit_hash": "fa54560ad5a4cd9e1ac1a0cb6ad21304638e4866"
+    "commit_hash": "e15e1c7764d21c9eb5fa3bd91ba8e92d2bfdbba6"
   },
   "zmu_data_analysis": {
     "inputs": {
@@ -4654,17 +5172,33 @@
     },
     "outputs": {
       "result_file": {
-        "kind": "report",
+        "kind": "other",
         "constraints": {
           "extensions": [
-            "docx",
-            "xlsx"
-          ],
-          "file_count": "multiple"
-        }
+            "zip"
+          ]
+        },
+        "archive_contents": [
+          {
+            "kind": "report",
+            "constraints": {
+              "extensions": [
+                "docx"
+              ]
+            }
+          },
+          {
+            "kind": "table",
+            "constraints": {
+              "extensions": [
+                "xlsx"
+              ]
+            }
+          }
+        ]
       }
     },
-    "commit_hash": "54436592b8cdc281da882a98dc6d360b68abe38e"
+    "commit_hash": "2a0baa9de003c5a5b611f619bafbf0770dae6bce"
   },
   "zmu_deploy": {
     "inputs": {
@@ -4689,7 +5223,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "region_boundary_file": {
@@ -4699,7 +5233,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "routes_file": {
@@ -4709,7 +5243,7 @@
           "geometry_types": [
             "line"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "landscapes_classification_file": {
@@ -4719,7 +5253,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "collectors_list": {
@@ -4728,7 +5262,7 @@
           "extensions": [
             "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "species_list": {
@@ -4737,7 +5271,7 @@
           "extensions": [
             "xlsx"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -4746,7 +5280,7 @@
         "kind": "text"
       }
     },
-    "commit_hash": "cb380fafe4bfcfcfdd9959fceb63a2c0eabddf5e"
+    "commit_hash": "8f411bddb71c70a5cf05226999e0dfb29fd074cc"
   },
   "zmu_update": {
     "inputs": {
@@ -4771,7 +5305,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "region_boundary_file": {
@@ -4781,7 +5315,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "routes_file": {
@@ -4791,7 +5325,7 @@
           "geometry_types": [
             "line"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       },
       "landscapes_classification_file": {
@@ -4801,7 +5335,7 @@
           "geometry_types": [
             "polygon"
           ],
-          "file_count": "single"
+          "dataset_count": "single"
         }
       }
     },
@@ -4810,6 +5344,536 @@
         "kind": "text"
       }
     },
-    "commit_hash": "eba6d9028f2d2e47ccb25fdf6186efb9fa4cb7d9"
+    "commit_hash": "a5c44e62e08783ebd46658ded1ab796a69958676"
+  },
+  "aggregate_raster_layer_to_h3": {
+    "inputs": {
+      "input_layer": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "raster",
+          "dataset_count": "single"
+        }
+      },
+      "zoom_min": {
+        "kind": "other",
+        "constraints": {
+          "min_value": 0,
+          "max_value": 15
+        }
+      },
+      "zoom_max": {
+        "kind": "other",
+        "constraints": {
+          "min_value": 0,
+          "max_value": 15
+        }
+      }
+    },
+    "outputs": {
+      "result": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "vector",
+          "geometry_types": [
+            "polygon"
+          ],
+          "drivers": [
+            "GPKG"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "commit_hash": "bcc622c1b9a527aaf4336a8c16f9715913ceca3c"
+  },
+  "aggregate_vector_layer_to_h3": {
+    "inputs": {
+      "input_layer": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "vector",
+          "geometry_types": [
+            "point",
+            "line",
+            "polygon"
+          ]
+        }
+      },
+      "zoom_min": {
+        "kind": "zoom_level",
+        "constraints": {
+          "min_value": 0,
+          "max_value": 15,
+          "unit": "zoom"
+        }
+      },
+      "zoom_max": {
+        "kind": "zoom_level",
+        "constraints": {
+          "min_value": 0,
+          "max_value": 15,
+          "unit": "zoom"
+        }
+      }
+    },
+    "outputs": {
+      "result": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "vector",
+          "geometry_types": [
+            "polygon"
+          ],
+          "drivers": [
+            "GPKG"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "commit_hash": "622c2e24fd1d44d63c6d7e640f69aedad9b48dfa"
+  },
+  "buffer": {
+    "inputs": {
+      "source": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "vector"
+        }
+      },
+      "buffer_attribute": {
+        "kind": "field",
+        "constraints": {
+          "field_count": "single",
+          "field_types": [
+            "integer",
+            "integer64",
+            "real"
+          ]
+        },
+        "relations": [
+          {
+            "type": "fields",
+            "source_parameter": "source"
+          }
+        ]
+      }
+    },
+    "outputs": {
+      "result": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "vector",
+          "geometry_types": [
+            "polygon"
+          ],
+          "drivers": [
+            "GPKG",
+            "GeoJSON"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "commit_hash": "de9a8d089a5b7a221132e20a9d5c8de9cfeccde7"
+  },
+  "cadnums_to_geodata": {
+    "inputs": {
+      "source_file": {
+        "kind": "table",
+        "constraints": {
+          "extensions": [
+            "txt",
+            "csv",
+            "xls",
+            "xlsx"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "outputs": {
+      "geodata": {
+        "kind": "layer",
+        "constraints": {
+          "drivers": [
+            "GeoJSON"
+          ],
+          "layer_type": "vector"
+        }
+      },
+      "report_text": {
+        "kind": "text"
+      },
+      "report_json": {
+        "kind": "document",
+        "constraints": {
+          "extensions": [
+            "json"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "commit_hash": "c561b206e4af9d4aa3aa7be70930a23d0b5f307d"
+  },
+  "field_combiner": {
+    "inputs": {
+      "layer_id": {
+        "kind": "ngw_resource_id",
+        "constraints": {
+          "ngw_resource_types": [
+            "vector_layer"
+          ]
+        },
+        "relations": [
+          {
+            "type": "ngw_resource",
+            "source_parameter": "ngw_connection"
+          }
+        ]
+      },
+      "attr_name_1": {
+        "kind": "field",
+        "relations": [
+          {
+            "type": "fields",
+            "source_parameter": "layer_id"
+          }
+        ]
+      },
+      "attr_name_2": {
+        "kind": "field",
+        "relations": [
+          {
+            "type": "fields",
+            "source_parameter": "layer_id"
+          }
+        ]
+      },
+      "attr_name_3": {
+        "kind": "field",
+        "relations": [
+          {
+            "type": "fields",
+            "source_parameter": "layer_id"
+          }
+        ]
+      },
+      "attr_name_combined": {
+        "kind": "field",
+        "relations": [
+          {
+            "type": "fields",
+            "source_parameter": "layer_id"
+          }
+        ]
+      }
+    },
+    "outputs": {},
+    "commit_hash": "5b3664d43d675850945a88a504d26070686fc1db"
+  },
+  "layerstack": {
+    "inputs": {
+      "raster_archive": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "raster",
+          "extensions": [
+            "tif",
+            "tiff",
+            "jp2"
+          ]
+        }
+      },
+      "channels": {
+        "kind": "other"
+      }
+    },
+    "outputs": {
+      "result": {
+        "kind": "layer",
+        "constraints": {
+          "drivers": [
+            "GTiff"
+          ],
+          "layer_type": "raster",
+          "dataset_count": "single"
+        }
+      }
+    },
+    "commit_hash": "69c3cc29b2cad62bf4ef409e6f06200846a5a62b"
+  },
+  "mbtiles2ngrc": {
+    "inputs": {
+      "raster_dataset": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "raster",
+          "extensions": [
+            "mbtiles"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "outputs": {
+      "result": {
+        "kind": "document",
+        "constraints": {
+          "extensions": [
+            "ngrc"
+          ],
+          "dataset_count": "single"
+        }
+      },
+      "result_text": {
+        "kind": "text"
+      }
+    },
+    "commit_hash": "d69c36790b9878675bd1f5662b288c2a7781ea1d"
+  },
+  "nemoremusora_import_protocols": {
+    "inputs": {
+      "data_source": {
+        "kind": "document",
+        "constraints": {
+          "extensions": [
+            "xlsx"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "outputs": {},
+    "commit_hash": "ed7e24af3f6d6356fb7dd0f5ffbe294ea6689114"
+  },
+  "nemoremusora_macro_protocols": {
+    "inputs": {},
+    "outputs": {
+      "result": {
+        "kind": "document",
+        "constraints": {
+          "extensions": [
+            "xlsx"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "commit_hash": "9483248c074480f5c3c5aaf28a2eb0c2c0d58324"
+  },
+  "ngw_group2webmap": {
+    "inputs": {
+      "group_id": {
+        "kind": "ngw_resource_id",
+        "constraints": {
+          "ngw_resource_types": [
+            "resource_group"
+          ]
+        },
+        "relations": [
+          {
+            "type": "ngw_resource",
+            "source_parameter": "ngw_connection"
+          }
+        ]
+      }
+    },
+    "outputs": {
+      "result": {
+        "kind": "text"
+      },
+      "user_log": {
+        "kind": "document",
+        "constraints": {
+          "extensions": [
+            "txt"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "commit_hash": "f4da0955a65f7b6d1fc6eddcfa396f0d9f90b9c2"
+  },
+  "ngw_webmap_combiner": {
+    "inputs": {
+      "webmap1": {
+        "kind": "ngw_resource_id",
+        "constraints": {
+          "ngw_resource_types": [
+            "webmap"
+          ]
+        },
+        "relations": [
+          {
+            "type": "ngw_resource",
+            "source_parameter": "ngw_connection"
+          }
+        ]
+      },
+      "webmap2": {
+        "kind": "ngw_resource_id",
+        "constraints": {
+          "ngw_resource_types": [
+            "webmap"
+          ]
+        },
+        "relations": [
+          {
+            "type": "ngw_resource",
+            "source_parameter": "ngw_connection"
+          }
+        ]
+      }
+    },
+    "outputs": {},
+    "commit_hash": "d6fdad994cb66d60b9d9884cafca461c5e0a4f18"
+  },
+  "pastvu2webgis": {
+    "inputs": {},
+    "outputs": {},
+    "commit_hash": "7ea75fb5225ebec27938032811da5ca79e965a85"
+  },
+  "pano2vr": {
+    "inputs": {
+      "source": {
+        "kind": "document"
+      }
+    },
+    "outputs": {
+      "result": {
+        "kind": "image",
+        "constraints": {
+          "extensions": [
+            "jpg"
+          ],
+          "dataset_count": "multiple"
+        }
+      }
+    },
+    "commit_hash": "045a30a4fbaea4e0b77eb119873bef3c2a0a3e28"
+  },
+  "raster2mbtiles": {
+    "inputs": {
+      "raster_dataset": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "raster"
+        }
+      }
+    },
+    "outputs": {
+      "result": {
+        "kind": "layer",
+        "constraints": {
+          "layer_type": "raster",
+          "drivers": [
+            "MBTILES"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "commit_hash": "49b45e6bb47057ca87f0c23b5154e2ae0ba6a009"
+  },
+  "ngcr_export": {
+    "inputs": {},
+    "outputs": {
+      "result": {
+        "kind": "document"
+      }
+    },
+    "commit_hash": "e3b987fb3caec48302274526998b4e91f2c159b6"
+  },
+  "caddb": {
+    "inputs": {
+      "cadfile": {
+        "kind": "document",
+        "validators": [
+          "cad_extract"
+        ]
+      },
+      "forced_custom_srs": {
+        "kind": "crs"
+      }
+    },
+    "outputs": {
+      "text": {
+        "kind": "text"
+      },
+      "error_log": {
+        "kind": "document",
+        "constraints": {
+          "extensions": [
+            "txt"
+          ]
+        }
+      }
+    },
+    "commit_hash": "af4326190bb589f2a59d6d69e96afe6cd899be06"
+  },
+  "point_cloud_to_copc": {
+    "inputs": {
+      "input_layer": {
+        "kind": "layer",
+        "constraints": {
+          "extensions": [
+            "las",
+            "laz",
+            "ply",
+            "pcd",
+            "pts",
+            "ptx",
+            "bpf"
+          ],
+          "dataset_count": "single"
+        }
+      },
+      "source_crs": {
+        "kind": "crs"
+      },
+      "output_crs": {
+        "kind": "crs"
+      }
+    },
+    "outputs": {
+      "result": {
+        "kind": "layer",
+        "constraints": {
+          "extensions": [
+            "laz"
+          ],
+          "dataset_count": "single"
+        }
+      }
+    },
+    "commit_hash": "e3e7d337e6fe5aaa3c1d17159c45c509f79dc0fe"
+  },
+  "plk_attrs": {
+    "inputs": {
+      "reg_number": {
+        "kind": "other"
+      }
+    },
+    "outputs": {
+      "result_file": {
+        "kind": "layer",
+        "constraints": {
+          "drivers": [
+            "GPKG"
+          ],
+          "layer_type": "vector",
+          "geometry_types": [
+            "polygon"
+          ]
+        }
+      },
+      "result_text": {
+        "kind": "report"
+      }
+    },
+    "commit_hash": "5b224ded097022af4471dae967359007462323d1"
   }
 }

@@ -270,6 +270,7 @@ class DemoButtonPatch(AlgorithmDialogPatch):
         notifier = self._runtime_controller.notifier(dialog)
         self._runtime_controller.dismiss_notifier_messages(dialog)
         self._runtime_controller.show_parameters_tab(dialog)
+        self._runtime_controller.clear_progress(dialog)
 
         button.start()
         QApplication.processEvents()

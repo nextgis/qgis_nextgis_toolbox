@@ -59,6 +59,7 @@ _EXTENSION_LABELS = {
     "txt": "Text",
     "xlsx": "Excel",
     "xml": "XML",
+    "zip": "ZIP Archive",
 }
 
 _GEOMETRY_SOURCE_TYPES = {
@@ -88,8 +89,15 @@ _FIELD_TYPE_MAPPING = {
 
 
 def is_single_file_semantic(constraints: Dict[str, Any]) -> bool:
-    file_count = constraints.get("file_count")
-    return file_count in (None, 1, "single")
+    # Missing cardinality does not guarantee a single logical dataset.
+    dataset_count = constraints.get(
+        "dataset_count", constraints.get("file_count")
+    )
+    return dataset_count == "single" or (
+        isinstance(dataset_count, int)
+        and not isinstance(dataset_count, bool)
+        and dataset_count == 1
+    )
 
 
 def compatible_file_extensions(constraints: Dict[str, Any]) -> List[str]:

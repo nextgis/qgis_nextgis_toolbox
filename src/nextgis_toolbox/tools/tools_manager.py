@@ -118,7 +118,9 @@ class ToolsManager(ToolsInterface):
         :param clear_cache: Clear API cache before reloading.
         """
         plugin = cast("NextgisToolboxInterface", self.parent())
-        use_async_refresh = plugin.mode == plugin.Mode.GUI
+        use_async_refresh = (
+            plugin is not None and plugin.mode == plugin.Mode.GUI
+        )
 
         if use_async_refresh:
             self._start_catalog_load(clear_cache=clear_cache)
@@ -369,6 +371,7 @@ class ToolsManager(ToolsInterface):
             )
             self._reset()
             self._set_state(ToolsManagerState.ERROR, error)
+            return
 
         except Exception as error:
             logger.exception(
@@ -377,10 +380,12 @@ class ToolsManager(ToolsInterface):
             )
             self._reset()
 
-            error = ToolboxError("Failed to load NextGIS Toolbox catalog.")
-            error.__cause__ = error
+            catalog_error = ToolboxError(
+                "Failed to load NextGIS Toolbox catalog."
+            )
+            catalog_error.__cause__ = error
 
-            self._set_state(ToolsManagerState.ERROR, error)
+            self._set_state(ToolsManagerState.ERROR, catalog_error)
             return
 
         self._set_state(ToolsManagerState.LOADED)

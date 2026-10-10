@@ -14,9 +14,16 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, see <https://www.gnu.org/licenses/>.
 
-from typing import Any, Dict, List, Optional, cast
+from dataclasses import replace
+from typing import Any, Dict, List, Optional, Sequence, cast
 
-from qgis.core import QgsProcessingAlgorithm, QgsProcessingContext
+from qgis.core import (
+    QgsProcessingAlgorithm,
+    QgsProcessingContext,
+    QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterField,
+    QgsProcessingParameterVectorLayer,
+)
 
 from nextgis_toolbox.processing.parameters.common import (
     InputParameterAdapter,
@@ -151,10 +158,51 @@ class ProcessingParameterRegistry:
     def create_input_representation(
         self,
         parameter: ToolInputParameter,
+        *,
+        tool_inputs: Optional[Sequence[ToolInputParameter]] = None,
     ) -> InputParameterRepresentation:
-        return self._input_registry.adapter_for(
-            parameter
-        ).create_representation(parameter)
+        adapter = self._input_registry.adapter_for(parameter)
+        representation = adapter.create_representation(parameter)
+        if tool_inputs is None:
+            return representation
+
+        for definition in representation.parameters:
+            if not isinstance(definition, QgsProcessingParameterField):
+                continue
+            if not self._has_local_field_parent(
+                definition.parentLayerParameterName(), tool_inputs
+            ):
+                # NGW IDs and uploaded archives have no local QGIS field list.
+                # Keep the semantic relation, but allow entering the field name.
+                return adapter.create_representation(
+                    replace(parameter, input_semantic=None)
+                )
+        return representation
+
+    def _has_local_field_parent(
+        self,
+        parent_name: str,
+        tool_inputs: Sequence[ToolInputParameter],
+    ) -> bool:
+        source = next(
+            (source for source in tool_inputs if source.name == parent_name),
+            None,
+        )
+        if source is None:
+            return False
+        return any(
+            definition.name() == parent_name
+            and isinstance(
+                definition,
+                (
+                    QgsProcessingParameterFeatureSource,
+                    QgsProcessingParameterVectorLayer,
+                ),
+            )
+            for definition in self.create_input_representation(
+                source
+            ).parameters
+        )
 
     def prepare_input_preset_values(
         self,

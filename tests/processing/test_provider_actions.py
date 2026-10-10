@@ -21,6 +21,7 @@ from unittest.mock import Mock
 
 import qgis.utils
 from qgis.core import QgsApplication
+from qgis.PyQt.QtCore import QUrl
 
 from nextgis_toolbox.processing.parameters import (
     create_default_parameter_registry,
@@ -48,7 +49,7 @@ def _import_processing_modules():
         qgis.utils.plugin_paths.append(str(processing_plugin_root))
 
     actions_module = importlib.import_module(
-        "nextgis_toolbox.processing.provider_actions"
+        "nextgis_toolbox.processing.ui.provider_actions"
     )
     interface_module = importlib.import_module(
         "nextgis_toolbox.nextgis_toolbox_interface"
@@ -92,7 +93,7 @@ def _create_algorithm():
     tasks_manager.api.return_value.api_client.endpoint = (
         "https://toolbox.nextgis.com"
     )
-    return algorithm_module.NextgisToolboxAlgorithm(
+    return algorithm_module.ToolboxAlgorithm(
         tool,
         tasks_manager,
         parameter_registry=create_default_parameter_registry(),
@@ -105,9 +106,16 @@ def test_provider_browser_action_opens_configured_toolbox_page(
 ) -> None:
     del qgis_app
 
-    actions_module, _, _, _ = _import_processing_modules()
+    actions_module, interface_module, _, _ = _import_processing_modules()
     settings = NextgisToolboxSettings()
     settings.endpoint = "https://sandbox.nextgis.test"
+    plugin = Mock()
+    plugin.api_client.endpoint = settings.endpoint
+    monkeypatch.setattr(
+        interface_module.NextgisToolboxInterface,
+        "instance",
+        classmethod(lambda cls: plugin),
+    )
 
     opened_urls = []
     monkeypatch.setattr(
@@ -119,7 +127,7 @@ def test_provider_browser_action_opens_configured_toolbox_page(
 
     action.execute()
 
-    assert opened_urls == ["https://sandbox.nextgis.test/t/"]
+    assert opened_urls == ["https://sandbox.nextgis.test"]
     assert not action.getIcon().isNull()
 
 
@@ -129,9 +137,18 @@ def test_provider_tasks_history_action_opens_configured_orders_page(
 ) -> None:
     del qgis_app
 
-    actions_module, _, _, _ = _import_processing_modules()
+    actions_module, interface_module, _, _ = _import_processing_modules()
     settings = NextgisToolboxSettings()
     settings.endpoint = "https://sandbox.nextgis.test"
+    plugin = Mock()
+    plugin.tasks_manager.api.return_value.tasks_history_url.return_value = (
+        QUrl(settings.endpoint + "/orders")
+    )
+    monkeypatch.setattr(
+        interface_module.NextgisToolboxInterface,
+        "instance",
+        classmethod(lambda cls: plugin),
+    )
 
     opened_urls = []
     monkeypatch.setattr(
@@ -276,6 +293,10 @@ def test_processing_provider_registers_and_unregisters_actions(
     _, _, provider_module, provider_actions_module = (
         _import_processing_modules()
     )
+    from nextgis_toolbox.processing.ui.panel_actions_integrator import (
+        PanelActionsIntegrator,
+    )
+
     qgis.utils.iface.messageBar.return_value.items.return_value = []
 
     tools_manager = Mock()
@@ -292,26 +313,18 @@ def test_processing_provider_registers_and_unregisters_actions(
         tools_manager=tools_manager,
         tasks_manager=tasks_manager,
     )
-    provider._provider_context_menu = Mock()
-
-    assert provider.load() is True
-    assert len(provider.actions) == 5
-    assert len(provider.contextMenuActions) == 2
-    provider._provider_context_menu.install.assert_called_once_with()
-    assert (
-        provider_actions_module.ProviderActions.actions[provider.id()]
-        == provider.actions
-    )
-    for action in provider.contextMenuActions:
+    integrator = PanelActionsIntegrator(qgis.utils.iface, provider)
+    integrator.load()
+    assert len(integrator._button_actions) == 5
+    assert len(integrator._tool_actions) == 2
+    for action in integrator._tool_actions:
         assert (
             action
             in provider_actions_module.ProviderContextMenuActions.actions
         )
 
-    provider.unload()
-    provider._provider_context_menu.uninstall.assert_called_once_with()
-    assert provider.id() not in provider_actions_module.ProviderActions.actions
-    for action in provider.contextMenuActions:
+    integrator.unload()
+    for action in integrator._tool_actions:
         assert (
             action
             not in provider_actions_module.ProviderContextMenuActions.actions
@@ -366,11 +379,13 @@ def test_processing_provider_emits_algorithm_instance_created_signal(
     signal_handler = Mock()
     provider.algorithm_instance_created.connect(signal_handler)
 
-    algorithm = Mock()
+    provider.load()
+    algorithm = _create_algorithm()
+    assert provider.addAlgorithm(algorithm)
 
-    provider.on_algorithm_instance_created(algorithm)
+    clone = algorithm.createInstance()
 
-    signal_handler.assert_called_once_with(algorithm)
+    signal_handler.assert_called_once_with(clone)
 
 
 def test_processing_provider_warning_uses_saved_token(

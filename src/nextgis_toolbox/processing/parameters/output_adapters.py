@@ -86,6 +86,9 @@ class FileOutputAdapter(OutputParameterAdapter):
             return self._create_file_destination_parameter(parameter)
 
         constraints = semantic.constraints
+        if semantic.archive_contents:
+            # Archive members are metadata, not a single layer destination.
+            return self._create_file_destination_parameter(parameter)
         if semantic.kind == "layer" and is_single_file_semantic(constraints):
             layer_type = constraints.get("layer_type")
             if layer_type == "vector":
