@@ -28,7 +28,7 @@ import tempfile
 import zipfile
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 try:
     import tomllib
@@ -55,6 +55,18 @@ def replace_metadata_version(content: str, version: str) -> str:
     return updated_content
 
 
+def remove_commit_hashes(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {
+            key: remove_commit_hashes(item)
+            for key, item in value.items()
+            if key != "commit_hash"
+        }
+    if isinstance(value, list):
+        return [remove_commit_hashes(item) for item in value]
+    return value
+
+
 class QgisPluginBuilder:
     def __init__(self):
         self.current_directory = Path(__file__).parent
@@ -65,7 +77,6 @@ class QgisPluginBuilder:
         self.qgsmith_settings = self.settings.get("tool", {}).get(
             "qgsmith", {}
         )
-        self.bandit_settings = self.settings.get("tool", {}).get("bandit", {})
         self.data_settings = self.qgsmith_settings.get("package-data", {})
         self.ui_settings = self.qgsmith_settings.get("forms", {})
         self.qrc_settings = self.qgsmith_settings.get("resources", {})
@@ -200,16 +211,22 @@ class QgisPluginBuilder:
         ) as zip_file:
             for source_file, build_path in build_mapping.items():
                 create_directories(zip_file, build_path)
-                zip_file.write(source_file, "/".join(build_path.parts))
-
-            bandit_config = self.__create_bandit_config()
-            if bandit_config is not None:
-                bandit_path = Path(project_name) / ".bandit"
-                create_directories(zip_file, bandit_path)
-                zip_file.writestr(
-                    "/".join(bandit_path.parts),
-                    bandit_config,
-                )
+                archive_path = "/".join(build_path.parts)
+                if source_file.suffix == ".json":
+                    content = json.loads(
+                        source_file.read_text(encoding="utf-8")
+                    )
+                    zip_file.writestr(
+                        archive_path,
+                        json.dumps(
+                            remove_commit_hashes(content),
+                            ensure_ascii=False,
+                            indent=2,
+                        )
+                        + "\n",
+                    )
+                else:
+                    zip_file.write(source_file, archive_path)
 
     def install(
         self,
@@ -484,30 +501,6 @@ class QgisPluginBuilder:
         build_path = Path(project_name) / file_path.name
 
         return {file_path: build_path}
-
-    def __create_bandit_config(self) -> Optional[str]:
-        if len(self.bandit_settings) == 0:
-            return None
-
-        bandit_options = {
-            "exclude_dirs": "exclude",
-            "tests": "tests",
-            "skips": "skips",
-        }
-        config_lines = ["[bandit]"]
-        for source_option, target_option in bandit_options.items():
-            option_value = self.bandit_settings.get(source_option)
-            if option_value is None:
-                continue
-
-            if isinstance(option_value, list):
-                serialized_value = ",".join(option_value)
-            else:
-                serialized_value = str(option_value)
-
-            config_lines.append(f"{target_option} = {serialized_value}")
-
-        return "\n".join(config_lines) + "\n"
 
     def __create_sources_mapping(self) -> Dict[Path, Path]:
         project_name: str = self.project_settings["name"]
