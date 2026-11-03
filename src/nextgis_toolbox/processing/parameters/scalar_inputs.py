@@ -27,6 +27,9 @@ from typing import (
 )
 
 from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsCoordinateTransformContext,
     QgsProcessingAlgorithm,
     QgsProcessingContext,
     QgsProcessingParameterBoolean,
@@ -328,6 +331,8 @@ class ScalarRuntimeValueResolver:
         name: str,
         context: QgsProcessingContext,
     ) -> Optional[int]:
+        if parameters[name] is None:
+            return None
         return algorithm.parameterAsInt(parameters, name, context)
 
     def resolve_float(
@@ -337,6 +342,8 @@ class ScalarRuntimeValueResolver:
         name: str,
         context: QgsProcessingContext,
     ) -> Optional[float]:
+        if parameters[name] is None:
+            return None
         return algorithm.parameterAsDouble(parameters, name, context)
 
     def resolve_bbox(
@@ -347,14 +354,24 @@ class ScalarRuntimeValueResolver:
         context: QgsProcessingContext,
     ) -> Optional[dict]:
         extent = algorithm.parameterAsExtent(parameters, name, context)
+        extent_crs = algorithm.parameterAsExtentCrs(parameters, name, context)
+
         if extent.isNull():
             return None
 
+        toolbox_crs = QgsCoordinateReferenceSystem("EPSG:4326")
+        if extent_crs.authid() == "EPSG:4326":
+            reprojected_extent = extent
+        else:
+            transform = QgsCoordinateTransform(
+                extent_crs, toolbox_crs, QgsCoordinateTransformContext()
+            )
+            reprojected_extent = transform.transformBoundingBox(extent)
         result = {
-            "east": extent.xMaximum(),
-            "west": extent.xMinimum(),
-            "north": extent.yMaximum(),
-            "south": extent.yMinimum(),
+            "east": reprojected_extent.xMaximum(),
+            "west": reprojected_extent.xMinimum(),
+            "north": reprojected_extent.yMaximum(),
+            "south": reprojected_extent.yMinimum(),
         }
         return result
 
@@ -410,7 +427,7 @@ class ScalarPresetValueConverter:
         y_min = value["south"]
         x_max = value["east"]
         y_max = value["north"]
-        result = f"{x_min},{y_min},{x_max},{y_max}"
+        result = f"{x_min},{x_max},{y_min},{y_max} [EPSG:4326]"
         return result
 
     def coerce_string_json(self, value: Any) -> str:
